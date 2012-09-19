@@ -146,7 +146,7 @@ RFMath::Vector RFMath::Vector::Cross(const Vector& vector) const
 	result._x = this->_y * vector._z - this->_z * vector._y;
 	result._y = this->_z * vector._x - this->_x * vector._z;
 	result._z = this->_x * vector._y - this->_y * vector._x;
-	return -result;
+	return result;
 }
 
 /**
