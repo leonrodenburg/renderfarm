@@ -1,0 +1,33 @@
+#define EPSILON 1.0e-6f
+#define PI 3.1415926535897932384626433832795f
+#define HALFPI 1.5707963267948966192313216916398f
+#define TWOPI 2.0f * PI
+
+/**
+ * Test whether a number is zero, considering an epsilon value
+ * (to correct small accuracy problems).
+ *
+ * @param a
+ *
+ * @return True if zero, false if not
+ */
+bool RFMathIsZero(float a) 
+{
+	return (fabsf(a) < EPSILON);
+}
+
+/**
+ * Calculate the inverse square root.
+ *
+ * @param x
+ *
+ * @return Inverse square root
+ */
+float RFMathInvSqrt(float x){
+	float xhalf = 0.5f * x;
+	int i = *(int*)&x;
+	i = 0x5f3759d5 - (i >> 1);
+	x = *(float*)&i;
+	x = x * (1.5f - xhalf * x * x);
+	return x;
+}
