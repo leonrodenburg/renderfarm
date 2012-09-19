@@ -23,7 +23,8 @@ bool RFMathIsZero(float a)
  *
  * @return Inverse square root
  */
-float RFMathInvSqrt(float x){
+float RFMathInvSqrt(float x)
+{
 	float xhalf = 0.5f * x;
 	int i = *(int*)&x;
 	i = 0x5f3759d5 - (i >> 1);
