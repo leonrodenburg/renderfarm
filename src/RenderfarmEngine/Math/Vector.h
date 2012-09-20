@@ -9,7 +9,7 @@
 
 namespace RFMath
 {
-	class __declspec(dllexport) Vector
+	class DLLEX Vector
 	{
 	public:
 		/**
