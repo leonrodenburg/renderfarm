@@ -283,6 +283,6 @@ RFMath::Vector RFMath::Vector::operator*=(const float scalar)
  */
 DLLEX std::ostream& RFMath::operator<<(std::ostream& output, const RFMath::Vector& vector)
 {
-	output << "Vector { " << vector._x << ", " << vector._y << ", " << vector._z << " }";
+	output << "Vector { " << vector._x << ", " << vector._y << ", " << vector._z << " }" << std::endl;
 	return output;
 }

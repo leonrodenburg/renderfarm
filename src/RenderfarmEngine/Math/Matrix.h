@@ -12,9 +12,18 @@ namespace RFMath
     class DLLEX Matrix
     {
     public:
+        /**
+         * Constructor and destructor
+         */
         Matrix();
         virtual ~Matrix();
+
+        /**
+         * Operators
+         */
+        DLLEX friend std::ostream& operator<<(std::ostream& output, const Matrix& matrix);
     protected:
+        float _elements[16];
     };
 }
 
