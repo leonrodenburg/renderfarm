@@ -1,7 +1,13 @@
+#pragma once
+
+#ifndef _UTILITY_H_
+#define _UTILITY_H_
+
 #define EPSILON 1.0e-6f
 #define PI 3.1415926535897932384626433832795f
 #define HALFPI 1.5707963267948966192313216916398f
 #define TWOPI 2.0f * PI
+#define DLLEX __declspec(dllexport)
 
 /**
  * Test whether a number is zero, considering an epsilon value
@@ -11,9 +17,23 @@
  *
  * @return True if zero, false if not
  */
-bool RFMathIsZero(float a) 
+inline bool RFMathIsZero(float a) 
 {
 	return (fabsf(a) < EPSILON);
+}
+
+/**
+ * Test whether two floats are equal, considering an epsilon
+ * value (to correct small accuracy problems).
+ *
+ * @param a
+ * @param b
+ *
+ * @return True if equal, false if not
+ */
+inline bool RFMathIsEqual(float a, float b)
+{
+	return RFMathIsZero(a - b);
 }
 
 /**
@@ -23,7 +43,7 @@ bool RFMathIsZero(float a)
  *
  * @return Inverse square root
  */
-float RFMathInvSqrt(float x)
+inline float RFMathInvSqrt(float x)
 {
 	float xhalf = 0.5f * x;
 	int i = *(int*)&x;
@@ -32,3 +52,5 @@ float RFMathInvSqrt(float x)
 	x = x * (1.5f - xhalf * x * x);
 	return x;
 }
+
+#endif
