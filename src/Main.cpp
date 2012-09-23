@@ -10,7 +10,9 @@ int main(int argc, char** argv)
 	RFMath::Matrix mat;
 	mat.Translate(RFMath::Vector3(10.0f, 1.0f, 80.0f));
 
-	std::cout << mat << std::endl;
+	RFMath::Matrix mat2;
+	mat2.Translate(RFMath::Vector3(0.11f, 0.11f, 0.11f));
+	std::cout << (mat * mat2) << std::endl;
 
 	std::getchar();
 	return 0;

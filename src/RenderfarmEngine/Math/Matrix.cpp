@@ -248,7 +248,7 @@ bool RFMath::Matrix::operator!=(const Matrix& matrix)
  *
  * @return Value at index
  */
-float RFMath::Matrix::operator[](unsigned int i)
+float RFMath::Matrix::operator[](unsigned int i) const
 {
 	return this->_elements[i];
 }
@@ -260,7 +260,7 @@ float RFMath::Matrix::operator[](unsigned int i)
  *
  * @return Value at index
  */
-float RFMath::Matrix::operator()(unsigned int i)
+float RFMath::Matrix::operator()(unsigned int i) const
 {
 	return this->_elements[i];
 }
@@ -273,7 +273,7 @@ float RFMath::Matrix::operator()(unsigned int i)
  *
  * @return Value at index
  */
-float RFMath::Matrix::operator()(unsigned int i, unsigned int j)
+float RFMath::Matrix::operator()(unsigned int i, unsigned int j) const
 {
 	return this->_elements[j + (i * 4)];
 }
@@ -283,16 +283,15 @@ float RFMath::Matrix::operator()(unsigned int i, unsigned int j)
  *
  * @param scalar
  *
- * @return Modified matrix
+ * @return New multiplied matrix
  */
-RFMath::Matrix RFMath::Matrix::operator*(float scalar)
+RFMath::Matrix RFMath::Matrix::operator*(float scalar) const
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] = this->_elements[i] * scalar;
-	}
+	Matrix result;
 
-	return *this;
+	// TODO: implement
+
+	return result;
 }
 
 /**
@@ -313,6 +312,72 @@ DLL_API RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
 	}
 
 	return result;
+}
+
+/**
+ * Matrix-scalar multiplication assignment operator.
+ *
+ * @param scalar
+ *
+ * @return Modified matrix
+ */
+RFMath::Matrix& RFMath::Matrix::operator*=(float scalar)
+{
+	// TODO: implement
+
+	return *this;
+}
+
+/**
+ * Multiplication operator.
+ *
+ * @param matrix
+ *
+ * @return New multiplied matrix
+ */
+RFMath::Matrix RFMath::Matrix::operator*(const Matrix& matrix) const
+{
+	Matrix result;
+
+	// First row
+	result._elements[0] = _elements[0] * matrix[0] + _elements[4] * matrix[1] + _elements[8] * matrix[2] + _elements[12] * matrix[3];		
+	result._elements[1] = _elements[1] * matrix[0] + _elements[5] * matrix[1] + _elements[9] * matrix[2] + _elements[13] * matrix[3];
+	result._elements[2] = _elements[2] * matrix[0] + _elements[6] * matrix[1] + _elements[10] * matrix[2] + _elements[14] * matrix[3];
+	result._elements[3] = _elements[3] * matrix[0] + _elements[7] * matrix[1] + _elements[11] * matrix[2] + _elements[15] * matrix[3];
+
+	// Second row
+	result._elements[4] = _elements[0] * matrix[4] + _elements[4] * matrix[5] + _elements[8] * matrix[6] + _elements[12] * matrix[7];
+	result._elements[5] = _elements[1] * matrix[4] + _elements[5] * matrix[5] + _elements[9] * matrix[6] + _elements[13] * matrix[7];
+	result._elements[6] = _elements[2] * matrix[4] + _elements[6] * matrix[5] + _elements[10] * matrix[6] + _elements[14] * matrix[7];
+	result._elements[7] = _elements[3] * matrix[4] + _elements[7] * matrix[5] + _elements[11] * matrix[6] + _elements[15] * matrix[7];
+
+	// Third row
+	result._elements[8] = _elements[0] * matrix[8] + _elements[4] * matrix[9] + _elements[8] * matrix[10] + _elements[12] * matrix[11];
+	result._elements[9] = _elements[1] * matrix[8] + _elements[5] * matrix[9] + _elements[9] * matrix[10] + _elements[13] * matrix[11];
+	result._elements[10] = _elements[2] * matrix[8] + _elements[6] * matrix[9] + _elements[10] * matrix[10] + _elements[14] * matrix[11];
+	result._elements[11] = _elements[3] * matrix[8] + _elements[7] * matrix[9] + _elements[11] * matrix[10] + _elements[15] * matrix[11];
+
+	// Second row
+	result._elements[12] = _elements[0] * matrix[12] + _elements[4] * matrix[13] + _elements[8] * matrix[14] + _elements[12] * matrix[15];
+	result._elements[13] = _elements[1] * matrix[12] + _elements[5] * matrix[13] + _elements[9] * matrix[14] + _elements[13] * matrix[15];
+	result._elements[14] = _elements[2] * matrix[12] + _elements[6] * matrix[13] + _elements[10] * matrix[14] + _elements[14] * matrix[15];
+	result._elements[15] = _elements[3] * matrix[12] + _elements[7] * matrix[13] + _elements[11] * matrix[14] + _elements[15] * matrix[15];
+
+	return result;
+}
+
+/**
+ * Matrix-matrix multiplication assignment operator.
+ *
+ * @param matrix
+ *
+ * @return Modified matrix
+ */
+RFMath::Matrix& RFMath::Matrix::operator*=(const Matrix& matrix)
+{
+	// TODO: implement
+
+	return *this;
 }
 
 /**

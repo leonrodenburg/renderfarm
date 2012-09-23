@@ -49,12 +49,14 @@ namespace RFMath
 		Matrix& operator=(const Matrix& matrix);
 		bool operator==(const Matrix& matrix);
 		bool operator!=(const Matrix& matrix);
-		float operator[](unsigned int i);
-		float operator()(unsigned int i);
-		float operator()(unsigned int i, unsigned int j);
-		Matrix operator*(float scalar);
+		float operator[](unsigned int i) const;
+		float operator()(unsigned int i) const;
+		float operator()(unsigned int i, unsigned int j) const;
+		Matrix operator*(float scalar) const;
 		DLL_API friend Matrix operator*(float scalar, const Matrix& matrix);
-		Matrix operator*(const Matrix& matrix);
+		Matrix& operator*=(float scalar);
+		Matrix operator*(const Matrix& matrix) const;
+		Matrix& operator*=(const Matrix& matrix);
 		DLL_API friend std::ostream& operator<<(std::ostream& output, const Matrix& matrix);
     protected:
         float _elements[16];
