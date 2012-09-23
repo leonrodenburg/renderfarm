@@ -56,6 +56,20 @@ void RFMath::Matrix::Identity()
 }
 
 /**
+ * Set all components that are near to zero, to zero.
+ */
+void RFMath::Matrix::Clean()
+{
+	for(int i = 0; i < 16; ++i)
+	{
+		if(RFMathIsZero(this->_elements[i]))
+		{
+			this->_elements[i] = 0.0f;
+		}
+	}
+}
+
+/**
  * Test whether or not the matrix is identity.
  *
  * @return True if identity, false if not
@@ -81,6 +95,25 @@ bool RFMath::Matrix::IsIdentity()
 }
 
 /**
+ * Test whether or not all components of the matrix are
+ * zero.
+ *
+ * @return True if zero, false if not
+ */
+bool RFMath::Matrix::IsZero()
+{
+	for(int i = 0; i < 16; ++i)
+	{
+		if(RFMathIsZero(this->_elements[i]))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
  * Get a float pointer to the raw data.
  *
  * @return Float pointer to data
@@ -91,13 +124,69 @@ float* RFMath::Matrix::GetPointer()
 }
 
 /**
+ * Set the translation in the matrix using a Vector3.
+ *
+ * @param vector
+ *
+ * @return Translation matrix
+ */
+RFMath::Matrix& RFMath::Matrix::Translate(const Vector3& vector)
+{
+	this->Identity();
+	this->_elements[12] = vector.GetX();
+	this->_elements[13] = vector.GetY();
+	this->_elements[14] = vector.GetZ();
+
+	return *this;
+}
+
+/**
+ * Set the x-axis translation in the matrix.
+ *
+ * @param x
+ *
+ * @return Modified matrix
+ */
+RFMath::Matrix& RFMath::Matrix::TranslateX(float x)
+{
+	this->_elements[12] = x;
+	return *this;
+}
+
+/**
+ * Set the y-axis translation in the matrix.
+ *
+ * @param y
+ *
+ * @return Modified matrix
+ */
+RFMath::Matrix& RFMath::Matrix::TranslateY(float y)
+{
+	this->_elements[13] = y;
+	return *this;
+}
+
+/**
+ * Set the z-axis translation in the matrix.
+ *
+ * @param z
+ *
+ * @return Modified matrix
+ */
+RFMath::Matrix& RFMath::Matrix::TranslateZ(float z)
+{
+	this->_elements[14] = z;
+	return *this;
+}
+
+/**
  * Assignment operator.
  *
  * @param matrix
  *
  * @return Modified matrix
  */
-RFMath::Matrix RFMath::Matrix::operator=(const Matrix& matrix)
+RFMath::Matrix& RFMath::Matrix::operator=(const Matrix& matrix)
 {
 	if(this == &matrix)
 	{
@@ -110,6 +199,46 @@ RFMath::Matrix RFMath::Matrix::operator=(const Matrix& matrix)
 	}
 
 	return *this;
+}
+
+/**
+ * Equality operator.
+ *
+ * @param matrix
+ *
+ * @return True if equal, false if not
+ */
+bool RFMath::Matrix::operator==(const Matrix& matrix)
+{
+	for(int i = 0; i < 16; ++i)
+	{
+		if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Inequality operator.
+ *
+ * @param matrix
+ *
+ * @return True if inequal, false if equal
+ */
+bool RFMath::Matrix::operator!=(const Matrix& matrix)
+{
+	for(int i = 0; i < 16; ++i)
+	{
+		if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -174,7 +303,7 @@ RFMath::Matrix RFMath::Matrix::operator*(float scalar)
  *
  * @return New matrix with multiplied components
  */
-DLLEX RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
+DLL_API RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
 {
 	Matrix result;
 	
@@ -194,7 +323,7 @@ DLLEX RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
  *
  * @return Output stream
  */
-DLLEX std::ostream& RFMath::operator<<(std::ostream& output, const Matrix& matrix)
+DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Matrix& matrix)
 {
     output << "Matrix {" << std::endl;
 	for(int i = 0; i < 4; ++i) 
@@ -208,6 +337,6 @@ DLLEX std::ostream& RFMath::operator<<(std::ostream& output, const Matrix& matri
 			}
 		}
 	}
-    output << "}" << std::endl;
+    output << "}";
     return output;
 }

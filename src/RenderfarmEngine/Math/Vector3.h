@@ -6,11 +6,17 @@
 #include <iostream>
 #include "Utility.h"
 
+#ifdef DLL_EXPORTS
+#define DLL_API __declspec(dllexport)
+#else
+#define DLL_API __declspec(dllimport)
+#endif
+
 namespace RFMath
 {
 	class Matrix;
 
-	class DLLEX Vector3
+	class DLL_API Vector3
 	{
 	public:
 		/**
@@ -50,18 +56,18 @@ namespace RFMath
 		/**
 		 * Operators
 		 */
-		Vector3 operator=(const Vector3& vector);
+		Vector3& operator=(const Vector3& vector);
 		Vector3 operator-() const;
 		Vector3 operator+(const Vector3& vector) const;
-		Vector3 operator+=(const Vector3& vector);
+		Vector3& operator+=(const Vector3& vector);
 		Vector3 operator-(const Vector3& vector) const;
-		Vector3 operator-=(const Vector3& vector);
+		Vector3& operator-=(const Vector3& vector);
 		Vector3 operator*(const float scalar) const;
-		DLLEX friend Vector3 operator*(const float scalar, const Vector3& vector);
-		Vector3 operator*=(const float scalar);
+		DLL_API friend Vector3 operator*(const float scalar, const Vector3& vector);
+		Vector3& operator*=(const float scalar);
 		float operator[](unsigned int i) const;
 		bool operator==(const Vector3& vector) const;
-		DLLEX friend std::ostream& operator<<(std::ostream& output, const Vector3& vector);
+		DLL_API friend std::ostream& operator<<(std::ostream& output, const Vector3& vector);
 
 		/**
 		 * Defaults

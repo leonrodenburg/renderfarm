@@ -1,13 +1,14 @@
 #include "Vector4.h"
+#include "Vector3.h"
 
 /**
  * Static defaults
  */
-RFMath::Vector4 RFMath::Vector4::xAxis(1.0f, 0.0f, 0.0f, 0.0f);
-RFMath::Vector4 RFMath::Vector4::yAxis(0.0f, 1.0f, 0.0f, 0.0f);
-RFMath::Vector4 RFMath::Vector4::zAxis(0.0f, 0.0f, 1.0f, 0.0f);
-RFMath::Vector4 RFMath::Vector4::wAxis(0.0f, 0.0f, 0.0f, 1.0f);
-RFMath::Vector4 RFMath::Vector4::origin(0.0f, 0.0f, 0.0f, 0.0f);
+DLL_API RFMath::Vector4 RFMath::Vector4::xAxis(1.0f, 0.0f, 0.0f, 0.0f);
+DLL_API RFMath::Vector4 RFMath::Vector4::yAxis(0.0f, 1.0f, 0.0f, 0.0f);
+DLL_API RFMath::Vector4 RFMath::Vector4::zAxis(0.0f, 0.0f, 1.0f, 0.0f);
+DLL_API RFMath::Vector4 RFMath::Vector4::wAxis(0.0f, 0.0f, 0.0f, 1.0f);
+DLL_API RFMath::Vector4 RFMath::Vector4::origin(0.0f, 0.0f, 0.0f, 0.0f);
 
 /**
  * Default constructor
@@ -18,6 +19,21 @@ RFMath::Vector4::Vector4()
 	this->_y = 0.0f;
 	this->_z = 0.0f;
 	this->_w = 0.0f;
+}
+
+/**
+ * Constructor setting the x, y, and z components from a
+ * Vector3 and adding the w component.
+ *
+ * @param vector
+ * @param w
+ */
+RFMath::Vector4::Vector4(const Vector3& vector, float w)
+{
+	this->_x = vector.GetX();
+	this->_y = vector.GetY();
+	this->_z = vector.GetZ();
+	this->_w = w;
 }
 
 /**
@@ -185,7 +201,7 @@ void RFMath::Vector4::Set(float x, float y, float z, float w)
  *
  * @return Modified vector
  */
-RFMath::Vector4 RFMath::Vector4::operator=(const Vector4& vector)
+RFMath::Vector4& RFMath::Vector4::operator=(const Vector4& vector)
 {
 	if(this == &vector)
 	{
@@ -231,7 +247,7 @@ RFMath::Vector4 RFMath::Vector4::operator+(const Vector4& vector) const
  *
  * @return Same vector with modified components
  */
-RFMath::Vector4 RFMath::Vector4::operator+=(const Vector4& vector)
+RFMath::Vector4& RFMath::Vector4::operator+=(const Vector4& vector)
 {
 	this->_x += vector._x;
 	this->_y += vector._y;
@@ -261,7 +277,7 @@ RFMath::Vector4 RFMath::Vector4::operator-(const Vector4& vector) const
  * 
  * @return Same vector with modified components
  */
-RFMath::Vector4 RFMath::Vector4::operator-=(const Vector4& vector)
+RFMath::Vector4& RFMath::Vector4::operator-=(const Vector4& vector)
 {
 	this->_x -= vector._x;
 	this->_y -= vector._y;
@@ -291,7 +307,7 @@ RFMath::Vector4 RFMath::Vector4::operator*(const float scalar) const
  *
  * @return New vector with multiplied components
  */
-DLLEX RFMath::Vector4 RFMath::operator*(const float scalar, const Vector4& vector)
+DLL_API RFMath::Vector4 RFMath::operator*(const float scalar, const Vector4& vector)
 {
 	return Vector4(vector._x * scalar, vector._y * scalar, vector._z * scalar, vector._w * scalar);
 }
@@ -304,7 +320,7 @@ DLLEX RFMath::Vector4 RFMath::operator*(const float scalar, const Vector4& vecto
  *
  * @return Same vector with modified components
  */
-RFMath::Vector4 RFMath::Vector4::operator*=(const float scalar)
+RFMath::Vector4& RFMath::Vector4::operator*=(const float scalar)
 {
 	this->_x *= scalar;
 	this->_y *= scalar;
@@ -348,8 +364,8 @@ bool RFMath::Vector4::operator==(const Vector4& vector) const
  *
  * @return Output stream
  */
-DLLEX std::ostream& RFMath::operator<<(std::ostream& output, const Vector4& vector)
+DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Vector4& vector)
 {
-	output << "Vector4 { " << vector._x << ", " << vector._y << ", " << vector._z << ", " << vector._w << " }" << std::endl;
+	output << "Vector4 { " << vector._x << ", " << vector._y << ", " << vector._z << ", " << vector._w << " }";
 	return output;
 }

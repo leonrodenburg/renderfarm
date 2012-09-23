@@ -3,10 +3,10 @@
 /**
  * Static defaults.
  */
-RFMath::Vector3 RFMath::Vector3::xAxis(1.0f, 0.0f, 0.0f);
-RFMath::Vector3 RFMath::Vector3::yAxis(0.0f, 1.0f, 0.0f);
-RFMath::Vector3 RFMath::Vector3::zAxis(0.0f, 0.0f, 1.0f);
-RFMath::Vector3 RFMath::Vector3::origin(0.0f, 0.0f, 0.0f);
+DLL_API RFMath::Vector3 RFMath::Vector3::xAxis(1.0f, 0.0f, 0.0f);
+DLL_API RFMath::Vector3 RFMath::Vector3::yAxis(0.0f, 1.0f, 0.0f);
+DLL_API RFMath::Vector3 RFMath::Vector3::zAxis(0.0f, 0.0f, 1.0f);
+DLL_API RFMath::Vector3 RFMath::Vector3::origin(0.0f, 0.0f, 0.0f);
 
 /**
  * Default constructor.
@@ -190,7 +190,7 @@ void RFMath::Vector3::Set(float x, float y, float z)
  *
  * @return Modified vector
  */
-RFMath::Vector3 RFMath::Vector3::operator=(const Vector3& vector)
+RFMath::Vector3& RFMath::Vector3::operator=(const Vector3& vector)
 {
 	if(this == &vector)
 	{
@@ -235,7 +235,7 @@ RFMath::Vector3 RFMath::Vector3::operator+(const Vector3& vector) const
  *
  * @return Same vector with modified components
  */
-RFMath::Vector3 RFMath::Vector3::operator+=(const Vector3& vector)
+RFMath::Vector3& RFMath::Vector3::operator+=(const Vector3& vector)
 {
 	this->_x += vector._x;
 	this->_y += vector._y;
@@ -264,7 +264,7 @@ RFMath::Vector3 RFMath::Vector3::operator-(const Vector3& vector) const
  * 
  * @return Same vector with modified components
  */
-RFMath::Vector3 RFMath::Vector3::operator-=(const Vector3& vector)
+RFMath::Vector3& RFMath::Vector3::operator-=(const Vector3& vector)
 {
 	this->_x -= vector._x;
 	this->_y -= vector._y;
@@ -293,7 +293,7 @@ RFMath::Vector3 RFMath::Vector3::operator*(const float scalar) const
  *
  * @return New vector with multiplied components
  */
-DLLEX RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vector)
+DLL_API RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vector)
 {
 	return Vector3(vector._x * scalar, vector._y * scalar, vector._z * scalar);
 }
@@ -306,7 +306,7 @@ DLLEX RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vecto
  *
  * @return Same vector with modified components
  */
-RFMath::Vector3 RFMath::Vector3::operator*=(const float scalar)
+RFMath::Vector3& RFMath::Vector3::operator*=(const float scalar)
 {
 	this->_x *= scalar;
 	this->_y *= scalar;
@@ -348,8 +348,8 @@ bool RFMath::Vector3::operator==(const Vector3& vector) const
  *
  * @return Output stream
  */
-DLLEX std::ostream& RFMath::operator<<(std::ostream& output, const Vector3& vector)
+DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Vector3& vector)
 {
-	output << "Vector3 { " << vector._x << ", " << vector._y << ", " << vector._z << " }" << std::endl;
+	output << "Vector3 { " << vector._x << ", " << vector._y << ", " << vector._z << " }";
 	return output;
 }

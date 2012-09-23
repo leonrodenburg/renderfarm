@@ -6,11 +6,18 @@
 #include <iostream>
 #include "Utility.h"
 
+#include "Vector3.h"
+#include "Vector4.h"
+
+#ifdef DLL_EXPORTS
+#define DLL_API __declspec(dllexport)
+#else
+#define DLL_API __declspec(dllimport)
+#endif
+
 namespace RFMath
 {
-	class Vector;
-
-    class DLLEX Matrix
+    class DLL_API Matrix
     {
     public:
         /**
@@ -24,21 +31,31 @@ namespace RFMath
 		 * Methods
 		 */
 		void Identity();
+		void Clean();
+
 		bool IsIdentity();
+		bool IsZero();
 
 		float* GetPointer();
+
+		Matrix& Translate(const Vector3& vector);
+		Matrix& TranslateX(float x);
+		Matrix& TranslateY(float y);
+		Matrix& TranslateZ(float z);
 
         /**
          * Operators
          */
-		Matrix operator=(const Matrix& matrix);
+		Matrix& operator=(const Matrix& matrix);
+		bool operator==(const Matrix& matrix);
+		bool operator!=(const Matrix& matrix);
 		float operator[](unsigned int i);
 		float operator()(unsigned int i);
 		float operator()(unsigned int i, unsigned int j);
 		Matrix operator*(float scalar);
-		DLLEX friend Matrix operator*(float scalar, const Matrix& matrix);
+		DLL_API friend Matrix operator*(float scalar, const Matrix& matrix);
 		Matrix operator*(const Matrix& matrix);
-		DLLEX friend std::ostream& operator<<(std::ostream& output, const Matrix& matrix);
+		DLL_API friend std::ostream& operator<<(std::ostream& output, const Matrix& matrix);
     protected:
         float _elements[16];
     };

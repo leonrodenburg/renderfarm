@@ -6,17 +6,25 @@
 #include <iostream>
 #include "Utility.h"
 
+#ifdef DLL_EXPORTS
+#define DLL_API __declspec(dllexport)
+#else
+#define DLL_API __declspec(dllimport)
+#endif
+
 namespace RFMath
 {
 	class Matrix;
+	class Vector3;
 
-	class DLLEX Vector4
+	class DLL_API Vector4
 	{
 	public:
 		/**
 		 * Constructors and destructor
 		 */
 		Vector4();
+		Vector4(const Vector3& vector, float w);
 		Vector4(float x, float y, float z, float w);
 		Vector4(const Vector4& vector);
 		virtual ~Vector4();
@@ -51,18 +59,18 @@ namespace RFMath
 		/**
 		 * Operators
 		 */
-		Vector4 operator=(const Vector4& vector);
+		Vector4& operator=(const Vector4& vector);
 		Vector4 operator-() const;
 		Vector4 operator+(const Vector4& vector) const;
-		Vector4 operator+=(const Vector4& vector);
+		Vector4& operator+=(const Vector4& vector);
 		Vector4 operator-(const Vector4& vector) const;
-		Vector4 operator-=(const Vector4& vector);
+		Vector4& operator-=(const Vector4& vector);
 		Vector4 operator*(const float scalar) const;
-		DLLEX friend Vector4 operator*(const float scalar, const Vector4& vector);
-		Vector4 operator*=(const float scalar);
+		DLL_API friend Vector4 operator*(const float scalar, const Vector4& vector);
+		Vector4& operator*=(const float scalar);
 		float operator[](unsigned int i) const;
 		bool operator==(const Vector4& vector) const;
-		DLLEX friend std::ostream& operator<<(std::ostream& output, const Vector4& vector);
+		DLL_API friend std::ostream& operator<<(std::ostream& output, const Vector4& vector);
 
 		/**
 		 * Defaults
