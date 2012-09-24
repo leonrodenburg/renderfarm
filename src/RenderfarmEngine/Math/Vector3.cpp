@@ -13,9 +13,9 @@ DLL_API RFMath::Vector3 RFMath::Vector3::origin(0.0f, 0.0f, 0.0f);
  */
 RFMath::Vector3::Vector3()
 {
-	this->_x = 0.0f;
-	this->_y = 0.0f;
-	this->_z = 0.0f;
+    this->_x = 0.0f;
+    this->_y = 0.0f;
+    this->_z = 0.0f;
 }
 
 /**
@@ -27,9 +27,9 @@ RFMath::Vector3::Vector3()
  */
 RFMath::Vector3::Vector3(float x, float y, float z)
 {
-	this->_x = x;
-	this->_y = y;
-	this->_z = z;
+    this->_x = x;
+    this->_y = y;
+    this->_z = z;
 }
 
 /**
@@ -39,9 +39,9 @@ RFMath::Vector3::Vector3(float x, float y, float z)
  */
 RFMath::Vector3::Vector3(const Vector3& vector)
 {
-	this->_x = vector._x;
-	this->_y = vector._y;
-	this->_z = vector._z;
+    this->_x = vector._x;
+    this->_y = vector._y;
+    this->_z = vector._z;
 }
 
 /**
@@ -59,7 +59,7 @@ RFMath::Vector3::~Vector3()
  */
 bool RFMath::Vector3::IsZero() const
 {
-	return RFMathIsZero(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z);
+    return RFMathIsZero(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z);
 }
 
 /**
@@ -70,7 +70,7 @@ bool RFMath::Vector3::IsZero() const
  */
 bool RFMath::Vector3::IsUnit() const
 {
-	return RFMathIsZero(1.0f - (this->_x * this->_x + this->_y * this->_y + this->_z * this->_z));
+    return RFMathIsZero(1.0f - (this->_x * this->_x + this->_y * this->_y + this->_z * this->_z));
 }
 
 /**
@@ -78,20 +78,20 @@ bool RFMath::Vector3::IsUnit() const
  */
 void RFMath::Vector3::Clean()
 {
-	if(RFMathIsZero(_x))
-	{
-		this->_x = 0.0f;
-	}
+    if(RFMathIsZero(_x))
+    {
+        this->_x = 0.0f;
+    }
 
-	if(RFMathIsZero(_y))
-	{
-		this->_y = 0.0f;
-	}
+    if(RFMathIsZero(_y))
+    {
+        this->_y = 0.0f;
+    }
 
-	if(RFMathIsZero(_z))
-	{
-		this->_z = 0.0f;
-	}
+    if(RFMathIsZero(_z))
+    {
+        this->_z = 0.0f;
+    }
 }
 
 /**
@@ -101,7 +101,7 @@ void RFMath::Vector3::Clean()
  */
 float RFMath::Vector3::Length() const
 {
-	return sqrtf(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z);
+    return sqrtf(this->_x * this->_x + this->_y * this->_y + this->_z * this->_z);
 }
 
 /**
@@ -112,7 +112,7 @@ float RFMath::Vector3::Length() const
  */
 float RFMath::Vector3::LengthSquared() const
 {
-	return this->_x * this->_x + this->_y * this->_y + this->_z * this->_z;
+    return this->_x * this->_x + this->_y * this->_y + this->_z * this->_z;
 }
 
 /**
@@ -122,21 +122,21 @@ float RFMath::Vector3::LengthSquared() const
  */
 RFMath::Vector3 RFMath::Vector3::Normalize()
 {
-	float lengthSquared = this->LengthSquared();
-	if(RFMathIsZero(lengthSquared))
-	{
-		this->_x = 0;
-		this->_y = 0;
-		this->_z = 0;
-		return *this;
-	}
+    float lengthSquared = this->LengthSquared();
+    if(RFMathIsZero(lengthSquared))
+    {
+        this->_x = 0;
+        this->_y = 0;
+        this->_z = 0;
+        return *this;
+    }
 
-	float reciprocal = RFMathInvSqrt(lengthSquared);
-	this->_x *= reciprocal;
-	this->_y *= reciprocal;
-	this->_z *= reciprocal;
+    float reciprocal = RFMathInvSqrt(lengthSquared);
+    this->_x *= reciprocal;
+    this->_y *= reciprocal;
+    this->_z *= reciprocal;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -149,7 +149,7 @@ RFMath::Vector3 RFMath::Vector3::Normalize()
  */
 float RFMath::Vector3::Dot(const Vector3& vector) const
 {
-	return (this->_x * vector._x, this->_y * vector._y, this->_z * vector._z);
+    return (this->_x * vector._x, this->_y * vector._y, this->_z * vector._z);
 }
 
 /**
@@ -162,11 +162,11 @@ float RFMath::Vector3::Dot(const Vector3& vector) const
  */
 RFMath::Vector3 RFMath::Vector3::Cross(const Vector3& vector) const
 {
-	Vector3 result;
-	result._x = this->_y * vector._z - this->_z * vector._y;
-	result._y = this->_z * vector._x - this->_x * vector._z;
-	result._z = this->_x * vector._y - this->_y * vector._x;
-	return result;
+    Vector3 result;
+    result._x = this->_y * vector._z - this->_z * vector._y;
+    result._y = this->_z * vector._x - this->_x * vector._z;
+    result._z = this->_x * vector._y - this->_y * vector._x;
+    return result;
 }
 
 /**
@@ -178,9 +178,9 @@ RFMath::Vector3 RFMath::Vector3::Cross(const Vector3& vector) const
  */
 void RFMath::Vector3::Set(float x, float y, float z)
 {
-	this->_x = x;
-	this->_y = y;
-	this->_z = z;
+    this->_x = x;
+    this->_y = y;
+    this->_z = z;
 }
 
 /**
@@ -192,16 +192,16 @@ void RFMath::Vector3::Set(float x, float y, float z)
  */
 RFMath::Vector3& RFMath::Vector3::operator=(const Vector3& vector)
 {
-	if(this == &vector)
-	{
-		return *this;
-	}
+    if(this == &vector)
+    {
+        return *this;
+    }
 
-	this->_x = vector._x;
-	this->_y = vector._y;
-	this->_z = vector._z;
+    this->_x = vector._x;
+    this->_y = vector._y;
+    this->_z = vector._z;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -212,7 +212,7 @@ RFMath::Vector3& RFMath::Vector3::operator=(const Vector3& vector)
  */
 RFMath::Vector3 RFMath::Vector3::operator-() const
 {
-	return Vector3(-this->_x, -this->_y, -this->_z);
+    return Vector3(-this->_x, -this->_y, -this->_z);
 }
 
 /**
@@ -224,7 +224,7 @@ RFMath::Vector3 RFMath::Vector3::operator-() const
  */
 RFMath::Vector3 RFMath::Vector3::operator+(const Vector3& vector) const
 {
-	return Vector3(this->_x + vector._x, this->_y + vector._y, this->_z + vector._z);
+    return Vector3(this->_x + vector._x, this->_y + vector._y, this->_z + vector._z);
 }
 
 /**
@@ -237,11 +237,11 @@ RFMath::Vector3 RFMath::Vector3::operator+(const Vector3& vector) const
  */
 RFMath::Vector3& RFMath::Vector3::operator+=(const Vector3& vector)
 {
-	this->_x += vector._x;
-	this->_y += vector._y;
-	this->_z += vector._z;
+    this->_x += vector._x;
+    this->_y += vector._y;
+    this->_z += vector._z;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -253,7 +253,7 @@ RFMath::Vector3& RFMath::Vector3::operator+=(const Vector3& vector)
  */
 RFMath::Vector3 RFMath::Vector3::operator-(const Vector3& vector) const
 {
-	return Vector3(this->_x - vector._x, this->_y - vector._y, this->_z - vector._z);
+    return Vector3(this->_x - vector._x, this->_y - vector._y, this->_z - vector._z);
 }
 
 /**
@@ -266,11 +266,11 @@ RFMath::Vector3 RFMath::Vector3::operator-(const Vector3& vector) const
  */
 RFMath::Vector3& RFMath::Vector3::operator-=(const Vector3& vector)
 {
-	this->_x -= vector._x;
-	this->_y -= vector._y;
-	this->_z -= vector._z;
+    this->_x -= vector._x;
+    this->_y -= vector._y;
+    this->_z -= vector._z;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -282,7 +282,7 @@ RFMath::Vector3& RFMath::Vector3::operator-=(const Vector3& vector)
  */
 RFMath::Vector3 RFMath::Vector3::operator*(const float scalar) const
 {
-	return Vector3(this->_x * scalar, this->_y * scalar, this->_z * scalar);
+    return Vector3(this->_x * scalar, this->_y * scalar, this->_z * scalar);
 }
 
 /**
@@ -295,7 +295,7 @@ RFMath::Vector3 RFMath::Vector3::operator*(const float scalar) const
  */
 DLL_API RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vector)
 {
-	return Vector3(vector._x * scalar, vector._y * scalar, vector._z * scalar);
+    return Vector3(vector._x * scalar, vector._y * scalar, vector._z * scalar);
 }
 
 /**
@@ -308,10 +308,10 @@ DLL_API RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vec
  */
 RFMath::Vector3& RFMath::Vector3::operator*=(const float scalar)
 {
-	this->_x *= scalar;
-	this->_y *= scalar;
-	this->_z *= scalar;
-	return *this;
+    this->_x *= scalar;
+    this->_y *= scalar;
+    this->_z *= scalar;
+    return *this;
 }
 
 /**
@@ -323,7 +323,7 @@ RFMath::Vector3& RFMath::Vector3::operator*=(const float scalar)
  */
 float RFMath::Vector3::operator[](unsigned int i) const
 {
-	return (&(this->_x))[i];
+    return (&(this->_x))[i];
 }
 
 /**
@@ -335,9 +335,9 @@ float RFMath::Vector3::operator[](unsigned int i) const
  */
 bool RFMath::Vector3::operator==(const Vector3& vector) const
 {
-	return RFMathIsEqual(this->_x, vector._x)
-		&& RFMathIsEqual(this->_y, vector._y)
-		&& RFMathIsEqual(this->_z, vector._z);	
+    return RFMathIsEqual(this->_x, vector._x)
+        && RFMathIsEqual(this->_y, vector._y)
+        && RFMathIsEqual(this->_z, vector._z);	
 }
 
 /**
@@ -350,6 +350,6 @@ bool RFMath::Vector3::operator==(const Vector3& vector) const
  */
 DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Vector3& vector)
 {
-	output << "Vector3 { " << vector._x << ", " << vector._y << ", " << vector._z << " }";
-	return output;
+    output << "Vector3 { " << vector._x << ", " << vector._y << ", " << vector._z << " }";
+    return output;
 }

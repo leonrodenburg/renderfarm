@@ -5,7 +5,7 @@
  */
 RFMath::Matrix::Matrix()
 {
-	this->Identity();
+    this->Identity();
 }
 
 /**
@@ -15,10 +15,10 @@ RFMath::Matrix::Matrix()
  */
 RFMath::Matrix::Matrix(const Matrix& matrix)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] = matrix._elements[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] = matrix._elements[i];
+    }
 }
 
 /**
@@ -34,25 +34,25 @@ RFMath::Matrix::~Matrix()
  */
 void RFMath::Matrix::Identity()
 {
-	this->_elements[0] = 1.0f;
-	this->_elements[1] = 0.0f;
-	this->_elements[2] = 0.0f;
-	this->_elements[3] = 0.0f;
-	
-	this->_elements[4] = 0.0f;
-	this->_elements[5] = 1.0f;
-	this->_elements[6] = 0.0f;
-	this->_elements[7] = 0.0f;
+    this->_elements[0] = 1.0f;
+    this->_elements[1] = 0.0f;
+    this->_elements[2] = 0.0f;
+    this->_elements[3] = 0.0f;
+    
+    this->_elements[4] = 0.0f;
+    this->_elements[5] = 1.0f;
+    this->_elements[6] = 0.0f;
+    this->_elements[7] = 0.0f;
 
-	this->_elements[8] = 0.0f;
-	this->_elements[9] = 0.0f;
-	this->_elements[10] = 1.0f;
-	this->_elements[11] = 0.0f;
+    this->_elements[8] = 0.0f;
+    this->_elements[9] = 0.0f;
+    this->_elements[10] = 1.0f;
+    this->_elements[11] = 0.0f;
 
-	this->_elements[12] = 0.0f;
-	this->_elements[13] = 0.0f;
-	this->_elements[14] = 0.0f;
-	this->_elements[15] = 1.0f;
+    this->_elements[12] = 0.0f;
+    this->_elements[13] = 0.0f;
+    this->_elements[14] = 0.0f;
+    this->_elements[15] = 1.0f;
 }
 
 /**
@@ -60,13 +60,13 @@ void RFMath::Matrix::Identity()
  */
 void RFMath::Matrix::Clean()
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		if(RFMathIsZero(this->_elements[i]))
-		{
-			this->_elements[i] = 0.0f;
-		}
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        if(RFMathIsZero(this->_elements[i]))
+        {
+            this->_elements[i] = 0.0f;
+        }
+    }
 }
 
 /**
@@ -76,22 +76,22 @@ void RFMath::Matrix::Clean()
  */
 bool RFMath::Matrix::IsIdentity()
 {
-	return RFMathIsEqual(this->_elements[0], 1.0f)
-		&& RFMathIsEqual(this->_elements[5], 1.0f)
-		&& RFMathIsEqual(this->_elements[10], 1.0f)
-		&& RFMathIsEqual(this->_elements[15], 1.0f)
-		&& RFMathIsZero(this->_elements[1])
-		&& RFMathIsZero(this->_elements[2])
-		&& RFMathIsZero(this->_elements[3])
-		&& RFMathIsZero(this->_elements[4])
-		&& RFMathIsZero(this->_elements[6])
-		&& RFMathIsZero(this->_elements[7])
-		&& RFMathIsZero(this->_elements[8])
-		&& RFMathIsZero(this->_elements[9])
-		&& RFMathIsZero(this->_elements[11])
-		&& RFMathIsZero(this->_elements[12])
-		&& RFMathIsZero(this->_elements[13])
-		&& RFMathIsZero(this->_elements[14]);
+    return RFMathIsEqual(this->_elements[0], 1.0f)
+        && RFMathIsEqual(this->_elements[5], 1.0f)
+        && RFMathIsEqual(this->_elements[10], 1.0f)
+        && RFMathIsEqual(this->_elements[15], 1.0f)
+        && RFMathIsZero(this->_elements[1])
+        && RFMathIsZero(this->_elements[2])
+        && RFMathIsZero(this->_elements[3])
+        && RFMathIsZero(this->_elements[4])
+        && RFMathIsZero(this->_elements[6])
+        && RFMathIsZero(this->_elements[7])
+        && RFMathIsZero(this->_elements[8])
+        && RFMathIsZero(this->_elements[9])
+        && RFMathIsZero(this->_elements[11])
+        && RFMathIsZero(this->_elements[12])
+        && RFMathIsZero(this->_elements[13])
+        && RFMathIsZero(this->_elements[14]);
 }
 
 /**
@@ -102,15 +102,15 @@ bool RFMath::Matrix::IsIdentity()
  */
 bool RFMath::Matrix::IsZero()
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		if(RFMathIsZero(this->_elements[i]))
-		{
-			return false;
-		}
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        if(RFMathIsZero(this->_elements[i]))
+        {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -120,7 +120,7 @@ bool RFMath::Matrix::IsZero()
  */
 float* RFMath::Matrix::GetPointer()
 {
-	return this->_elements;
+    return this->_elements;
 }
 
 /**
@@ -130,32 +130,32 @@ float* RFMath::Matrix::GetPointer()
  */
 RFMath::Matrix& RFMath::Matrix::Transpose()
 {
-	// Swap elements 1 / 4
-	float temp = this->_elements[1];
-	this->_elements[1] = this->_elements[4];
-	this->_elements[4] = temp;
+    // Swap elements 1 / 4
+    float temp = this->_elements[1];
+    this->_elements[1] = this->_elements[4];
+    this->_elements[4] = temp;
 
-	// Swap elements 2 / 8
-	temp = this->_elements[2];
-	this->_elements[2] = this->_elements[8];
-	this->_elements[8] = temp;
+    // Swap elements 2 / 8
+    temp = this->_elements[2];
+    this->_elements[2] = this->_elements[8];
+    this->_elements[8] = temp;
 
-	// Swap elements 6 / 9
-	temp = this->_elements[6];
-	this->_elements[6] = this->_elements[9];
-	this->_elements[9] = temp;
+    // Swap elements 6 / 9
+    temp = this->_elements[6];
+    this->_elements[6] = this->_elements[9];
+    this->_elements[9] = temp;
 
-	// Swap elements 7 / 13
-	temp = this->_elements[7];
-	this->_elements[7] = this->_elements[13];
-	this->_elements[13] = temp;
+    // Swap elements 7 / 13
+    temp = this->_elements[7];
+    this->_elements[7] = this->_elements[13];
+    this->_elements[13] = temp;
 
-	// Swap elements 11 / 14
-	temp = this->_elements[11];
-	this->_elements[11] = this->_elements[14];
-	this->_elements[14] = temp;
+    // Swap elements 11 / 14
+    temp = this->_elements[11];
+    this->_elements[11] = this->_elements[14];
+    this->_elements[14] = temp;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -168,29 +168,29 @@ RFMath::Matrix& RFMath::Matrix::Transpose()
  */
 RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 {
-	Matrix result;
+    Matrix result;
 
-	result._elements[0] = matrix[0];
-	result._elements[1] = matrix[4];
-	result._elements[2] = matrix[8];
-	result._elements[3] = matrix[12];
+    result._elements[0] = matrix[0];
+    result._elements[1] = matrix[4];
+    result._elements[2] = matrix[8];
+    result._elements[3] = matrix[12];
 
-	result._elements[4] = matrix[1];
-	result._elements[5] = matrix[5];
-	result._elements[6] = matrix[9];
-	result._elements[7] = matrix[13];
+    result._elements[4] = matrix[1];
+    result._elements[5] = matrix[5];
+    result._elements[6] = matrix[9];
+    result._elements[7] = matrix[13];
 
-	result._elements[8] = matrix[2];
-	result._elements[9] = matrix[6];
-	result._elements[10] = matrix[10];
-	result._elements[11] = matrix[14];
+    result._elements[8] = matrix[2];
+    result._elements[9] = matrix[6];
+    result._elements[10] = matrix[10];
+    result._elements[11] = matrix[14];
 
-	result._elements[12] = matrix[3];
-	result._elements[13] = matrix[7];
-	result._elements[14] = matrix[11];
-	result._elements[15] = matrix[15];
+    result._elements[12] = matrix[3];
+    result._elements[13] = matrix[7];
+    result._elements[14] = matrix[11];
+    result._elements[15] = matrix[15];
 
-	return result;
+    return result;
 }
 
 /**
@@ -202,12 +202,12 @@ RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
  */
 RFMath::Matrix& RFMath::Matrix::Translate(const Vector3& vector)
 {
-	this->Identity();
-	this->_elements[12] = vector[0];
-	this->_elements[13] = vector[1];
-	this->_elements[14] = vector[2];
+    this->Identity();
+    this->_elements[12] = vector[0];
+    this->_elements[13] = vector[1];
+    this->_elements[14] = vector[2];
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -221,12 +221,12 @@ RFMath::Matrix& RFMath::Matrix::Translate(const Vector3& vector)
  */
 RFMath::Matrix& RFMath::Matrix::Translate(float x, float y, float z)
 {
-	this->Identity();
-	this->_elements[12] = x;
-	this->_elements[13] = y;
-	this->_elements[14] = z;
+    this->Identity();
+    this->_elements[12] = x;
+    this->_elements[13] = y;
+    this->_elements[14] = z;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -238,8 +238,8 @@ RFMath::Matrix& RFMath::Matrix::Translate(float x, float y, float z)
  */
 RFMath::Matrix& RFMath::Matrix::TranslateX(float x)
 {
-	this->_elements[12] = x;
-	return *this;
+    this->_elements[12] = x;
+    return *this;
 }
 
 /**
@@ -251,8 +251,8 @@ RFMath::Matrix& RFMath::Matrix::TranslateX(float x)
  */
 RFMath::Matrix& RFMath::Matrix::TranslateY(float y)
 {
-	this->_elements[13] = y;
-	return *this;
+    this->_elements[13] = y;
+    return *this;
 }
 
 /**
@@ -264,8 +264,8 @@ RFMath::Matrix& RFMath::Matrix::TranslateY(float y)
  */
 RFMath::Matrix& RFMath::Matrix::TranslateZ(float z)
 {
-	this->_elements[14] = z;
-	return *this;
+    this->_elements[14] = z;
+    return *this;
 }
 
 /**
@@ -277,12 +277,12 @@ RFMath::Matrix& RFMath::Matrix::TranslateZ(float z)
  */
 RFMath::Matrix& RFMath::Matrix::Scale(const Vector3& vector)
 {
-	this->Identity();
-	this->_elements[0] = vector[0];
-	this->_elements[5] = vector[1];
-	this->_elements[10] = vector[2];
+    this->Identity();
+    this->_elements[0] = vector[0];
+    this->_elements[5] = vector[1];
+    this->_elements[10] = vector[2];
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -296,12 +296,12 @@ RFMath::Matrix& RFMath::Matrix::Scale(const Vector3& vector)
  */
 RFMath::Matrix& RFMath::Matrix::Scale(float x, float y, float z)
 {
-	this->Identity();
-	this->_elements[0] = x;
-	this->_elements[5] = y;
-	this->_elements[10] = z;
+    this->Identity();
+    this->_elements[0] = x;
+    this->_elements[5] = y;
+    this->_elements[10] = z;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -313,8 +313,8 @@ RFMath::Matrix& RFMath::Matrix::Scale(float x, float y, float z)
  */
 RFMath::Matrix& RFMath::Matrix::ScaleX(float x)
 {
-	this->_elements[0] = x;
-	return *this;
+    this->_elements[0] = x;
+    return *this;
 }
 
 /**
@@ -326,8 +326,8 @@ RFMath::Matrix& RFMath::Matrix::ScaleX(float x)
  */
 RFMath::Matrix& RFMath::Matrix::ScaleY(float y)
 {
-	this->_elements[5] = y;
-	return *this;
+    this->_elements[5] = y;
+    return *this;
 }
 
 /**
@@ -339,8 +339,8 @@ RFMath::Matrix& RFMath::Matrix::ScaleY(float y)
  */
 RFMath::Matrix& RFMath::Matrix::ScaleZ(float z)
 {
-	this->_elements[10] = z;
-	return *this;
+    this->_elements[10] = z;
+    return *this;
 }
 
 /**
@@ -354,30 +354,30 @@ RFMath::Matrix& RFMath::Matrix::ScaleZ(float z)
  */
 RFMath::Matrix& RFMath::Matrix::Rotation(float y, float x, float z)
 {
-	this->Identity();
+    this->Identity();
 
-	float cosx, sinx;
-	RFMathSinCos(x, sinx, cosx);
+    float cosx, sinx;
+    RFMathSinCos(x, sinx, cosx);
 
-	float cosy, siny;
-	RFMathSinCos(y, siny, cosy);
+    float cosy, siny;
+    RFMathSinCos(y, siny, cosy);
 
-	float cosz, sinz;
-	RFMathSinCos(z, sinz, cosz);
+    float cosz, sinz;
+    RFMathSinCos(z, sinz, cosz);
 
-	this->_elements[0] = cosy * cosz;
-	this->_elements[4] = -(cosy * sinz);
-	this->_elements[8] = siny;
-	
-	this->_elements[1] = (sinx * siny * cosz) + (cosx * sinz);
-	this->_elements[5] = -(sinx * siny * sinz) + (cosx * cosz);
-	this->_elements[9] = -(sinx * cosy);
-	
-	this->_elements[2] = -(cosx * siny * cosz) + (sinx * sinz);
-	this->_elements[6] = (cosx * siny * sinz) + (sinx * cosz);
-	this->_elements[10] = (cosx * cosy);
+    this->_elements[0] = cosy * cosz;
+    this->_elements[4] = -(cosy * sinz);
+    this->_elements[8] = siny;
+    
+    this->_elements[1] = (sinx * siny * cosz) + (cosx * sinz);
+    this->_elements[5] = -(sinx * siny * sinz) + (cosx * cosz);
+    this->_elements[9] = -(sinx * cosy);
+    
+    this->_elements[2] = -(cosx * siny * cosz) + (sinx * sinz);
+    this->_elements[6] = (cosx * siny * sinz) + (sinx * cosz);
+    this->_elements[10] = (cosx * cosy);
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -389,15 +389,15 @@ RFMath::Matrix& RFMath::Matrix::Rotation(float y, float x, float z)
  */
 RFMath::Matrix& RFMath::Matrix::RotationX(float angle)
 {
-	float cos, sin;
-	RFMathSinCos(angle, sin, cos);
+    float cos, sin;
+    RFMathSinCos(angle, sin, cos);
 
-	this->_elements[5] = cos;
-	this->_elements[6] = sin;
-	this->_elements[9] = -sin;
-	this->_elements[10] = cos;
+    this->_elements[5] = cos;
+    this->_elements[6] = sin;
+    this->_elements[9] = -sin;
+    this->_elements[10] = cos;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -409,15 +409,15 @@ RFMath::Matrix& RFMath::Matrix::RotationX(float angle)
  */
 RFMath::Matrix& RFMath::Matrix::RotationY(float angle)
 {
-	float cos, sin;
-	RFMathSinCos(angle, sin, cos);
+    float cos, sin;
+    RFMathSinCos(angle, sin, cos);
 
-	this->_elements[0] = cos;
-	this->_elements[2] = -sin;
-	this->_elements[8] = sin;
-	this->_elements[10] = cos;
+    this->_elements[0] = cos;
+    this->_elements[2] = -sin;
+    this->_elements[8] = sin;
+    this->_elements[10] = cos;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -429,15 +429,15 @@ RFMath::Matrix& RFMath::Matrix::RotationY(float angle)
  */
 RFMath::Matrix& RFMath::Matrix::RotationZ(float angle)
 {
-	float cos, sin;
-	RFMathSinCos(angle, sin, cos);
+    float cos, sin;
+    RFMathSinCos(angle, sin, cos);
 
-	this->_elements[0] = cos;
-	this->_elements[1] = sin;
-	this->_elements[4] = -sin;
-	this->_elements[5] = cos;
+    this->_elements[0] = cos;
+    this->_elements[1] = sin;
+    this->_elements[4] = -sin;
+    this->_elements[5] = cos;
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -447,14 +447,14 @@ RFMath::Matrix& RFMath::Matrix::RotationZ(float angle)
  */
 RFMath::Matrix RFMath::Matrix::operator-() const
 {
-	Matrix result;
+    Matrix result;
 
-	for(int i = 0; i < 16; ++i)
-	{
-		result._elements[i] = -(this->_elements[i]);
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        result._elements[i] = -(this->_elements[i]);
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -466,17 +466,17 @@ RFMath::Matrix RFMath::Matrix::operator-() const
  */
 RFMath::Matrix& RFMath::Matrix::operator=(const Matrix& matrix)
 {
-	if(this == &matrix)
-	{
-		return *this;
-	}
+    if(this == &matrix)
+    {
+        return *this;
+    }
 
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] = matrix._elements[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] = matrix._elements[i];
+    }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -488,15 +488,15 @@ RFMath::Matrix& RFMath::Matrix::operator=(const Matrix& matrix)
  */
 bool RFMath::Matrix::operator==(const Matrix& matrix)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
-		{
-			return false;
-		}
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
+        {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -508,15 +508,15 @@ bool RFMath::Matrix::operator==(const Matrix& matrix)
  */
 bool RFMath::Matrix::operator!=(const Matrix& matrix)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
-		{
-			return true;
-		}
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        if(!RFMathIsEqual(this->_elements[i], matrix._elements[i]))
+        {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
 /**
@@ -528,7 +528,7 @@ bool RFMath::Matrix::operator!=(const Matrix& matrix)
  */
 float RFMath::Matrix::operator[](unsigned int i) const
 {
-	return this->_elements[i];
+    return this->_elements[i];
 }
 
 /**
@@ -540,7 +540,7 @@ float RFMath::Matrix::operator[](unsigned int i) const
  */
 float RFMath::Matrix::operator()(unsigned int i) const
 {
-	return this->_elements[i];
+    return this->_elements[i];
 }
 
 /**
@@ -553,7 +553,7 @@ float RFMath::Matrix::operator()(unsigned int i) const
  */
 float RFMath::Matrix::operator()(unsigned int i, unsigned int j) const
 {
-	return this->_elements[j + (i * 4)];
+    return this->_elements[j + (i * 4)];
 }
 
 /**
@@ -565,14 +565,14 @@ float RFMath::Matrix::operator()(unsigned int i, unsigned int j) const
  */
 RFMath::Matrix RFMath::Matrix::operator+(const Matrix& matrix) const
 {
-	Matrix result;
+    Matrix result;
 
-	for(int i = 0; i < 16; ++i)
-	{
-		result._elements[i] = this->_elements[i] + matrix[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        result._elements[i] = this->_elements[i] + matrix[i];
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -584,12 +584,12 @@ RFMath::Matrix RFMath::Matrix::operator+(const Matrix& matrix) const
  */
 RFMath::Matrix& RFMath::Matrix::operator+=(const Matrix& matrix)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] += matrix[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] += matrix[i];
+    }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -601,14 +601,14 @@ RFMath::Matrix& RFMath::Matrix::operator+=(const Matrix& matrix)
  */
 RFMath::Matrix RFMath::Matrix::operator-(const Matrix& matrix) const
 {
-	Matrix result;
+    Matrix result;
 
-	for(int i = 0; i < 16; ++i)
-	{
-		result._elements[i] = this->_elements[i] - matrix[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        result._elements[i] = this->_elements[i] - matrix[i];
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -620,12 +620,12 @@ RFMath::Matrix RFMath::Matrix::operator-(const Matrix& matrix) const
  */
 RFMath::Matrix& RFMath::Matrix::operator-=(const Matrix& matrix)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] -= matrix[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] -= matrix[i];
+    }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -637,14 +637,14 @@ RFMath::Matrix& RFMath::Matrix::operator-=(const Matrix& matrix)
  */
 RFMath::Matrix RFMath::Matrix::operator*(float scalar) const
 {
-	Matrix result;
+    Matrix result;
 
-	for(int i = 0; i < 16; ++i)
-	{
-		result._elements[i] = this->_elements[i] * scalar;
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        result._elements[i] = this->_elements[i] * scalar;
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -657,14 +657,14 @@ RFMath::Matrix RFMath::Matrix::operator*(float scalar) const
  */
 DLL_API RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
 {
-	Matrix result;
-	
-	for(int i = 0; i < 16; ++i)
-	{
-		result._elements[i] = matrix._elements[i] * scalar;
-	}
+    Matrix result;
+    
+    for(int i = 0; i < 16; ++i)
+    {
+        result._elements[i] = matrix._elements[i] * scalar;
+    }
 
-	return result;
+    return result;
 }
 
 /**
@@ -676,12 +676,12 @@ DLL_API RFMath::Matrix RFMath::operator*(float scalar, const Matrix& matrix)
  */
 RFMath::Matrix& RFMath::Matrix::operator*=(float scalar)
 {
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] *= scalar;
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] *= scalar;
+    }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -693,15 +693,15 @@ RFMath::Matrix& RFMath::Matrix::operator*=(float scalar)
  */
 RFMath::Vector3 RFMath::Matrix::operator*(const Vector3& vector) const
 {
-	Vector3 result;
+    Vector3 result;
 
-	result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12]);
-	result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13]);
-	result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14]);
+    result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12]);
+    result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13]);
+    result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14]);
 
-	result.Clean();
+    result.Clean();
 
-	return result;
+    return result;
 }
 
 /**
@@ -714,15 +714,15 @@ RFMath::Vector3 RFMath::Matrix::operator*(const Vector3& vector) const
  */
 DLL_API RFMath::Vector3 RFMath::operator*(const Vector3& vector, const Matrix& matrix)
 {
-	Vector3 result;
+    Vector3 result;
 
-	result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12]);
-	result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13]);
-	result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14]);
+    result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12]);
+    result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13]);
+    result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14]);
 
-	result.Clean();
+    result.Clean();
 
-	return result;
+    return result;
 }
 
 /**
@@ -734,16 +734,16 @@ DLL_API RFMath::Vector3 RFMath::operator*(const Vector3& vector, const Matrix& m
  */
 RFMath::Vector4 RFMath::Matrix::operator*(const Vector4& vector) const
 {
-	Vector4 result;
+    Vector4 result;
 
-	result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12] * vector.GetW());
-	result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13] * vector.GetW());
-	result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14] * vector.GetW());
-	result.SetW(this->_elements[3] * vector.GetX() + this->_elements[7] * vector.GetY() + this->_elements[11] * vector.GetZ() + this->_elements[15] * vector.GetW());
+    result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12] * vector.GetW());
+    result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13] * vector.GetW());
+    result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14] * vector.GetW());
+    result.SetW(this->_elements[3] * vector.GetX() + this->_elements[7] * vector.GetY() + this->_elements[11] * vector.GetZ() + this->_elements[15] * vector.GetW());
 
-	result.Clean();
+    result.Clean();
 
-	return result;
+    return result;
 }
 
 /**
@@ -756,16 +756,16 @@ RFMath::Vector4 RFMath::Matrix::operator*(const Vector4& vector) const
  */
 DLL_API RFMath::Vector4 RFMath::operator*(const Vector4& vector, const Matrix& matrix)
 {
-	Vector4 result;
+    Vector4 result;
 
-	result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12] * vector.GetW());
-	result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13] * vector.GetW());
-	result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14] * vector.GetW());
-	result.SetW(matrix[3] * vector.GetX() + matrix[7] * vector.GetY() + matrix[11] * vector.GetZ() + matrix[15] * vector.GetW());
+    result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12] * vector.GetW());
+    result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13] * vector.GetW());
+    result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14] * vector.GetW());
+    result.SetW(matrix[3] * vector.GetX() + matrix[7] * vector.GetY() + matrix[11] * vector.GetZ() + matrix[15] * vector.GetW());
 
-	result.Clean();
+    result.Clean();
 
-	return result;
+    return result;
 }
 
 /**
@@ -777,33 +777,33 @@ DLL_API RFMath::Vector4 RFMath::operator*(const Vector4& vector, const Matrix& m
  */
 RFMath::Matrix RFMath::Matrix::operator*(const Matrix& matrix) const
 {
-	Matrix result;
+    Matrix result;
 
-	// First row
-	result._elements[0] = _elements[0] * matrix[0] + _elements[4] * matrix[1] + _elements[8] * matrix[2] + _elements[12] * matrix[3];		
-	result._elements[1] = _elements[1] * matrix[0] + _elements[5] * matrix[1] + _elements[9] * matrix[2] + _elements[13] * matrix[3];
-	result._elements[2] = _elements[2] * matrix[0] + _elements[6] * matrix[1] + _elements[10] * matrix[2] + _elements[14] * matrix[3];
-	result._elements[3] = _elements[3] * matrix[0] + _elements[7] * matrix[1] + _elements[11] * matrix[2] + _elements[15] * matrix[3];
+    // First row
+    result._elements[0] = _elements[0] * matrix[0] + _elements[4] * matrix[1] + _elements[8] * matrix[2] + _elements[12] * matrix[3];		
+    result._elements[1] = _elements[1] * matrix[0] + _elements[5] * matrix[1] + _elements[9] * matrix[2] + _elements[13] * matrix[3];
+    result._elements[2] = _elements[2] * matrix[0] + _elements[6] * matrix[1] + _elements[10] * matrix[2] + _elements[14] * matrix[3];
+    result._elements[3] = _elements[3] * matrix[0] + _elements[7] * matrix[1] + _elements[11] * matrix[2] + _elements[15] * matrix[3];
 
-	// Second row
-	result._elements[4] = _elements[0] * matrix[4] + _elements[4] * matrix[5] + _elements[8] * matrix[6] + _elements[12] * matrix[7];
-	result._elements[5] = _elements[1] * matrix[4] + _elements[5] * matrix[5] + _elements[9] * matrix[6] + _elements[13] * matrix[7];
-	result._elements[6] = _elements[2] * matrix[4] + _elements[6] * matrix[5] + _elements[10] * matrix[6] + _elements[14] * matrix[7];
-	result._elements[7] = _elements[3] * matrix[4] + _elements[7] * matrix[5] + _elements[11] * matrix[6] + _elements[15] * matrix[7];
+    // Second row
+    result._elements[4] = _elements[0] * matrix[4] + _elements[4] * matrix[5] + _elements[8] * matrix[6] + _elements[12] * matrix[7];
+    result._elements[5] = _elements[1] * matrix[4] + _elements[5] * matrix[5] + _elements[9] * matrix[6] + _elements[13] * matrix[7];
+    result._elements[6] = _elements[2] * matrix[4] + _elements[6] * matrix[5] + _elements[10] * matrix[6] + _elements[14] * matrix[7];
+    result._elements[7] = _elements[3] * matrix[4] + _elements[7] * matrix[5] + _elements[11] * matrix[6] + _elements[15] * matrix[7];
 
-	// Third row
-	result._elements[8] = _elements[0] * matrix[8] + _elements[4] * matrix[9] + _elements[8] * matrix[10] + _elements[12] * matrix[11];
-	result._elements[9] = _elements[1] * matrix[8] + _elements[5] * matrix[9] + _elements[9] * matrix[10] + _elements[13] * matrix[11];
-	result._elements[10] = _elements[2] * matrix[8] + _elements[6] * matrix[9] + _elements[10] * matrix[10] + _elements[14] * matrix[11];
-	result._elements[11] = _elements[3] * matrix[8] + _elements[7] * matrix[9] + _elements[11] * matrix[10] + _elements[15] * matrix[11];
+    // Third row
+    result._elements[8] = _elements[0] * matrix[8] + _elements[4] * matrix[9] + _elements[8] * matrix[10] + _elements[12] * matrix[11];
+    result._elements[9] = _elements[1] * matrix[8] + _elements[5] * matrix[9] + _elements[9] * matrix[10] + _elements[13] * matrix[11];
+    result._elements[10] = _elements[2] * matrix[8] + _elements[6] * matrix[9] + _elements[10] * matrix[10] + _elements[14] * matrix[11];
+    result._elements[11] = _elements[3] * matrix[8] + _elements[7] * matrix[9] + _elements[11] * matrix[10] + _elements[15] * matrix[11];
 
-	// Second row
-	result._elements[12] = _elements[0] * matrix[12] + _elements[4] * matrix[13] + _elements[8] * matrix[14] + _elements[12] * matrix[15];
-	result._elements[13] = _elements[1] * matrix[12] + _elements[5] * matrix[13] + _elements[9] * matrix[14] + _elements[13] * matrix[15];
-	result._elements[14] = _elements[2] * matrix[12] + _elements[6] * matrix[13] + _elements[10] * matrix[14] + _elements[14] * matrix[15];
-	result._elements[15] = _elements[3] * matrix[12] + _elements[7] * matrix[13] + _elements[11] * matrix[14] + _elements[15] * matrix[15];
+    // Second row
+    result._elements[12] = _elements[0] * matrix[12] + _elements[4] * matrix[13] + _elements[8] * matrix[14] + _elements[12] * matrix[15];
+    result._elements[13] = _elements[1] * matrix[12] + _elements[5] * matrix[13] + _elements[9] * matrix[14] + _elements[13] * matrix[15];
+    result._elements[14] = _elements[2] * matrix[12] + _elements[6] * matrix[13] + _elements[10] * matrix[14] + _elements[14] * matrix[15];
+    result._elements[15] = _elements[3] * matrix[12] + _elements[7] * matrix[13] + _elements[11] * matrix[14] + _elements[15] * matrix[15];
 
-	return result;
+    return result;
 }
 
 /**
@@ -815,38 +815,38 @@ RFMath::Matrix RFMath::Matrix::operator*(const Matrix& matrix) const
  */
 RFMath::Matrix& RFMath::Matrix::operator*=(const Matrix& matrix)
 {
-	Matrix result;
+    Matrix result;
 
-	// First row
-	result._elements[0] = _elements[0] * matrix[0] + _elements[4] * matrix[1] + _elements[8] * matrix[2] + _elements[12] * matrix[3];		
-	result._elements[1] = _elements[1] * matrix[0] + _elements[5] * matrix[1] + _elements[9] * matrix[2] + _elements[13] * matrix[3];
-	result._elements[2] = _elements[2] * matrix[0] + _elements[6] * matrix[1] + _elements[10] * matrix[2] + _elements[14] * matrix[3];
-	result._elements[3] = _elements[3] * matrix[0] + _elements[7] * matrix[1] + _elements[11] * matrix[2] + _elements[15] * matrix[3];
+    // First row
+    result._elements[0] = _elements[0] * matrix[0] + _elements[4] * matrix[1] + _elements[8] * matrix[2] + _elements[12] * matrix[3];		
+    result._elements[1] = _elements[1] * matrix[0] + _elements[5] * matrix[1] + _elements[9] * matrix[2] + _elements[13] * matrix[3];
+    result._elements[2] = _elements[2] * matrix[0] + _elements[6] * matrix[1] + _elements[10] * matrix[2] + _elements[14] * matrix[3];
+    result._elements[3] = _elements[3] * matrix[0] + _elements[7] * matrix[1] + _elements[11] * matrix[2] + _elements[15] * matrix[3];
 
-	// Second row
-	result._elements[4] = _elements[0] * matrix[4] + _elements[4] * matrix[5] + _elements[8] * matrix[6] + _elements[12] * matrix[7];
-	result._elements[5] = _elements[1] * matrix[4] + _elements[5] * matrix[5] + _elements[9] * matrix[6] + _elements[13] * matrix[7];
-	result._elements[6] = _elements[2] * matrix[4] + _elements[6] * matrix[5] + _elements[10] * matrix[6] + _elements[14] * matrix[7];
-	result._elements[7] = _elements[3] * matrix[4] + _elements[7] * matrix[5] + _elements[11] * matrix[6] + _elements[15] * matrix[7];
+    // Second row
+    result._elements[4] = _elements[0] * matrix[4] + _elements[4] * matrix[5] + _elements[8] * matrix[6] + _elements[12] * matrix[7];
+    result._elements[5] = _elements[1] * matrix[4] + _elements[5] * matrix[5] + _elements[9] * matrix[6] + _elements[13] * matrix[7];
+    result._elements[6] = _elements[2] * matrix[4] + _elements[6] * matrix[5] + _elements[10] * matrix[6] + _elements[14] * matrix[7];
+    result._elements[7] = _elements[3] * matrix[4] + _elements[7] * matrix[5] + _elements[11] * matrix[6] + _elements[15] * matrix[7];
 
-	// Third row
-	result._elements[8] = _elements[0] * matrix[8] + _elements[4] * matrix[9] + _elements[8] * matrix[10] + _elements[12] * matrix[11];
-	result._elements[9] = _elements[1] * matrix[8] + _elements[5] * matrix[9] + _elements[9] * matrix[10] + _elements[13] * matrix[11];
-	result._elements[10] = _elements[2] * matrix[8] + _elements[6] * matrix[9] + _elements[10] * matrix[10] + _elements[14] * matrix[11];
-	result._elements[11] = _elements[3] * matrix[8] + _elements[7] * matrix[9] + _elements[11] * matrix[10] + _elements[15] * matrix[11];
+    // Third row
+    result._elements[8] = _elements[0] * matrix[8] + _elements[4] * matrix[9] + _elements[8] * matrix[10] + _elements[12] * matrix[11];
+    result._elements[9] = _elements[1] * matrix[8] + _elements[5] * matrix[9] + _elements[9] * matrix[10] + _elements[13] * matrix[11];
+    result._elements[10] = _elements[2] * matrix[8] + _elements[6] * matrix[9] + _elements[10] * matrix[10] + _elements[14] * matrix[11];
+    result._elements[11] = _elements[3] * matrix[8] + _elements[7] * matrix[9] + _elements[11] * matrix[10] + _elements[15] * matrix[11];
 
-	// Second row
-	result._elements[12] = _elements[0] * matrix[12] + _elements[4] * matrix[13] + _elements[8] * matrix[14] + _elements[12] * matrix[15];
-	result._elements[13] = _elements[1] * matrix[12] + _elements[5] * matrix[13] + _elements[9] * matrix[14] + _elements[13] * matrix[15];
-	result._elements[14] = _elements[2] * matrix[12] + _elements[6] * matrix[13] + _elements[10] * matrix[14] + _elements[14] * matrix[15];
-	result._elements[15] = _elements[3] * matrix[12] + _elements[7] * matrix[13] + _elements[11] * matrix[14] + _elements[15] * matrix[15];
+    // Second row
+    result._elements[12] = _elements[0] * matrix[12] + _elements[4] * matrix[13] + _elements[8] * matrix[14] + _elements[12] * matrix[15];
+    result._elements[13] = _elements[1] * matrix[12] + _elements[5] * matrix[13] + _elements[9] * matrix[14] + _elements[13] * matrix[15];
+    result._elements[14] = _elements[2] * matrix[12] + _elements[6] * matrix[13] + _elements[10] * matrix[14] + _elements[14] * matrix[15];
+    result._elements[15] = _elements[3] * matrix[12] + _elements[7] * matrix[13] + _elements[11] * matrix[14] + _elements[15] * matrix[15];
 
-	for(int i = 0; i < 16; ++i)
-	{
-		this->_elements[i] = result[i];
-	}
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] = result[i];
+    }
 
-	return *this;
+    return *this;
 }
 
 /**
@@ -860,17 +860,17 @@ RFMath::Matrix& RFMath::Matrix::operator*=(const Matrix& matrix)
 DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Matrix& matrix)
 {
     output << "Matrix {" << std::endl;
-	for(int i = 0; i < 4; ++i) 
-	{
-		for(int j = 0; j < 4; ++j) 
-		{
-			output << matrix._elements[j + (i * 4)] << ", ";
-			if(j == 3) 
-			{
-				output << std::endl;
-			}
-		}
-	}
+    for(int i = 0; i < 4; ++i) 
+    {
+        for(int j = 0; j < 4; ++j) 
+        {
+            output << matrix._elements[j + (i * 4)] << ", ";
+            if(j == 3) 
+            {
+                output << std::endl;
+            }
+        }
+    }
     output << "}";
     return output;
 }

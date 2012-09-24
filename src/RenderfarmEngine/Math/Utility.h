@@ -18,7 +18,7 @@
  */
 inline bool RFMathIsZero(float a) 
 {
-	return (fabsf(a) < EPSILON);
+    return (fabsf(a) < EPSILON);
 }
 
 /**
@@ -32,7 +32,7 @@ inline bool RFMathIsZero(float a)
  */
 inline bool RFMathIsEqual(float a, float b)
 {
-	return RFMathIsZero(a - b);
+    return RFMathIsZero(a - b);
 }
 
 /**
@@ -44,12 +44,12 @@ inline bool RFMathIsEqual(float a, float b)
  */
 inline float RFMathInvSqrt(float x)
 {
-	float xhalf = 0.5f * x;
-	int i = *(int*)&x;
-	i = 0x5f3759d5 - (i >> 1);
-	x = *(float*)&i;
-	x = x * (1.5f - xhalf * x * x);
-	return x;
+    float xhalf = 0.5f * x;
+    int i = *(int*)&x;
+    i = 0x5f3759d5 - (i >> 1);
+    x = *(float*)&i;
+    x = x * (1.5f - xhalf * x * x);
+    return x;
 }
 
 /**
@@ -61,8 +61,8 @@ inline float RFMathInvSqrt(float x)
  */
 inline void RFMathSinCos(float angle, float& sin, float& cos)
 {
-	sin = sinf(angle);
-	cos = cosf(angle);
+    sin = sinf(angle);
+    cos = cosf(angle);
 }
 
 /**
@@ -74,7 +74,7 @@ inline void RFMathSinCos(float angle, float& sin, float& cos)
  */
 inline float RFMathDegToRad(float degrees)
 {
-	return degrees * (PI / 180.0f);
+    return degrees * (PI / 180.0f);
 }
 
 /**
@@ -86,7 +86,7 @@ inline float RFMathDegToRad(float degrees)
  */
 inline float RFMathRadToDeg(float radians)
 {
-	return radians * (180.0f / PI);
+    return radians * (180.0f / PI);
 }
 
 
