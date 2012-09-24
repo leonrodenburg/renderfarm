@@ -179,18 +179,6 @@ RFMath::Matrix& RFMath::Matrix::Transpose()
 }
 
 /**
- * Calculate the inverse of this matrix and return
- * the inverse (if it exists).
- *
- * @return Inverted matrix
- */
-RFMath::Matrix& RFMath::Matrix::Inverse()
-{
-    *this = RFMath::Inverse(*this);
-    return *this;
-}
-
-/**
  * Calculate the transpose of a matrix and return a new
  * matrix.
  *
@@ -223,6 +211,20 @@ DLL_API RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
     result._elements[15] = matrix[15];
 
     return result;
+}
+
+/**
+ * Calculate the inverse of this matrix and return
+ * the inverse (if it exists).
+ *
+ * @return Inverted matrix
+ */
+RFMath::Matrix& RFMath::Matrix::Inverse()
+{
+    *this = RFMath::Inverse(*this);
+    this->Clean();
+    
+    return *this;
 }
 
 /**
@@ -268,6 +270,8 @@ DLL_API RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
     result._elements[12] = -result[0] * matrix[12] - result[4] * matrix[13] - result[8] * matrix[14];
     result._elements[13] = -result[1] * matrix[12] - result[5] * matrix[13] - result[9] * matrix[14];
     result._elements[14] = -result[2] * matrix[12] - result[6] * matrix[13] - result[10] * matrix[14];
+
+    result.Clean();
 
     return result;
 }
