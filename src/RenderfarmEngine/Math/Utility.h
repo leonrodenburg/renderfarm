@@ -52,4 +52,42 @@ inline float RFMathInvSqrt(float x)
 	return x;
 }
 
+/**
+ * Calculate the sine and cosine of an angle.
+ *
+ * @param angle
+ * @param sina out
+ * @param cosa out
+ */
+inline void RFMathSinCos(float angle, float& sin, float& cos)
+{
+	sin = sinf(angle);
+	cos = cosf(angle);
+}
+
+/**
+ * Convert degrees to radians.
+ *
+ * @param degrees
+ *
+ * @return Angle in radians
+ */
+inline float RFMathDegToRad(float degrees)
+{
+	return degrees * (PI / 180.0f);
+}
+
+/**
+ * Convert radians to degrees.
+ *
+ * @param radians
+ *
+ * @return Angle in degrees
+ */
+inline float RFMathRadToDeg(float radians)
+{
+	return radians * (180.0f / PI);
+}
+
+
 #endif
