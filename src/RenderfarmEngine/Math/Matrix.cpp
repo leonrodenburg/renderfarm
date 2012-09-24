@@ -124,6 +124,26 @@ float* RFMath::Matrix::GetPointer()
 }
 
 /**
+ * Transform a point described by the vector.
+ *
+ * @param vector
+ *
+ * @return Transformed vector
+ */
+RFMath::Vector3 RFMath::Matrix::Transform(const Vector3& vector)
+{
+    Vector3 result;
+
+    result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12]);
+    result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13]);
+    result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14]);
+
+    result.Clean();
+
+    return result;
+}
+
+/**
  * Get the transpose of this matrix.
  *
  * @return Tranposed matrix
@@ -344,38 +364,33 @@ RFMath::Matrix& RFMath::Matrix::ScaleZ(float z)
 }
 
 /**
- * Calculate the rotation matrix.
+ * Calculate the rotation matrix. The resulting matrix's order is
+ * roll - pitch - yaw.
  *
- * @param y
- * @param x
- * @param z
+ * @param yaw
+ * @param pitch
+ * @param roll
  *
  * @return Rotation matrix
  */
-RFMath::Matrix& RFMath::Matrix::Rotation(float y, float x, float z)
+RFMath::Matrix& RFMath::Matrix::Rotate(float yaw, float pitch, float roll)
 {
     this->Identity();
 
-    float cosx, sinx;
-    RFMathSinCos(x, sinx, cosx);
+    Matrix yawMatrix;
+    Matrix pitchMatrix;
+    Matrix rollMatrix;
 
-    float cosy, siny;
-    RFMathSinCos(y, siny, cosy);
+    yawMatrix.RotateY(yaw);
+    pitchMatrix.RotateX(pitch);
+    rollMatrix.RotateZ(roll);
 
-    float cosz, sinz;
-    RFMathSinCos(z, sinz, cosz);
+    Matrix result = yawMatrix * pitchMatrix * rollMatrix;
 
-    this->_elements[0] = cosy * cosz;
-    this->_elements[4] = -(cosy * sinz);
-    this->_elements[8] = siny;
-    
-    this->_elements[1] = (sinx * siny * cosz) + (cosx * sinz);
-    this->_elements[5] = -(sinx * siny * sinz) + (cosx * cosz);
-    this->_elements[9] = -(sinx * cosy);
-    
-    this->_elements[2] = -(cosx * siny * cosz) + (sinx * sinz);
-    this->_elements[6] = (cosx * siny * sinz) + (sinx * cosz);
-    this->_elements[10] = (cosx * cosy);
+    for(int i = 0; i < 16; ++i)
+    {
+        this->_elements[i] = result[i];
+    }
 
     return *this;
 }
@@ -387,10 +402,10 @@ RFMath::Matrix& RFMath::Matrix::Rotation(float y, float x, float z)
  *
  * @return Modified matrix
  */
-RFMath::Matrix& RFMath::Matrix::RotationX(float angle)
+RFMath::Matrix& RFMath::Matrix::RotateX(float angle)
 {
     float cos, sin;
-    RFMathSinCos(angle, sin, cos);
+    RFMathSinCos(-angle, sin, cos);
 
     this->_elements[5] = cos;
     this->_elements[6] = sin;
@@ -407,7 +422,7 @@ RFMath::Matrix& RFMath::Matrix::RotationX(float angle)
  *
  * @return Modified matrix
  */
-RFMath::Matrix& RFMath::Matrix::RotationY(float angle)
+RFMath::Matrix& RFMath::Matrix::RotateY(float angle)
 {
     float cos, sin;
     RFMathSinCos(angle, sin, cos);
@@ -427,10 +442,10 @@ RFMath::Matrix& RFMath::Matrix::RotationY(float angle)
  *
  * @return Modified matrix
  */
-RFMath::Matrix& RFMath::Matrix::RotationZ(float angle)
+RFMath::Matrix& RFMath::Matrix::RotateZ(float angle)
 {
     float cos, sin;
-    RFMathSinCos(angle, sin, cos);
+    RFMathSinCos(-angle, sin, cos);
 
     this->_elements[0] = cos;
     this->_elements[1] = sin;
@@ -691,47 +706,6 @@ RFMath::Matrix& RFMath::Matrix::operator*=(float scalar)
  *
  * @return New, transformed vector
  */
-RFMath::Vector3 RFMath::Matrix::operator*(const Vector3& vector) const
-{
-    Vector3 result;
-
-    result.SetX(this->_elements[0] * vector.GetX() + this->_elements[4] * vector.GetY() + this->_elements[8] * vector.GetZ() + this->_elements[12]);
-    result.SetY(this->_elements[1] * vector.GetX() + this->_elements[5] * vector.GetY() + this->_elements[9] * vector.GetZ() + this->_elements[13]);
-    result.SetZ(this->_elements[2] * vector.GetX() + this->_elements[6] * vector.GetY() + this->_elements[10] * vector.GetZ() + this->_elements[14]);
-
-    result.Clean();
-
-    return result;
-}
-
-/**
- * Vector-matrix multiplication operator.
- *
- * @param vector
- * @param matrix
- *
- * @return New, transform vector
- */
-DLL_API RFMath::Vector3 RFMath::operator*(const Vector3& vector, const Matrix& matrix)
-{
-    Vector3 result;
-
-    result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12]);
-    result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13]);
-    result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14]);
-
-    result.Clean();
-
-    return result;
-}
-
-/**
- * Matrix-vector multiplication operator.
- *
- * @param vector
- *
- * @return New, transformed vector
- */
 RFMath::Vector4 RFMath::Matrix::operator*(const Vector4& vector) const
 {
     Vector4 result;
@@ -758,10 +732,10 @@ DLL_API RFMath::Vector4 RFMath::operator*(const Vector4& vector, const Matrix& m
 {
     Vector4 result;
 
-    result.SetX(matrix[0] * vector.GetX() + matrix[4] * vector.GetY() + matrix[8] * vector.GetZ() + matrix[12] * vector.GetW());
-    result.SetY(matrix[1] * vector.GetX() + matrix[5] * vector.GetY() + matrix[9] * vector.GetZ() + matrix[13] * vector.GetW());
-    result.SetZ(matrix[2] * vector.GetX() + matrix[6] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[14] * vector.GetW());
-    result.SetW(matrix[3] * vector.GetX() + matrix[7] * vector.GetY() + matrix[11] * vector.GetZ() + matrix[15] * vector.GetW());
+    result.SetX(matrix[0] * vector.GetX() + matrix[1] * vector.GetY() + matrix[2] * vector.GetZ() + matrix[3] * vector.GetW());
+    result.SetY(matrix[4] * vector.GetX() + matrix[5] * vector.GetY() + matrix[6] * vector.GetZ() + matrix[7] * vector.GetW());
+    result.SetZ(matrix[8] * vector.GetX() + matrix[9] * vector.GetY() + matrix[10] * vector.GetZ() + matrix[11] * vector.GetW());
+    result.SetW(matrix[12] * vector.GetX() + matrix[13] * vector.GetY() + matrix[14] * vector.GetZ() + matrix[15] * vector.GetW());
 
     result.Clean();
 
