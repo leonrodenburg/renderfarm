@@ -43,6 +43,9 @@ namespace RFMath
         Matrix& Transpose();
         friend Matrix Transpose(const Matrix& matrix);
 
+        Matrix& Inverse();
+        friend Matrix Inverse(const Matrix& matrix);
+
         Matrix& Translate(const Vector3& vector);
         Matrix& Translate(float x, float y, float z);
         Matrix& TranslateX(float x);

@@ -214,6 +214,70 @@ RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 }
 
 /**
+ * Calculate the inverse of this matrix and return
+ * the inverse (if it exists).
+ *
+ * @return Inverted matrix
+ */
+RFMath::Matrix& RFMath::Matrix::Inverse()
+{
+    Matrix result = ::Inverse(*this);
+    if(null != result)
+    {
+        *this = result;
+    }
+
+    return *this;
+}
+
+/**
+ * Calculate the inverse of the given matrix and
+ * return a new matrix that is the inverse. Return
+ * null if there is no inverse.
+ *
+ * @param matrix
+ *
+ * @return New inverted matrix or null if no inversion possible
+ */
+RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
+{
+    Matrix result;
+
+    // Compute determinant of upper-left 3x3 matrix
+    float cofactor0 = matrix[5] * matrix[10] - matrix[6] * matrix[9];
+    float cofactor4 = matrix[2] * matrix[9] - matrix[1] * matrix[10];
+    float cofactor8 = matrix[1] * matrix[6] - matrix[2] * matrix[5];
+    float det = matrix[0] * cofactor0 + matrix[4] * cofactor4 + matrix[8] * cofactor8;
+
+    // If the determinant is zero (and the matrix is not invertible)
+    if(::IsZero(det))
+    {
+        return null;
+    }
+
+    // Create adjunct matrix and multiply by 1 / determinant to get upper 3x3
+    float invDet = 1.0f / det;
+
+    result._elements[0] = invDet * cofactor0;
+    result._elements[1] = invDet * cofactor4;
+    result._elements[2] = invDet * cofactor8;
+
+    result._elements[4] = invDet * (matrix[6] * matrix[8] - matrix[4] * matrix[10]);
+    result._elements[5] = invDet * (matrix[0] * matrix[10] - matrix[2] * matrix[8]);
+    result._elements[6] = invDet * (matrix[2] * matrix[4] - matrix[0] * matrix[6]);
+
+    result._elements[8] = invDet * (matrix[4] * matrix[9] - matrix[5] * matrix[8]);
+    result._elements[9] = invDet * (matrix[1] * matrix[8] - matrix[0] * matrix[9]);
+    result._elements[10] = invDet * (matrix[0] * matrix[5] - matrix[1] * matrix[4]);
+
+    result._elements[12] = -result[0] * matrix[12] - result[4] * matrix[13] - result[8] * matrix[14];
+    result._elements[13] = -result[1] * matrix[12] - result[5] * matrix[13] - result[9] * matrix[14];
+    result._elements[14] = -result[2] * matrix[12] - result[6] * matrix[13] - result[10] * matrix[14];
+
+    return result;
+}
+
+/**
  * Set the translation in the matrix using a Vector3.
  *
  * @param vector
