@@ -179,6 +179,18 @@ RFMath::Matrix& RFMath::Matrix::Transpose()
 }
 
 /**
+ * Calculate the inverse of this matrix and return
+ * the inverse (if it exists).
+ *
+ * @return Inverted matrix
+ */
+RFMath::Matrix& RFMath::Matrix::Inverse()
+{
+    *this = RFMath::Inverse(*this);
+    return *this;
+}
+
+/**
  * Calculate the transpose of a matrix and return a new
  * matrix.
  *
@@ -186,7 +198,7 @@ RFMath::Matrix& RFMath::Matrix::Transpose()
  *
  * @return New transposed matrix
  */
-RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
+DLL_API RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 {
     Matrix result;
 
@@ -214,32 +226,15 @@ RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 }
 
 /**
- * Calculate the inverse of this matrix and return
- * the inverse (if it exists).
- *
- * @return Inverted matrix
- */
-RFMath::Matrix& RFMath::Matrix::Inverse()
-{
-    Matrix result = ::Inverse(*this);
-    if(null != result)
-    {
-        *this = result;
-    }
-
-    return *this;
-}
-
-/**
  * Calculate the inverse of the given matrix and
  * return a new matrix that is the inverse. Return
- * null if there is no inverse.
+ * identity matrix if not invertible.
  *
  * @param matrix
  *
- * @return New inverted matrix or null if no inversion possible
+ * @return New inverted matrix or identity if no inversion possible
  */
-RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
+DLL_API RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
 {
     Matrix result;
 
@@ -250,9 +245,9 @@ RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
     float det = matrix[0] * cofactor0 + matrix[4] * cofactor4 + matrix[8] * cofactor8;
 
     // If the determinant is zero (and the matrix is not invertible)
-    if(::IsZero(det))
+    if(RFMathIsZero(det))
     {
-        return null;
+        return result;
     }
 
     // Create adjunct matrix and multiply by 1 / determinant to get upper 3x3
