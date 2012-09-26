@@ -3,8 +3,10 @@
 #ifndef _VECTOR4_H_
 #define _VECTOR4_H_
 
-#include <iostream>
+#include "../Resources.h"
 #include "Utility.h"
+
+#include <iostream>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -20,18 +22,12 @@ namespace RFMath
     class DLL_API Vector4
     {
     public:
-        /**
-         * Constructors and destructor
-         */
         Vector4();
         Vector4(const Vector3& vector, float w);
         Vector4(float x, float y, float z, float w);
         Vector4(const Vector4& vector);
         virtual ~Vector4();
 
-        /**
-         * Methods
-         */
         bool IsZero() const;
         bool IsUnit() const;
         void Clean();
@@ -42,9 +38,6 @@ namespace RFMath
 
         float Dot(const Vector4& vector) const;
 
-        /**
-         * Getters and setters
-         */
         float GetX() const { return this->_x; }
         float GetY() const { return this->_y; }
         float GetZ() const { return this->_z; }
@@ -56,9 +49,6 @@ namespace RFMath
         void SetZ(float z) { this->_z = z; }
         void SetW(float w) { this->_w = w; }
 
-        /**
-         * Operators
-         */
         Vector4& operator=(const Vector4& vector);
         Vector4 operator-() const;
         Vector4 operator+(const Vector4& vector) const;
@@ -72,9 +62,6 @@ namespace RFMath
         bool operator==(const Vector4& vector) const;
         DLL_API friend std::ostream& operator<<(std::ostream& output, const Vector4& vector);
 
-        /**
-         * Defaults
-         */
         static Vector4 xAxis;
         static Vector4 yAxis;
         static Vector4 zAxis;

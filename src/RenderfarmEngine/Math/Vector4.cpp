@@ -2,7 +2,7 @@
 #include "Vector3.h"
 
 /**
- * Static defaults
+ * Static member initialisation.
  */
 DLL_API RFMath::Vector4 RFMath::Vector4::xAxis(1.0f, 0.0f, 0.0f, 0.0f);
 DLL_API RFMath::Vector4 RFMath::Vector4::yAxis(0.0f, 1.0f, 0.0f, 0.0f);
@@ -11,7 +11,7 @@ DLL_API RFMath::Vector4 RFMath::Vector4::wAxis(0.0f, 0.0f, 0.0f, 1.0f);
 DLL_API RFMath::Vector4 RFMath::Vector4::origin(0.0f, 0.0f, 0.0f, 0.0f);
 
 /**
- * Default constructor
+ * Default constructor.
  */
 RFMath::Vector4::Vector4()
 {
@@ -66,7 +66,7 @@ RFMath::Vector4::Vector4(const Vector4& vector)
 }
 
 /**
- * Destructor
+ * Destructor.
  */
 RFMath::Vector4::~Vector4()
 {
