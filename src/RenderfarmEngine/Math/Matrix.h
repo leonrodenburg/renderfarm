@@ -4,8 +4,9 @@
 #define _MATRIX_H_
 
 #include <iostream>
-#include "Utility.h"
 
+#include "../Resources.h"
+#include "Utility.h"
 #include "Vector3.h"
 #include "Vector4.h"
 
@@ -20,16 +21,10 @@ namespace RFMath
     class DLL_API Matrix
     {
     public:
-        /**
-         * Constructor and destructor
-         */
         Matrix();
         Matrix(const Matrix& matrix);
         virtual ~Matrix();
 
-        /**
-         * Methods
-         */
         void Identity();
         void Clean();
 
@@ -63,9 +58,6 @@ namespace RFMath
         Matrix& RotateY(float angle);
         Matrix& RotateZ(float angle);
 
-        /**
-         * Operators
-         */
         Matrix operator-() const;
 
         Matrix& operator=(const Matrix& matrix);

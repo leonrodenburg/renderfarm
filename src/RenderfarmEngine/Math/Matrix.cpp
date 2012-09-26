@@ -1,7 +1,7 @@
 #include "Matrix.h"
 
 /**
- * Default constructor
+ * Default constructor.
  */
 RFMath::Matrix::Matrix()
 {
@@ -9,7 +9,7 @@ RFMath::Matrix::Matrix()
 }
 
 /**
- * Copy constructor
+ * Copy constructor.
  *
  * @param matrix
  */
@@ -22,7 +22,7 @@ RFMath::Matrix::Matrix(const Matrix& matrix)
 }
 
 /**
- * Destructor
+ * Destructor.
  */
 RFMath::Matrix::~Matrix()
 {
@@ -247,6 +247,7 @@ DLL_API RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
     // If the determinant is zero (and the matrix is not invertible)
     if(RFMathIsZero(det))
     {
+        RFCore::Logger::GetLogger()->Log(RFCore::Logger::WARNING, "Matrix has no inverse");
         return result;
     }
 
@@ -899,7 +900,7 @@ DLL_API std::ostream& RFMath::operator<<(std::ostream& output, const Matrix& mat
     {
         for(int j = 0; j < 4; ++j) 
         {
-            output << matrix._elements[j + (i * 4)] << ", ";
+            output << "    " << matrix._elements[j + (i * 4)] << ", ";
             if(j == 3) 
             {
                 output << std::endl;

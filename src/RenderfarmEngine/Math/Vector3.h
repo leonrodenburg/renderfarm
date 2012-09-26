@@ -4,6 +4,8 @@
 #define _VECTOR3_H_
 
 #include <iostream>
+
+#include "../Resources.h"
 #include "Utility.h"
 
 #ifdef DLL_EXPORTS
@@ -19,17 +21,11 @@ namespace RFMath
     class DLL_API Vector3
     {
     public:
-        /**
-         * Constructors and destructor
-         */
         Vector3();
         Vector3(float x, float y, float z);
         Vector3(const Vector3& vector);
         virtual ~Vector3();
 
-        /**
-         * Methods
-         */
         bool IsZero() const;
         bool IsUnit() const;
         void Clean();
@@ -41,9 +37,6 @@ namespace RFMath
         float Dot(const Vector3& vector) const;
         Vector3 Cross(const Vector3& vector) const;
 
-        /**
-         * Getters and setters
-         */
         float GetX() const { return this->_x; }
         float GetY() const { return this->_y; }
         float GetZ() const { return this->_z; }
@@ -53,9 +46,6 @@ namespace RFMath
         void SetY(float y) { this->_y = y; }
         void SetZ(float z) { this->_z = z; }
 
-        /**
-         * Operators
-         */
         Vector3& operator=(const Vector3& vector);
         Vector3 operator-() const;
         Vector3 operator+(const Vector3& vector) const;
@@ -69,9 +59,6 @@ namespace RFMath
         bool operator==(const Vector3& vector) const;
         DLL_API friend std::ostream& operator<<(std::ostream& output, const Vector3& vector);
 
-        /**
-         * Defaults
-         */
         static Vector3 xAxis;
         static Vector3 yAxis;
         static Vector3 zAxis;
