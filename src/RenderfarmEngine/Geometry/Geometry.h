@@ -27,7 +27,9 @@ namespace RFGeometry
         void SetPosition(const RFMath::Vector3& position);
 
         virtual RFMath::Vector3* GetVertices() = 0;
-        virtual const RFMath::Vector3** GetVertexBuffer() = 0;
+        virtual unsigned int GetVerticesCount() = 0;
+        virtual RFMath::Vector3** GetVertexBuffer() = 0;
+        virtual unsigned int GetVertexBufferCount() = 0;
         virtual void Print(std::ostream& output) = 0;
 
         DLL_API friend std::ostream& operator<<(std::ostream& output, Geometry& geometry);

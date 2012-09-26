@@ -28,7 +28,9 @@ namespace RFGeometry
         void SetSize(float size);
 
         RFMath::Vector3* GetVertices();
-        const RFMath::Vector3** GetVertexBuffer();
+        unsigned int GetVerticesCount();
+        RFMath::Vector3** GetVertexBuffer();
+        unsigned int GetVertexBufferCount();
         
         void Print(std::ostream& output);
     private:
@@ -39,7 +41,7 @@ namespace RFGeometry
 
         float _size;
         RFMath::Vector3 _vertices[8];
-        const RFMath::Vector3* _vertexBuffer[36];
+        RFMath::Vector3* _vertexBuffer[36];
     };
 }
 

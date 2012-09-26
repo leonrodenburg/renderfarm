@@ -6,6 +6,7 @@
 RFGeometry::World::World()
 {
     this->_pGeometry = new std::map<int, Geometry*>();
+    this->_pVertices = new std::vector<RFMath::Vector3*>();
     this->_currentIndex = 1;
 }
 
@@ -15,6 +16,11 @@ RFGeometry::World::World()
 RFGeometry::World::~World()
 {
     delete this->_pGeometry;
+
+    if(this->_pVertices != 0)
+    {
+        delete this->_pVertices;
+    }
 }
 
 /**
@@ -39,5 +45,27 @@ int RFGeometry::World::AddGeometry(RFGeometry::Geometry* pGeometry)
  */
 void RFGeometry::World::RemoveGeometry(int index)
 {
+    this->_pGeometry->erase(index);
+}
 
+/**
+ * Build the geometry in the world by creating one large
+ * vertex buffer with all triangles.
+ *
+ * @return Vertex buffer with all vertices in the world.
+ */
+std::vector<RFMath::Vector3*>& RFGeometry::World::BuildGeometry()
+{
+    this->_pVertices->clear();
+
+    for(std::map<int, Geometry*>::iterator it = this->_pGeometry->begin(); it != this->_pGeometry->end(); it++)
+    {
+        RFMath::Vector3** vertexBuffer = it->second->GetVertexBuffer();
+        for(unsigned int i = 0; i < it->second->GetVertexBufferCount(); ++i)
+        {
+            this->_pVertices->push_back(vertexBuffer[i]);
+        }
+    }
+
+    return *this->_pVertices;
 }

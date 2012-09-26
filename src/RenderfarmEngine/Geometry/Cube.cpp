@@ -74,15 +74,35 @@ RFMath::Vector3* RFGeometry::Cube::GetVertices()
 }
 
 /**
+ * Return the number of vertices in this cube.
+ *
+ * @return The number of vertices
+ */
+unsigned int RFGeometry::Cube::GetVerticesCount()
+{
+    return 8;
+}
+
+/**
  * Return the vertex buffer layout of this cube. This consists of
  * vertices that form triangles that make up the cube. The vertex
  * buffer can be drawn to screen.
  *
  * @return Array of Vector3
  */
-const RFMath::Vector3** RFGeometry::Cube::GetVertexBuffer()
+RFMath::Vector3** RFGeometry::Cube::GetVertexBuffer()
 {
     return this->_vertexBuffer;
+}
+
+/**
+ * Return the number of elements in the vertex buffer.
+ *
+ * @return Number of elements in vertex buffer
+ */
+unsigned int RFGeometry::Cube::GetVertexBufferCount()
+{
+    return 36;
 }
 
 /**

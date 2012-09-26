@@ -7,6 +7,7 @@
 #include "Geometry.h"
 
 #include <map>
+#include <vector>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -24,8 +25,11 @@ namespace RFGeometry
 
         int AddGeometry(Geometry* pGeometry);
         void RemoveGeometry(int index);
+
+        std::vector<RFMath::Vector3*>& BuildGeometry();
     protected:
         std::map<int, Geometry*>* _pGeometry;
+        std::vector<RFMath::Vector3*>* _pVertices;
         int _currentIndex;
     };
 }
