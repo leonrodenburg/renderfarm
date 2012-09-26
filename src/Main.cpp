@@ -1,8 +1,9 @@
+#include "Geometry/Cube.h"
+#include "Geometry/Cube.h"
+
 #include <iostream>
 #include <cstdio>
 //#include <vld.h>
-
-#include "Geometry/Cube.h"
 
 int main(int argc, char** argv)
 {

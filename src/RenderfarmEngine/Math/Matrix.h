@@ -3,12 +3,12 @@
 #ifndef _MATRIX_H_
 #define _MATRIX_H_
 
-#include <iostream>
-
 #include "../Resources.h"
 #include "Utility.h"
 #include "Vector3.h"
 #include "Vector4.h"
+
+#include <iostream>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)

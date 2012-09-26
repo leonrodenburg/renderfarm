@@ -3,10 +3,10 @@
 #ifndef _VECTOR3_H_
 #define _VECTOR3_H_
 
-#include <iostream>
-
 #include "../Resources.h"
 #include "Utility.h"
+
+#include <iostream>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)

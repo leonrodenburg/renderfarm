@@ -1,7 +1,5 @@
 #include "Cube.h"
 
-#include <vector>
-
 /**
  * Default constructor.
  */

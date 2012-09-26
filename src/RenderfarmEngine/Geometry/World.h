@@ -5,6 +5,7 @@
 
 #include "../Resources.h"
 #include "Geometry.h"
+
 #include <map>
 
 #ifdef DLL_EXPORTS

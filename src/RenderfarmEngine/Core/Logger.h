@@ -3,9 +3,9 @@
 #ifndef _LOGGER_H_
 #define _LOGGER_H_
 
-#include <string>
-
 #include "../Resources.h"
+
+#include <string>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
