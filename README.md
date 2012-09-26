@@ -7,6 +7,7 @@ I came up with this project for a minor course in 3D software engineering. The m
 
 For more information on the project and the rendering pipeline, see these documents (both in Dutch):
 [Plan of Approach](http://www.instanceof.nl/doc/PvA_SRP_LeonRodenburg.pdf)
+
 [Rendering Pipeline](http://www.instanceof.nl/doc/RP_SRP_LeonRodenburg.pdf)
 
 A lot of the images in these documents come from the excellent book Real-Time Rendering (3rd Edition) by Tomas Akenine-Möller, Eric Haines and Naty Hoffman.
