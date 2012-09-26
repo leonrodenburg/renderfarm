@@ -57,52 +57,117 @@ float RFGeometry::Cube::GetSize()
 void RFGeometry::Cube::SetSize(float size)
 {
     this->_size = size;
-
-    this->_CalculateVertices();
-    this->_CalculateVertexBuffer();
 }
 
 /**
- * Return the array of vertices that make up this
- * cube.
- *
- * @return Array of Vector3
+ * Prepare the vertices and its buffer.
  */
-RFMath::Vector3* RFGeometry::Cube::GetVertices()
+void RFGeometry::Cube::PrepareBuffers()
 {
-    return this->_vertices;
-}
+    // Prepare vertices
+    if(this->_pVertices != 0)
+    {
+        this->_pVertices->clear();
+    }
 
-/**
- * Return the number of vertices in this cube.
- *
- * @return The number of vertices
- */
-unsigned int RFGeometry::Cube::GetVerticesCount()
-{
-    return 8;
-}
+    float halfSize = this->_size / 2;
 
-/**
- * Return the vertex buffer layout of this cube. This consists of
- * vertices that form triangles that make up the cube. The vertex
- * buffer can be drawn to screen.
- *
- * @return Array of Vector3
- */
-RFMath::Vector3** RFGeometry::Cube::GetVertexBuffer()
-{
-    return this->_vertexBuffer;
-}
+    // Lower vertices (seen from top)
+    // 1-----2
+    // |     |
+    // |     |
+    // 0-----3
+    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2])));
 
-/**
- * Return the number of elements in the vertex buffer.
- *
- * @return Number of elements in vertex buffer
- */
-unsigned int RFGeometry::Cube::GetVertexBufferCount()
-{
-    return 36;
+    // Upper vertices (seen from top)
+    // 5-----6
+    // |     |
+    // |     |
+    // 4-----7
+    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2])));
+    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2])));
+
+    // Result:
+    //
+    //     5--------6
+    //    /|       /| 
+    //   / |      / |
+    //  4--------7  |
+    //  |  1-----|--2
+    //  | /      | /
+    //  |/       |/
+    //  0--------3
+
+    // Prepare vertex buffer
+    if(this->_pVertexBuffer != 0)
+    {
+        this->_pVertexBuffer->clear();
+    }
+
+    // Lower square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+
+    // Lower square, triangle 2                     
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+
+    // Front square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+
+    // Front square, triangle 2
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+
+    // Left square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+
+    // Left square, triangle 2
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
+
+    // Back square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+
+    // Back square, triangle 2
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+
+    // Right square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+
+    // Right square, triangle 2
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
+
+    // Top square, triangle 1
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+
+    // Top square, triangle 2
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
 }
 
 /**
@@ -115,9 +180,9 @@ void RFGeometry::Cube::Print(std::ostream& output)
     output << "    Cube {" << std::endl;
     output << "        Size: " << this->_size << std::endl;
     output << "        Vertices: {" << std::endl;
-    for(int i = 0; i < 8; ++i)
+    for(unsigned int i = 0; i < this->_pVertices->size(); ++i)
     {
-        output << "            " << this->_vertices[i] << std::endl;
+        output << "            " << this->_pVertices->at(i) << std::endl;
     }
     output << "        }" << std::endl;
     output << "    }";
@@ -132,115 +197,5 @@ void RFGeometry::Cube::Print(std::ostream& output)
 void RFGeometry::Cube::_Construct(float size)
 {
     this->_size = size;
-
-    this->_CalculateVertices();
-    this->_CalculateVertexBuffer();
-}
-
-/**
- * Calculate the set of vertices that make up this cube, given
- * the size and position. The position is taken as the center
- * of the cube and the size is the width and height (not the
- * distance from the center to the vertices).
- */
-void RFGeometry::Cube::_CalculateVertices()
-{
-    float halfSize = this->_size / 2;
-
-    // Lower vertices (seen from top)
-    // 1-----2
-    // |     |
-    // |     |
-    // 0-----3
-    this->_vertices[0] = RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2]);
-    this->_vertices[1] = RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2]);
-    this->_vertices[2] = RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2]);
-    this->_vertices[3] = RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2]);
-
-    // Upper vertices (seen from top)
-    // 5-----6
-    // |     |
-    // |     |
-    // 4-----7
-    this->_vertices[4] = RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2]);
-    this->_vertices[5] = RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2]);
-    this->_vertices[6] = RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2]);
-    this->_vertices[7] = RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2]);
-
-    // Result:
-    //
-    //     5--------6
-    //    /|       /| 
-    //   / |      / |
-    //  4--------7  |
-    //  |  1-----|--2
-    //  | /      | /
-    //  |/       |/
-    //  0--------3
-} 
-
-/**
- * Calculate the triangles that make up the cube.
- */
-void RFGeometry::Cube::_CalculateVertexBuffer()
-{
-    // Lower square, triangle 1
-    this->_vertexBuffer[0]  = &(this->_vertices[1]);
-    this->_vertexBuffer[1]  = &(this->_vertices[0]);
-    this->_vertexBuffer[2]  = &(this->_vertices[2]);
-
-    // Lower square, triangle 2                     
-    this->_vertexBuffer[3]  = &(this->_vertices[2]);
-    this->_vertexBuffer[4]  = &(this->_vertices[0]);
-    this->_vertexBuffer[5]  = &(this->_vertices[3]);
-
-    // Front square, triangle 1
-    this->_vertexBuffer[6]  = &(this->_vertices[0]);
-    this->_vertexBuffer[7]  = &(this->_vertices[4]);
-    this->_vertexBuffer[8]  = &(this->_vertices[3]);
-
-    // Front square, triangle 2
-    this->_vertexBuffer[9]  = &(this->_vertices[3]);
-    this->_vertexBuffer[10] = &(this->_vertices[4]);
-    this->_vertexBuffer[11] = &(this->_vertices[7]);
-
-    // Left square, triangle 1
-    this->_vertexBuffer[12] = &(this->_vertices[1]);
-    this->_vertexBuffer[13] = &(this->_vertices[5]);
-    this->_vertexBuffer[14] = &(this->_vertices[0]);
-
-    // Left square, triangle 2
-    this->_vertexBuffer[15] = &(this->_vertices[0]);
-    this->_vertexBuffer[16] = &(this->_vertices[5]);
-    this->_vertexBuffer[17] = &(this->_vertices[4]);
-
-    // Back square, triangle 1
-    this->_vertexBuffer[18] = &(this->_vertices[2]);
-    this->_vertexBuffer[19] = &(this->_vertices[6]);
-    this->_vertexBuffer[20] = &(this->_vertices[1]);
-
-    // Back square, triangle 2
-    this->_vertexBuffer[21] = &(this->_vertices[1]);
-    this->_vertexBuffer[22] = &(this->_vertices[6]);
-    this->_vertexBuffer[23] = &(this->_vertices[5]);
-
-    // Right square, triangle 1
-    this->_vertexBuffer[24] = &(this->_vertices[3]);
-    this->_vertexBuffer[25] = &(this->_vertices[7]);
-    this->_vertexBuffer[26] = &(this->_vertices[2]);
-
-    // Right square, triangle 2
-    this->_vertexBuffer[27] = &(this->_vertices[2]);
-    this->_vertexBuffer[28] = &(this->_vertices[7]);
-    this->_vertexBuffer[29] = &(this->_vertices[6]);
-
-    // Top square, triangle 1
-    this->_vertexBuffer[30] = &(this->_vertices[4]);
-    this->_vertexBuffer[31] = &(this->_vertices[5]);
-    this->_vertexBuffer[32] = &(this->_vertices[7]);
-
-    // Top square, triangle 2
-    this->_vertexBuffer[33] = &(this->_vertices[7]);
-    this->_vertexBuffer[34] = &(this->_vertices[5]);
-    this->_vertexBuffer[35] = &(this->_vertices[6]);
+    this->PrepareBuffers();
 }

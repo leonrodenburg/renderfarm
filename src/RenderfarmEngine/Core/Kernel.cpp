@@ -3,7 +3,7 @@
 /**
  * Default constructor.
  */
-RFCore::Kernel::Kernel(const RFGeometry::World* pWorld)
+RFCore::Kernel::Kernel(RFGeometry::World* pWorld)
 {
     this->_pWorld = pWorld;
     this->_pClipper = new RFStage::Clipper();
@@ -22,6 +22,8 @@ RFCore::Kernel::~Kernel()
  */
 void RFCore::Kernel::Run()
 {
+    this->_pWorld->BuildGeometry();
+
 #ifdef DEBUG_BUILD
     Logger::GetLogger()->Log("Firing up Kernel...");
 #endif

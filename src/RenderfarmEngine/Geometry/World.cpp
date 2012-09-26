@@ -16,11 +16,7 @@ RFGeometry::World::World()
 RFGeometry::World::~World()
 {
     delete this->_pGeometry;
-
-    if(this->_pVertices != 0)
-    {
-        delete this->_pVertices;
-    }
+    delete this->_pVertices;
 }
 
 /**
@@ -54,18 +50,18 @@ void RFGeometry::World::RemoveGeometry(int index)
  *
  * @return Vertex buffer with all vertices in the world.
  */
-std::vector<RFMath::Vector3*>& RFGeometry::World::BuildGeometry()
+std::vector<RFMath::Vector3*>* RFGeometry::World::BuildGeometry()
 {
     this->_pVertices->clear();
 
     for(std::map<int, Geometry*>::iterator it = this->_pGeometry->begin(); it != this->_pGeometry->end(); it++)
     {
-        RFMath::Vector3** vertexBuffer = it->second->GetVertexBuffer();
-        for(unsigned int i = 0; i < it->second->GetVertexBufferCount(); ++i)
+        std::vector<RFMath::Vector3*>* vertexBuffer = it->second->GetVertexBuffer();
+        for(unsigned int i = 0; i < vertexBuffer->size(); ++i)
         {
-            this->_pVertices->push_back(vertexBuffer[i]);
+            this->_pVertices->push_back(vertexBuffer->at(i));
         }
     }
 
-    return *this->_pVertices;
+    return this->_pVertices;
 }
