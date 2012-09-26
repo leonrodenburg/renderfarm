@@ -48,7 +48,7 @@ void RFCore::Logger::Log(char* pFormat, ...)
 {
 	va_list pArguments;
 	va_start(pArguments, pFormat);
-	this->Log(DEBUG, pFormat, pArguments);
+	this->_Log(DEBUG, pFormat, pArguments);
 	va_end(pArguments);
 }
 
@@ -60,11 +60,11 @@ void RFCore::Logger::Log(char* pFormat, ...)
  * @param pFormat
  * @param ...
  */
-void RFCore::Logger::Log(LogType type, char *pFormat, ...)
+void RFCore::Logger::Log(LogType type, char* pFormat, ...)
 {
 	va_list pArguments;
 	va_start(pArguments, pFormat);
-	this->Log(type, pFormat, pArguments);
+	this->_Log(type, pFormat, pArguments);
 	va_end(pArguments);
 }
 
@@ -77,7 +77,7 @@ void RFCore::Logger::Log(LogType type, char *pFormat, ...)
  * @param pFormat
  * @param pArguments
  */
-void RFCore::Logger::Log(LogType type, char *pFormat, va_list pArguments)									
+void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)									
 {
 	std::string typeString = "";
 	switch(type) 

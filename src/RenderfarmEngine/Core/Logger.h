@@ -22,15 +22,15 @@ namespace RFCore
 
 	    static Logger * GetLogger();									
 
-	    void Log(char *p_format, ...);									
-	    void Log(LogType type, char *p_format, ...);
+	    void Log(char* pFormat, ...);									
+	    void Log(LogType type, char* pFormat, ...);
 
     private:
 	    static Logger _instance;
 
 	    Logger();
 	    virtual ~Logger();
-	    void Log(LogType type, char *p_format, va_list p_arguments);
+	    void _Log(LogType type, char* pFormat, va_list pArguments);
     };
 }
 

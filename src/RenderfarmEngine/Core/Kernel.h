@@ -4,6 +4,8 @@
 #define _KERNEL_H_
 
 #include "../Resources.h"
+#include "../Stage/Clipper.h"
+#include "../Geometry/World.h"
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -16,11 +18,13 @@ namespace RFCore
     class DLL_API Kernel
     {
     public:
-        Kernel();
+        Kernel(const RFGeometry::World* pWorld);
         virtual ~Kernel();
 
         void Run();
-    protected:
+    private:
+        RFStage::Clipper* _pClipper;
+        const RFGeometry::World* _pWorld;
     };
 }
 

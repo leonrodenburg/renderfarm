@@ -3,9 +3,10 @@
 /**
  * Default constructor.
  */
-RFCore::Kernel::Kernel()
+RFCore::Kernel::Kernel(const RFGeometry::World* pWorld)
 {
-
+    this->_pWorld = pWorld;
+    this->_pClipper = new RFStage::Clipper();
 }
 
 /**
@@ -13,7 +14,7 @@ RFCore::Kernel::Kernel()
  */
 RFCore::Kernel::~Kernel()
 {
-
+    delete this->_pClipper;
 }
 
 /**
