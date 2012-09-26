@@ -222,8 +222,6 @@ DLL_API RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 RFMath::Matrix& RFMath::Matrix::Inverse()
 {
     *this = RFMath::Inverse(*this);
-    this->Clean();
-    
     return *this;
 }
 
