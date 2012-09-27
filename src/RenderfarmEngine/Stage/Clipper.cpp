@@ -14,7 +14,7 @@ RFStage::Clipper::Clipper()
  * @param pMin
  * @param pMax
  */
-RFStage::Clipper::Clipper(RFMath::Vector3* pMin, RFMath::Vector3& pMax)
+RFStage::Clipper::Clipper(const RFMath::Vector3* pMin, const RFMath::Vector3* pMax)
 {
     this->_Construct(pMin, pMax);
 }
@@ -34,7 +34,7 @@ RFStage::Clipper::~Clipper()
  */
 void RFStage::Clipper::BindBuffer(const std::vector<RFMath::Vector3*>* pBuffer)
 {
-    this->_pBuffer = buffer;
+    this->_pBuffer = pBuffer;
 }
 
 /**
@@ -53,10 +53,10 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
  * Construct the Clipper object, setting the minimum and maximum points
  * against which the vertices will be clipped.
  *
- * @param min
- * @param max
+ * @param pMin
+ * @param pMax
  */
-void RFStage::Clipper::_Construct(RFMath::Vector3* pMin, RFMath::Vector3* pMax)
+void RFStage::Clipper::_Construct(const RFMath::Vector3* pMin, const RFMath::Vector3* pMax)
 {
     this->_pOutput = new std::vector<RFMath::Vector3*>();
     this->_pMin = pMin;
