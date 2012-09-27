@@ -7,6 +7,7 @@
 #include "Geometry.h"
 
 #include <iostream>
+#include <vector>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -26,22 +27,13 @@ namespace RFGeometry
 
         float GetSize();
         void SetSize(float size);
-
-        RFMath::Vector3* GetVertices();
-        unsigned int GetVerticesCount();
-        RFMath::Vector3** GetVertexBuffer();
-        unsigned int GetVertexBufferCount();
         
+        void PrepareBuffers();
         void Print(std::ostream& output);
     private:
         void _Construct(float size);
 
-        void _CalculateVertices();
-        void _CalculateVertexBuffer();
-
         float _size;
-        RFMath::Vector3 _vertices[8];
-        RFMath::Vector3* _vertexBuffer[36];
     };
 }
 

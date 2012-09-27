@@ -7,6 +7,7 @@
 #include "../Math/Vector3.h"
 
 #include <iostream>
+#include <vector>
 
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
@@ -26,15 +27,19 @@ namespace RFGeometry
         RFMath::Vector3& GetPosition();
         void SetPosition(const RFMath::Vector3& position);
 
-        virtual RFMath::Vector3* GetVertices() = 0;
-        virtual unsigned int GetVerticesCount() = 0;
-        virtual RFMath::Vector3** GetVertexBuffer() = 0;
-        virtual unsigned int GetVertexBufferCount() = 0;
+        std::vector<RFMath::Vector3*>* GetVertices();
+        std::vector<RFMath::Vector3*>* GetVertexBuffer();
+
+        virtual void PrepareBuffers() = 0;
         virtual void Print(std::ostream& output) = 0;
 
         DLL_API friend std::ostream& operator<<(std::ostream& output, Geometry& geometry);
     protected:
         RFMath::Vector3 _position;
+        std::vector<RFMath::Vector3*>* _pVertices;
+        std::vector<RFMath::Vector3*>* _pVertexBuffer;
+    private:
+        void _Construct(const RFMath::Vector3& position);
     };
 }
 

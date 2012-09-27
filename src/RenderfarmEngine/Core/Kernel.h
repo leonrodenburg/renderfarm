@@ -18,13 +18,13 @@ namespace RFCore
     class DLL_API Kernel
     {
     public:
-        Kernel(const RFGeometry::World* pWorld);
+        Kernel(RFGeometry::World* pWorld);
         virtual ~Kernel();
 
         void Run();
     private:
         RFStage::Clipper* _pClipper;
-        const RFGeometry::World* _pWorld;
+        RFGeometry::World* _pWorld;
     };
 }
 
