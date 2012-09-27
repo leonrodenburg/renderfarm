@@ -20,10 +20,17 @@ namespace RFStage
     {
     public:
         Clipper();
+        Clipper(const RFMath::Vector3* pMin, const RFMath::Vector3* pMax);
         virtual ~Clipper();
 
-        void BindBuffer(const std::vector<RFMath::Vector3*>& buffer);
+        void BindBuffer(const std::vector<RFMath::Vector3*>* pBuffer);
+        std::vector<RFMath::Vector3*>* Clip();
+    protected:
+        RFMath::Vector3* _pMin;
+        RFMath::Vector3* _pMax;
     private:
+        void _Construct(const RFMath::Vector3* pMin, const RFMath::Vector3* pMax);
+
         const std::vector<RFMath::Vector3*>* _pBuffer;
         std::vector<RFMath::Vector3*>* _pOutput;
     };

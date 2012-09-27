@@ -5,7 +5,18 @@
  */
 RFStage::Clipper::Clipper()
 {
-    this->_pOutput = new std::vector<RFMath::Vector3*>();
+    this->_Construct(&(RFMath::Vector3(-1.0f, -1.0f, -1.0f)), &(RFMath::Vector3(1.0f, 1.0f, 1.0f)));
+}
+
+/**
+ * Constructor setting the minimum and maximum clipping points.
+ *
+ * @param pMin
+ * @param pMax
+ */
+RFStage::Clipper::Clipper(RFMath::Vector3* pMin, RFMath::Vector3& pMax)
+{
+    this->_Construct(pMin, pMax);
 }
 
 /**
@@ -19,9 +30,35 @@ RFStage::Clipper::~Clipper()
 /**
  * Bind a vertex buffer to the clipping stage.
  *
- * @param buffer
+ * @param pBuffer
  */
-void RFStage::Clipper::BindBuffer(const std::vector<RFMath::Vector3*>& buffer)
+void RFStage::Clipper::BindBuffer(const std::vector<RFMath::Vector3*>* pBuffer)
 {
-    this->_pBuffer = &buffer;
+    this->_pBuffer = buffer;
+}
+
+/**
+ * Clip the buffer against the minimum and maximum point, stitching together
+ * partially clipped triangles, and build a new list of vertices that pass
+ * through.
+ *
+ * @return Vertices to be rendered
+ */
+std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
+{
+    return this->_pOutput;
+}
+
+/**
+ * Construct the Clipper object, setting the minimum and maximum points
+ * against which the vertices will be clipped.
+ *
+ * @param min
+ * @param max
+ */
+void RFStage::Clipper::_Construct(RFMath::Vector3* pMin, RFMath::Vector3* pMax)
+{
+    this->_pOutput = new std::vector<RFMath::Vector3*>();
+    this->_pMin = pMin;
+    this->_pMax = pMax;
 }
