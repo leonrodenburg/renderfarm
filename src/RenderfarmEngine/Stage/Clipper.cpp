@@ -71,16 +71,21 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
                     {
                         if(dotLast < 0)
                         {
-                            //triangleList.push_back(this->_CalculateIntersection(pLast, input.at(k), &this->_planeNormals[j]));
+                            RFMath::Vector3* pIntersect = this->_CalculateIntersection(input.at(k), pLast, &this->_planeNormals[j]);
+                            if(pIntersect != 0)
+                            {
+                                triangleList.push_back(pIntersect);
+                            }
                         }
 
                         triangleList.push_back(input.at(k));
                     }
-                    else
+                    else if(dotLast > 0)
                     {
-                        if(dotLast > 0)
+                        RFMath::Vector3* pIntersect = this->_CalculateIntersection(input.at(k), pLast, &this->_planeNormals[j]);
+                        if(pIntersect != 0)
                         {
-                            //triangleList.push_back(this->_CalculateIntersection(pLast, input.at(k), &this->_planeNormals[j]));
+                            triangleList.push_back(pIntersect);
                         }
                     }
 
@@ -99,7 +104,8 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 }
 
 /**
- * Calculate the intersection point between an edge and a plane.
+ * Calculate the intersection point between an edge and a plane. Return
+ * 0 if it doesn't exist (edge parallel to plane).
  *
  * @param pFrom
  * @param pTo
@@ -109,5 +115,20 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
  */
 RFMath::Vector3* RFStage::Clipper::_CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal)
 {
-    return &RFMath::Vector3::xAxis;
+    std::cout << "Rekenen: " << (*pTo - *pFrom) << std::endl;
+    float nDotV = pPlaneNormal->Dot(*pTo - *pFrom);
+    if(RFMathIsZero(nDotV))
+    {
+        return 0;
+    }
+
+    float t = (pPlaneNormal->Dot(*pPlaneNormal - *pFrom)) / nDotV;
+    if(RFMathIsZero(t))
+    {
+        return pFrom;
+    }
+    else
+    {
+        return &(*pFrom + t * (*pTo - *pFrom));
+    }    
 }
