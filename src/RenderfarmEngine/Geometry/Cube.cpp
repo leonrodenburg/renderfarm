@@ -67,6 +67,10 @@ void RFGeometry::Cube::PrepareBuffers()
     // Prepare vertices
     if(this->_pVertices != 0)
     {
+        for(unsigned int i = 0; i < this->_pVertices->size(); ++i)
+        {
+            delete this->_pVertices->at(i);
+        }
         this->_pVertices->clear();
     }
 
@@ -77,20 +81,20 @@ void RFGeometry::Cube::PrepareBuffers()
     // |     |
     // |     |
     // 0-----3
-    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2])));
+    this->_pVertices->push_back(new RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3(-halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1],  halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3( halfSize + this->_position[0], -halfSize + this->_position[1], -halfSize + this->_position[2]));
 
     // Upper vertices (seen from top)
     // 5-----6
     // |     |
     // |     |
     // 4-----7
-    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2])));
-    this->_pVertices->push_back(&(RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2])));
+    this->_pVertices->push_back(new RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3(-halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1],  halfSize + this->_position[2]));
+    this->_pVertices->push_back(new RFMath::Vector3( halfSize + this->_position[0], halfSize + this->_position[1], -halfSize + this->_position[2]));
 
     // Result:
     //

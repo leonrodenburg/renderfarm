@@ -7,6 +7,8 @@
 #include "../Stage/Clipper.h"
 #include "../Geometry/World.h"
 
+#include <vector>
+
 #ifdef DLL_EXPORTS
 #define DLL_API __declspec(dllexport)
 #else

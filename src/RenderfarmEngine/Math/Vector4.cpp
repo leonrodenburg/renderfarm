@@ -176,7 +176,7 @@ RFMath::Vector4 RFMath::Vector4::Normalize()
  */
 float RFMath::Vector4::Dot(const Vector4& vector) const
 {
-    return (this->_x * vector._x, this->_y * vector._y, this->_z * vector._z);
+    return (this->_x * vector._x + this->_y * vector._y + this->_z * vector._z);
 }
 
 /**

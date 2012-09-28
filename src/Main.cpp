@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     RFGeometry::World world;
 
     // Add geometry to world
-    RFGeometry::Cube cube(10.0f);
+    RFGeometry::Cube cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 1.0f));
     world.AddGeometry(&cube);
 
     // Create kernel
