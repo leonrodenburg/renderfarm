@@ -8,12 +8,10 @@ RFStage::Clipper::Clipper()
     this->_pOutput = new std::vector<RFMath::Vector3*>();
 
     _planeNormals[0] = RFMath::Vector3::xAxis;
-    _planeNormals[1] = -RFMath::Vector3::xAxis;
-
-    _planeNormals[2] = RFMath::Vector3::yAxis;
-    _planeNormals[3] = -RFMath::Vector3::yAxis;
-
-    _planeNormals[4] = RFMath::Vector3::zAxis;
+    _planeNormals[1] = RFMath::Vector3::yAxis;
+    _planeNormals[2] = RFMath::Vector3::zAxis;
+    _planeNormals[3] = -RFMath::Vector3::xAxis;
+    _planeNormals[4] = -RFMath::Vector3::yAxis;
     _planeNormals[5] = -RFMath::Vector3::zAxis;
 }
 
@@ -74,47 +72,37 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
                 RFMath::Vector3* pLast = inputList.back();
                 for(unsigned int k = 0; k < inputList.size(); ++k)
                 {
-                    dot = inputList.at(k)->Dot(this->_planeNormals[j]) - 1.0f;
+                    RFMath::Vector3* pCurrent = inputList.at(k);
+                    dot = pCurrent->Dot(this->_planeNormals[j]) - 1.0f;
                     lastDot = pLast->Dot(this->_planeNormals[j]) - 1.0f;
 
-                    if(dot <= 0.0f && lastDot <= 0.0f)
+                    if(dot <= 0.0f) // Current vertex 'inside' current plane
                     {
-                        outputList.push_back(inputList.at(k));
-                    }
-                    else if(dot > 0.0f && lastDot <= 0.0f)
-                    {
-                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
-                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                        outputList.push_back(pAdd);
-                    }
-                    else if(dot <= 0.0 && lastDot > 0.0f)
-                    {
-                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
-                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                        outputList.push_back(pAdd);
-
-                        outputList.push_back(inputList.at(k));
-                    }
-
-                    /*if(dot <= 0.0f)
-                    {
-                        if(lastDot > 0.0f)
+                        if(lastDot > 0.0f) // Last vertex 'inside' current plane
                         {
-                            RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
+                            RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+
+                            if(!intersection.IsZero())
+                            {
+                                RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                                outputList.push_back(pAdd);
+                            }
+                        }
+
+                        outputList.push_back(pCurrent);
+                    }
+                    else if(lastDot <= 0.0f) // Last vertex 'inside' current plane
+                    {
+                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+
+                        if(!intersection.IsZero())
+                        {
                             RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
                             outputList.push_back(pAdd);
                         }
-
-                        outputList.push_back(inputList.at(k));
                     }
-                    else if(lastDot <= 0.0f)
-                    {
-                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
-                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                        outputList.push_back(pAdd);
-                    }*/
 
-                    pLast = inputList.at(k);
+                    pLast = pCurrent;
                 }
             } 
         }
