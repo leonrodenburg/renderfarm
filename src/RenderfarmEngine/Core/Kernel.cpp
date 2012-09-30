@@ -31,7 +31,7 @@ void RFCore::Kernel::Run()
 
     for(unsigned int i = 0; i < output->size(); ++i)
     {
-        std::cout << *output->at(i) << std::endl;
+        //std::cout << *output->at(i) << std::endl;
     }
 
 #ifdef DEBUG_BUILD

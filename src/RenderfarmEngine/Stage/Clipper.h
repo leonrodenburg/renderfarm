@@ -25,7 +25,7 @@ namespace RFStage
         void BindBuffer(std::vector<RFMath::Vector3*>* pBuffer);
         std::vector<RFMath::Vector3*>* Clip();
     private:
-        RFMath::Vector3* _CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal);
+        RFMath::Vector3 _CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal);
 
         std::vector<RFMath::Vector3*>* _pBuffer;
         std::vector<RFMath::Vector3*>* _pOutput;

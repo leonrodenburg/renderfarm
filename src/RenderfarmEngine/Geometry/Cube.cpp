@@ -114,64 +114,64 @@ void RFGeometry::Cube::PrepareBuffers()
     }
 
     // Lower square, triangle 1
-    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
     this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
     this->_pVertexBuffer->push_back(this->_pVertices->at(2));
 
     // Lower square, triangle 2                     
     this->_pVertexBuffer->push_back(this->_pVertices->at(2));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
     this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
 
     // Front square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(0));
     this->_pVertexBuffer->push_back(this->_pVertices->at(4));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
 
     // Front square, triangle 2
-    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
     this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
 
     // Left square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(1));
     this->_pVertexBuffer->push_back(this->_pVertices->at(5));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
 
     // Left square, triangle 2
-    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
     this->_pVertexBuffer->push_back(this->_pVertices->at(4));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
 
     // Back square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(2));
     this->_pVertexBuffer->push_back(this->_pVertices->at(6));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
 
     // Back square, triangle 2
-    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
     this->_pVertexBuffer->push_back(this->_pVertices->at(5));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
 
     // Right square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(3));
     this->_pVertexBuffer->push_back(this->_pVertices->at(7));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
 
     // Right square, triangle 2
-    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
     this->_pVertexBuffer->push_back(this->_pVertices->at(6));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(2));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(3));
 
     // Top square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(4));
     this->_pVertexBuffer->push_back(this->_pVertices->at(5));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(6));
 
     // Top square, triangle 2
-    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(5));
     this->_pVertexBuffer->push_back(this->_pVertices->at(6));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(7));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(4));
 }
 
 /**

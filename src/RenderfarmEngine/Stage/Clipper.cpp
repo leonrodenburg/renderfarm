@@ -47,59 +47,109 @@ void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  */
 std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 {
+    for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
+    {
+        delete this->_pOutput->at(i);
+    }
+
+    std::vector<RFMath::Vector3*> outputList;
+    std::vector<RFMath::Vector3*> inputList;
+    float dot;
+    float lastDot;
+
     for(unsigned int i = 0; i < this->_pBuffer->size(); i += 3)
     {
-        std::vector<RFMath::Vector3*> triangleList;
-        triangleList.push_back(this->_pBuffer->at(i));
-        triangleList.push_back(this->_pBuffer->at(i + 1));
-        triangleList.push_back(this->_pBuffer->at(i + 2));
+        outputList.clear();
+        outputList.push_back(this->_pBuffer->at(i));
+        outputList.push_back(this->_pBuffer->at(i + 1));
+        outputList.push_back(this->_pBuffer->at(i + 2));
 
         for(int j = 0; j < 6; ++j)
         {
-            std::vector<RFMath::Vector3*> input = triangleList;
-            triangleList.clear();
+            inputList = outputList;
+            outputList.clear();
 
-            if(input.size() > 0)
+            if(inputList.size() > 0)
             {
-                RFMath::Vector3* pLast = input.at(input.size() - 1);
-                float dotLast = this->_planeNormals[j].Dot(*pLast) + 1.0f;
-
-                for(unsigned int k = 0; k < input.size(); ++k)
+                RFMath::Vector3* pLast = inputList.back();
+                for(unsigned int k = 0; k < inputList.size(); ++k)
                 {
-                    float dot = this->_planeNormals[j].Dot(*input.at(k)) + 1.0f;
-                    if(dot >= 0)
+                    dot = inputList.at(k)->Dot(this->_planeNormals[j]) - 1.0f;
+                    lastDot = pLast->Dot(this->_planeNormals[j]) - 1.0f;
+
+                    if(dot <= 0.0f && lastDot <= 0.0f)
                     {
-                        if(dotLast < 0)
+                        outputList.push_back(inputList.at(k));
+                    }
+                    else if(dot > 0.0f && lastDot <= 0.0f)
+                    {
+                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
+                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                        outputList.push_back(pAdd);
+                    }
+                    else if(dot <= 0.0 && lastDot > 0.0f)
+                    {
+                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
+                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                        outputList.push_back(pAdd);
+
+                        outputList.push_back(inputList.at(k));
+                    }
+
+                    /*if(dot <= 0.0f)
+                    {
+                        if(lastDot > 0.0f)
                         {
-                            RFMath::Vector3* pIntersect = this->_CalculateIntersection(input.at(k), pLast, &this->_planeNormals[j]);
-                            if(pIntersect != 0)
-                            {
-                                triangleList.push_back(pIntersect);
-                            }
+                            RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
+                            RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                            outputList.push_back(pAdd);
                         }
 
-                        triangleList.push_back(input.at(k));
+                        outputList.push_back(inputList.at(k));
                     }
-                    else if(dotLast > 0)
+                    else if(lastDot <= 0.0f)
                     {
-                        RFMath::Vector3* pIntersect = this->_CalculateIntersection(input.at(k), pLast, &this->_planeNormals[j]);
-                        if(pIntersect != 0)
-                        {
-                            triangleList.push_back(pIntersect);
-                        }
-                    }
+                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, inputList.at(k), &this->_planeNormals[j]);
+                        RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                        outputList.push_back(pAdd);
+                    }*/
 
-                    pLast = input.at(k);
+                    pLast = inputList.at(k);
+                }
+            } 
+        }
+
+        for(unsigned int m = 0; m < outputList.size(); ++m)
+        {
+            std::cout << *outputList.at(m) << std::endl;
+            this->_pOutput->push_back(outputList.at(m));
+        }
+
+        std::cout << "<< Triangle" << std::endl;
+        std::cout << std::endl;
+
+        /*RFMath::Vector3* pLast = outputList[2];
+
+        float dot = 0.0f;
+
+        for(int j = 0; j < 3; ++j)
+        {
+            
+            if(dot > 0.0f)
+            {
+                RFMath::Vector3 intersect = this->_CalculateIntersection(pLast, outputList[j], &this->_planeNormals[0]);
+                if(intersect.IsZero())
+                {
+                    std::cout << *outputList[j] << " -> removed" << std::endl;
                 }
             }
+
+            pLast = outputList[j];
         }
 
-        for(unsigned int m = 0; m < triangleList.size(); ++m)
-        {
-            this->_pOutput->push_back(triangleList.at(m));
-        }
+        std::cout << std::endl;*/
     }
-    
+
     return this->_pOutput;
 }
 
@@ -113,22 +163,14 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
  *
  * @return The point on the plane
  */
-RFMath::Vector3* RFStage::Clipper::_CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal)
+RFMath::Vector3 RFStage::Clipper::_CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal)
 {
-    std::cout << "Rekenen: " << (*pTo - *pFrom) << std::endl;
     float nDotV = pPlaneNormal->Dot(*pTo - *pFrom);
     if(RFMathIsZero(nDotV))
     {
-        return 0;
+        return RFMath::Vector3();
     }
 
-    float t = (pPlaneNormal->Dot(*pPlaneNormal - *pFrom)) / nDotV;
-    if(RFMathIsZero(t))
-    {
-        return pFrom;
-    }
-    else
-    {
-        return &(*pFrom + t * (*pTo - *pFrom));
-    }    
+    float t = pPlaneNormal->Dot(*pPlaneNormal - *pFrom) / nDotV;
+    return *pFrom + (t * (*pTo - *pFrom));  
 }
