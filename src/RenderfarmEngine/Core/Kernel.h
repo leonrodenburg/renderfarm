@@ -23,8 +23,8 @@ namespace RFCore
         Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsigned int windowHeight);
         virtual ~Kernel();
 
-        void BindBuffer(float* pBuffer);
-        void Run();
+        unsigned int* GetFrontBuffer();
+        unsigned int* Run();
     private:
         RFStage::Clipper* _pClipper;
         RFGeometry::World* _pWorld;
@@ -32,7 +32,8 @@ namespace RFCore
         unsigned int _windowWidth;
         unsigned int _windowHeight;
 
-        float* _pBuffer;
+        unsigned int* _pFrontBuffer;
+        unsigned int* _pBackBuffer;
     };
 }
 

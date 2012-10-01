@@ -3,13 +3,35 @@
 #include <tchar.h>
 #include <iostream>
 
-#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+//#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+
+#include "Core/Logger.h"
+#include "Core/Kernel.h"
 
 // Forward declarations
 WNDCLASSEX CreateWindowClass(HINSTANCE hInstance);
-void OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height);
+HWND OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height);
 LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM windowParameters, LPARAM userParameters);
-int Start();
+int Run();
+void Paint();
+void CreateBitmap();
+void Cleanup();
+
+// Globals
+HWND khWnd;
+
+unsigned int kWidth = 800;
+unsigned int kHeight = 600;
+
+BITMAPINFO kBitmapInfo;
+HBITMAP kBitmap = NULL;
+HBITMAP kOldBitmap = NULL;
+HDC kBitmapDC = NULL;
+
+unsigned int * kpPixels;
+unsigned int * kpBuffer;
+
+RFCore::Kernel* kpKernel;
 
 /**
  * Main entry point of application.
@@ -20,15 +42,23 @@ int Start();
 int main(int argc, char** argv)
 {
     std::cout << "Renderfarm 0.1a - by Leon Rodenburg" << std::endl;
-    std::cout << "Fetching application handle..." << std::endl;
+
+    // Initialize window
+    RFCore::Logger::GetLogger()->Log("Fetching application handle...");
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
-    std::cout << "Creating window class..." << std::endl;
+    RFCore::Logger::GetLogger()->Log("Creating window class...");
     WNDCLASSEX windowClass = CreateWindowClass(hInstance);
 
-    std::cout << "Opening window..." << std::endl;
-    OpenWindow(hInstance, windowClass, 1024, 768);
-    return Start();
+    RFCore::Logger::GetLogger()->Log("Opening window...");
+    khWnd = ::OpenWindow(hInstance, windowClass, kWidth, kHeight);
+
+    // Initialize world
+    RFGeometry::World world;
+    kpKernel = new RFCore::Kernel(&world, kWidth, kHeight);
+
+    // Start rendering!
+    return ::Run();
 }
 
 /**
@@ -36,9 +66,14 @@ int main(int argc, char** argv)
  *
  * @return ID of last received message.
  */
-int Start()
+int Run()
 {
-    std::cout << "Started message loop, time to render!" << std::endl;
+    RFCore::Logger::GetLogger()->Log("Started message loop, time to render!");
+
+    kpBuffer = kpKernel->Run();
+
+    // First render
+    kpKernel->Run();
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
@@ -53,16 +88,89 @@ int Start()
         }
         else
         {
-            float currentTime = (float)timeGetTime();
-            float timeDelta = (currentTime - lastTime) / 1000.0f;
+            //float currentTime = (float)timeGetTime();
+            //float timeDelta = (currentTime - lastTime) / 1000.0f;
 
             // Render (and pass timeDelta)!
+            kpBuffer = kpKernel->Run();
+            //lastTime = currentTime;
 
-            lastTime = currentTime;
+            // Paint the buffer!
+            ::Paint();
         }
     }
 
     return msg.wParam;
+}
+
+/**
+ * Paint the current buffer in the window.
+ */
+void Paint()
+{
+    for(unsigned int y = 0; y < kHeight; ++y)
+    {
+        for(unsigned int x = 0; x < kWidth; x++)
+        {
+            kpPixels[y * kWidth + x] = RGB(
+                kpBuffer[y * (kWidth * 3) + (x * 3)],
+                kpBuffer[y * (kWidth * 3) + (x * 3) + 1],
+                kpBuffer[y * (kWidth * 3) + (x * 3) + 2]
+            );
+        }
+    }
+
+    HDC currentDC = GetDC(khWnd);
+    SetDIBits(kBitmapDC, kBitmap, 0, kHeight, (void **)&kpPixels, &kBitmapInfo, DIB_RGB_COLORS);       
+    BitBlt(currentDC, 0, 0, kWidth, kHeight, kBitmapDC, 0, 0, SRCCOPY);
+}
+
+/**
+ * Create the bitmap and memory DC.
+ */
+void CreateBitmap()
+{
+    RFCore::Logger::GetLogger()->Log("Gathering bitmap info...");
+
+    ZeroMemory(&(kBitmapInfo.bmiHeader), sizeof(kBitmapInfo.bmiHeader));
+    kBitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    kBitmapInfo.bmiHeader.biWidth = kWidth;
+    kBitmapInfo.bmiHeader.biHeight = kHeight;
+    kBitmapInfo.bmiHeader.biPlanes = 1;
+    kBitmapInfo.bmiHeader.biBitCount = 32;
+    kBitmapInfo.bmiHeader.biCompression = BI_RGB;
+    kBitmapInfo.bmiHeader.biSizeImage = 0;
+
+    RFCore::Logger::GetLogger()->Log("Creating DC and bitmap...");
+    kBitmapDC = CreateCompatibleDC(NULL);
+    kBitmap = CreateDIBSection(kBitmapDC, &kBitmapInfo, DIB_RGB_COLORS, (void **)&kpPixels, NULL, NULL);
+    if(kBitmap == NULL || kpPixels == NULL)
+    {
+        RFCore::Logger::GetLogger()->Log(RFCore::Logger::FATAL, "Failed to create bitmap!");
+    }
+
+    kOldBitmap = (HBITMAP)SelectObject(kBitmapDC, kBitmap);
+}
+
+/**
+ * Clean up all resources.
+ */
+void Cleanup()
+{
+    RFCore::Logger::GetLogger()->Log("SIGNAL: Window was closed");
+    RFCore::Logger::GetLogger()->Log("Cleaning up bitmap...");
+
+    kBitmap = (HBITMAP)SelectObject(kBitmapDC, kOldBitmap);
+    DeleteObject(kOldBitmap);
+    DeleteObject(kBitmap);
+    DeleteDC(kBitmapDC);
+
+    RFCore::Logger::GetLogger()->Log("Cleaning up Renderfarm resources...");
+    delete kpKernel;
+
+    RFCore::Logger::GetLogger()->Log("Resources cleaned up. Closing Renderfarm...");
+
+    PostQuitMessage(0);
 }
 
 /**
@@ -77,15 +185,30 @@ int Start()
  */
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    HDC hDC;
+    PAINTSTRUCT ps;
+
     switch (message)
     {
+    case WM_CREATE:
+        ::CreateBitmap();
+        break;
     case WM_PAINT:
-        
+        hDC = BeginPaint(hWnd, &ps);
+   
+        BitBlt(hDC, 0, 0, kWidth, kHeight, kBitmapDC, 0, 0, SRCCOPY);
+
+        EndPaint(hWnd, &ps);
+        return 1;
         break;
     case WM_DESTROY:
-        std::cout << "Window closed, cleaning up..." << std::endl;
-
-        PostQuitMessage(0);
+        ::Cleanup();
+        break;
+    case WM_KEYDOWN:
+        if(wParam == VK_ESCAPE)
+        {
+            DestroyWindow(hWnd);
+        }
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -130,8 +253,10 @@ WNDCLASSEX CreateWindowClass(HINSTANCE hInstance)
  * @param windowClass
  * @param width
  * @param height
+ *
+ * @return Window handle
  */
-void OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height)
+HWND OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height)
 {
     RECT clientRect;
 
@@ -162,6 +287,8 @@ void OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width,
 
     ::ShowWindow(handle, SW_SHOWDEFAULT);
     ::UpdateWindow(handle);
+
+    return handle;
 }
 
 
