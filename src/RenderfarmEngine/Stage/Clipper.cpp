@@ -45,10 +45,7 @@ void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  */
 std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 {
-    for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
-    {
-        delete this->_pOutput->at(i);
-    }
+    this->_pOutput->clear();
 
     std::vector<RFMath::Vector3*> outputList;
     std::vector<RFMath::Vector3*> inputList;
@@ -109,33 +106,8 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
         for(unsigned int m = 0; m < outputList.size(); ++m)
         {
-            std::cout << *outputList.at(m) << std::endl;
             this->_pOutput->push_back(outputList.at(m));
         }
-
-        std::cout << "<< Triangle" << std::endl;
-        std::cout << std::endl;
-
-        /*RFMath::Vector3* pLast = outputList[2];
-
-        float dot = 0.0f;
-
-        for(int j = 0; j < 3; ++j)
-        {
-            
-            if(dot > 0.0f)
-            {
-                RFMath::Vector3 intersect = this->_CalculateIntersection(pLast, outputList[j], &this->_planeNormals[0]);
-                if(intersect.IsZero())
-                {
-                    std::cout << *outputList[j] << " -> removed" << std::endl;
-                }
-            }
-
-            pLast = outputList[j];
-        }
-
-        std::cout << std::endl;*/
     }
 
     return this->_pOutput;

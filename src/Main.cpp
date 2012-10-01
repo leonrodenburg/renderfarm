@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <cstdio>
-//#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
 
 int main(int argc, char** argv)
 {
@@ -15,11 +15,11 @@ int main(int argc, char** argv)
     RFGeometry::World world;
 
     // Add geometry to world
-    RFGeometry::Cube cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 1.0f));
+    RFGeometry::Cube cube(1.0f, RFMath::Vector3(0.5f, 0.5f, 0.5f));
     world.AddGeometry(&cube);
 
     // Create kernel
-    RFCore::Kernel kernel(&world);
+    RFCore::Kernel kernel(&world, 800, 600);
 
     // Start the kernel
     kernel.Run();

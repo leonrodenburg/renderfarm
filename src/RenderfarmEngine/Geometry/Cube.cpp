@@ -121,7 +121,7 @@ void RFGeometry::Cube::PrepareBuffers()
     // Lower square, triangle 2                     
     this->_pVertexBuffer->push_back(this->_pVertices->at(2));
     this->_pVertexBuffer->push_back(this->_pVertices->at(3));
-    this->_pVertexBuffer->push_back(this->_pVertices->at(1));
+    this->_pVertexBuffer->push_back(this->_pVertices->at(0));
 
     // Front square, triangle 1
     this->_pVertexBuffer->push_back(this->_pVertices->at(0));

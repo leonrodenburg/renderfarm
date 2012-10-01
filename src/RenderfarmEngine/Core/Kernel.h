@@ -20,13 +20,19 @@ namespace RFCore
     class DLL_API Kernel
     {
     public:
-        Kernel(RFGeometry::World* pWorld);
+        Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsigned int windowHeight);
         virtual ~Kernel();
 
+        void BindBuffer(float* pBuffer);
         void Run();
     private:
         RFStage::Clipper* _pClipper;
         RFGeometry::World* _pWorld;
+
+        unsigned int _windowWidth;
+        unsigned int _windowHeight;
+
+        float* _pBuffer;
     };
 }
 
