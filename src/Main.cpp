@@ -46,8 +46,8 @@ int main(int argc, char** argv)
     RFCore::Logger::GetLogger()->Log("Fetching application handle...");
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
-    RFCore::Logger::GetLogger()->Log("Creating window class...");
     WNDCLASSEX windowClass = CreateWindowClass(hInstance);
+    RFCore::Logger::GetLogger()->Log("Created window class...");
 
     RFCore::Logger::GetLogger()->Log("Opening window...");
     khWnd = ::OpenWindow(hInstance, windowClass, kWidth, kHeight);
@@ -138,13 +138,13 @@ void CreateBitmap()
     kBitmapInfo.bmiHeader.biCompression = BI_RGB;
     kBitmapInfo.bmiHeader.biSizeImage = 0;
 
-    RFCore::Logger::GetLogger()->Log("Creating DC and bitmap...");
     kBitmapDC = CreateCompatibleDC(NULL);
     kBitmap = CreateDIBSection(kBitmapDC, &kBitmapInfo, DIB_RGB_COLORS, (void **)&kpPixels, NULL, NULL);
     if(kBitmap == NULL || kpPixels == NULL)
     {
         RFCore::Logger::GetLogger()->Log(RFCore::Logger::FATAL, "Failed to create bitmap!");
     }
+    RFCore::Logger::GetLogger()->Log("Created DC and bitmap...");
 
     kOldBitmap = (HBITMAP)SelectObject(kBitmapDC, kBitmap);
 }
