@@ -13,7 +13,7 @@ WNDCLASSEX CreateWindowClass(HINSTANCE hInstance);
 HWND OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height);
 LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM windowParameters, LPARAM userParameters);
 int Run();
-void Paint();
+void Paint(unsigned int* pBuffer);
 void CreateBitmap();
 void Cleanup();
 
@@ -29,7 +29,6 @@ HBITMAP kOldBitmap = NULL;
 HDC kBitmapDC = NULL;
 
 unsigned int * kpPixels;
-unsigned int * kpBuffer;
 
 RFCore::Kernel* kpKernel;
 
@@ -70,11 +69,6 @@ int Run()
 {
     RFCore::Logger::GetLogger()->Log("Started message loop, time to render!");
 
-    kpBuffer = kpKernel->Run();
-
-    // First render
-    kpKernel->Run();
-
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
     static float lastTime = (float)timeGetTime();
@@ -91,12 +85,13 @@ int Run()
             //float currentTime = (float)timeGetTime();
             //float timeDelta = (currentTime - lastTime) / 1000.0f;
 
-            // Render (and pass timeDelta)!
-            kpBuffer = kpKernel->Run();
-            //lastTime = currentTime;
+            // Render!
+            unsigned int* pBuffer = kpKernel->Run();
 
             // Paint the buffer!
-            ::Paint();
+            ::Paint(pBuffer);
+
+            //lastTime = currentTime;
         }
     }
 
@@ -104,24 +99,26 @@ int Run()
 }
 
 /**
- * Paint the current buffer in the window.
+ * Paint the given buffer in the window.
+ *
+ * @param pBuffer
  */
-void Paint()
+void Paint(unsigned int* pBuffer)
 {
     for(unsigned int y = 0; y < kHeight; ++y)
     {
         for(unsigned int x = 0; x < kWidth; x++)
         {
             kpPixels[y * kWidth + x] = RGB(
-                kpBuffer[y * (kWidth * 3) + (x * 3)],
-                kpBuffer[y * (kWidth * 3) + (x * 3) + 1],
-                kpBuffer[y * (kWidth * 3) + (x * 3) + 2]
+                pBuffer[y * (kWidth * 3) + (x * 3)],        // red
+                pBuffer[y * (kWidth * 3) + (x * 3) + 1],    // green
+                pBuffer[y * (kWidth * 3) + (x * 3) + 2]     // blue
             );
         }
     }
 
     HDC currentDC = GetDC(khWnd);
-    SetDIBits(kBitmapDC, kBitmap, 0, kHeight, (void **)&kpPixels, &kBitmapInfo, DIB_RGB_COLORS);       
+    SetDIBits(kBitmapDC, kBitmap, 0, kHeight, (void **)&kpPixels, &kBitmapInfo, DIB_RGB_COLORS);
     BitBlt(currentDC, 0, 0, kWidth, kHeight, kBitmapDC, 0, 0, SRCCOPY);
 }
 
@@ -272,25 +269,21 @@ HWND OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width,
     );
 
     HWND handle = ::CreateWindow(
-        windowClass.lpszClassName,					/* window class name */
-        _T("Renderfarm 0.1a - by Leon Rodenburg"),	/* window name */
-        WS_OVERLAPPEDWINDOW,						/* window type */
-        CW_USEDEFAULT,								/* x-position */
-        CW_USEDEFAULT,								/* y-position */
-        clientRect.right - clientRect.left,			/* width */
-        clientRect.bottom - clientRect.top,			/* height */
-        NULL,										/* parent window */
-        NULL,										/* menu name */
-        hInstance,									/* application handle */
+        windowClass.lpszClassName,                  /* window class name */
+        _T("Renderfarm 0.1a - by Leon Rodenburg"),  /* window name */
+        WS_OVERLAPPEDWINDOW,                        /* window type */
+        CW_USEDEFAULT,                              /* x-position */
+        CW_USEDEFAULT,                              /* y-position */
+        clientRect.right - clientRect.left,         /* width */
+        clientRect.bottom - clientRect.top,         /* height */
+        NULL,                                       /* parent window */
+        NULL,                                       /* menu name */
+        hInstance,                                  /* application handle */
         NULL                                        /* user-defined parameters */
-    );	
+    );
 
     ::ShowWindow(handle, SW_SHOWDEFAULT);
     ::UpdateWindow(handle);
 
     return handle;
 }
-
-
-
-
