@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     // Initialize world
     RFGeometry::World world;
 
-    RFGeometry::Cube cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 0.7f));
+    RFGeometry::Cube cube(1.0f, RFMath::Vector3(0.5f, 0.7f, 0.8f));
     world.AddGeometry(&cube);
     kpKernel = new RFCore::Kernel(&world, kWidth, kHeight);
 

@@ -55,28 +55,48 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
     for(unsigned int i = 0; i < this->_pBuffer->size(); i += 3)
     {
-        outputList.clear();
-        outputList.push_back(this->_pBuffer->at(i));
-        outputList.push_back(this->_pBuffer->at(i + 1));
-        outputList.push_back(this->_pBuffer->at(i + 2));
+        RFMath::Vector3* p1 = this->_pBuffer->at(i);
+        RFMath::Vector3* p2 = this->_pBuffer->at(i + 1);
+        RFMath::Vector3* p3 = this->_pBuffer->at(i + 2);
 
-        for(int j = 0; j < 6; ++j)
+        // If the triangle is front facing (otherwise it can be clipped / culled)
+        if(this->_IsFrontFacing(p1, p2, p3))
         {
-            inputList = outputList;
             outputList.clear();
+            outputList.push_back(p1);
+            outputList.push_back(p2);
+            outputList.push_back(p3);
 
-            if(inputList.size() > 0)
+            for(int j = 0; j < 6; ++j)
             {
-                RFMath::Vector3* pLast = inputList.back();
-                for(unsigned int k = 0; k < inputList.size(); ++k)
-                {
-                    RFMath::Vector3* pCurrent = inputList.at(k);
-                    dot = pCurrent->Dot(this->_planeNormals[j]) - 1.0f;
-                    lastDot = pLast->Dot(this->_planeNormals[j]) - 1.0f;
+                inputList = outputList;
+                outputList.clear();
 
-                    if(dot <= 0.0f) // Current vertex 'inside' current plane
+                if(inputList.size() > 0)
+                {
+                    RFMath::Vector3* pLast = inputList.back();
+                    for(unsigned int k = 0; k < inputList.size(); ++k)
                     {
-                        if(lastDot > 0.0f) // Last vertex 'inside' current plane
+                        RFMath::Vector3* pCurrent = inputList.at(k);
+                        dot = pCurrent->Dot(this->_planeNormals[j]) - 1.0f;
+                        lastDot = pLast->Dot(this->_planeNormals[j]) - 1.0f;
+
+                        if(dot <= 0.0f) // Current vertex 'inside' current plane
+                        {
+                            if(lastDot > 0.0f) // Last vertex 'inside' current plane
+                            {
+                                RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+
+                                if(!intersection.IsZero())
+                                {
+                                    RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                                    outputList.push_back(pAdd);
+                                }
+                            }
+
+                            outputList.push_back(pCurrent);
+                        }
+                        else if(lastDot <= 0.0f) // Last vertex 'inside' current plane
                         {
                             RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
 
@@ -87,34 +107,17 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
                             }
                         }
 
-                        outputList.push_back(pCurrent);
+                        pLast = pCurrent;
                     }
-                    else if(lastDot <= 0.0f) // Last vertex 'inside' current plane
-                    {
-                        RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+                } 
+            }
 
-                        if(!intersection.IsZero())
-                        {
-                            RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                            outputList.push_back(pAdd);
-                        }
-                    }
-
-                    pLast = pCurrent;
-                }
-            } 
+            for(unsigned int m = 0; m < outputList.size(); ++m)
+            {
+                this->_pOutput->push_back(outputList.at(m));
+            }
         }
-
-        for(unsigned int m = 0; m < outputList.size(); ++m)
-        {
-            std::cout << *outputList.at(m) << std::endl;
-            this->_pOutput->push_back(outputList.at(m));
-        }
-
-        std::cout << "Triangle" << std::endl << std::endl;
     }
-
-
 
     return this->_pOutput;
 }
@@ -139,4 +142,34 @@ RFMath::Vector3 RFStage::Clipper::_CalculateIntersection(RFMath::Vector3* pFrom,
 
     float t = pPlaneNormal->Dot(*pPlaneNormal - *pFrom) / nDotV;
     return *pFrom + (t * (*pTo - *pFrom));  
+}
+
+/**
+ * Return true if the triangle formed by the three vertices is front facing,
+ * false if it is not. If the triangle is not front-facing, it can be culled.
+ *
+ * @param p1
+ * @param p2
+ * @param p3
+ *
+ * @return True if front-facing, false if not
+ */
+bool RFStage::Clipper::_IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, RFMath::Vector3* p3)
+{
+    // Calculate normal of triangle surface
+    RFMath::Vector3 line1 = *p2 - *p1;
+    RFMath::Vector3 line2 = *p3 - *p1;
+    RFMath::Vector3 normal = line1.Cross(line2);
+
+    RFMath::Vector3 origin(0.0f, 0.0f, 0.0f);
+    RFMath::Vector3 toCamera = origin - *p1;
+
+    float dot = normal.Dot(toCamera);
+
+    if(dot < 0.0f)
+    {
+        return false;
+    }
+
+    return true;
 }
