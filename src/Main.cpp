@@ -7,6 +7,8 @@
 
 #include "Core/Logger.h"
 #include "Core/Kernel.h"
+#include "Math/Vector3.h"
+#include "Geometry/Cube.h"
 
 // Forward declarations
 WNDCLASSEX CreateWindowClass(HINSTANCE hInstance);
@@ -54,6 +56,9 @@ int main(int argc, char** argv)
 
     // Initialize world
     RFGeometry::World world;
+
+    RFGeometry::Cube cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 0.7f));
+    world.AddGeometry(&cube);
     kpKernel = new RFCore::Kernel(&world, kWidth, kHeight);
 
     // Start rendering!

@@ -1,4 +1,5 @@
 #include "Clipper.h"
+#include <iostream>
 
 /**
  * Default constructor.
@@ -106,9 +107,14 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
         for(unsigned int m = 0; m < outputList.size(); ++m)
         {
+            std::cout << *outputList.at(m) << std::endl;
             this->_pOutput->push_back(outputList.at(m));
         }
+
+        std::cout << "Triangle" << std::endl << std::endl;
     }
+
+
 
     return this->_pOutput;
 }
