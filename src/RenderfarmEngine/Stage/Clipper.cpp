@@ -161,8 +161,8 @@ bool RFStage::Clipper::_IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, 
     RFMath::Vector3 line2 = *p3 - *p1;
     RFMath::Vector3 normal = line1.Cross(line2);
 
-    // Calculate triangle -> camera (origin) vector
-    RFMath::Vector3 origin(0.0f, 0.0f, 0.0f);
+    // Calculate triangle -> camera vector
+    RFMath::Vector3 origin(0.0f, 0.0f, -1.0f);
     RFMath::Vector3 toCamera = origin - *p1;
 
     // Dot triangle normal with camera vector
