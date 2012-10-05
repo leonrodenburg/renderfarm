@@ -7,7 +7,7 @@
 
 #include <string>
 
-#ifdef DLL_EXPORTS
+#ifdef DLL_EXPORT
 #define DLL_API __declspec(dllexport)
 #else
 #define DLL_API __declspec(dllimport)
@@ -18,7 +18,7 @@ namespace RFCore
     class DLL_API Logger
     {
     public:
-	    enum LogType { FATAL, WARNING, NOTICE, DEBUG };					
+	    enum LogType { FATAL_TYPE, WARNING_TYPE, NOTICE_TYPE, DEBUG_TYPE };					
 
 	    static Logger * GetLogger();									
 

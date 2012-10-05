@@ -3,7 +3,9 @@
 #include <tchar.h>
 #include <iostream>
 
-#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+#ifdef DEBUG
+    //#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+#endif
 
 #include "Core/Logger.h"
 #include "Core/Kernel.h"
@@ -45,13 +47,22 @@ int main(int argc, char** argv)
     std::cout << "Renderfarm 0.1a - by Leon Rodenburg" << std::endl;
 
     // Initialize window
+#ifdef DEBUG
+    std::cout << "DEBUG BUILD - BE PREPARED TO SEE OUTPUT!" << std::endl;
     RFCore::Logger::GetLogger()->Log("Fetching application handle...");
+#else
+    std::cout << "RELEASE BUILD - CONSOLE OUTPUT SUPPRESSED" << std::endl;
+#endif
+
     HINSTANCE hInstance = GetModuleHandle(NULL);
 
     WNDCLASSEX windowClass = CreateWindowClass(hInstance);
-    RFCore::Logger::GetLogger()->Log("Created window class...");
 
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Created window class...");
     RFCore::Logger::GetLogger()->Log("Opening window...");
+#endif
+    
     khWnd = ::OpenWindow(hInstance, windowClass, kWidth, kHeight);
 
     // Initialize world
@@ -72,7 +83,9 @@ int main(int argc, char** argv)
  */
 int Run()
 {
+#ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Started message loop, time to render!");
+#endif
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
@@ -128,7 +141,9 @@ void Paint(unsigned int* pBuffer)
  */
 void CreateBitmap()
 {
+#ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Gathering bitmap info...");
+#endif
 
     ZeroMemory(&(kBitmapInfo.bmiHeader), sizeof(kBitmapInfo.bmiHeader));
     kBitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
@@ -141,11 +156,14 @@ void CreateBitmap()
 
     kBitmapDC = CreateCompatibleDC(NULL);
     kBitmap = CreateDIBSection(kBitmapDC, &kBitmapInfo, DIB_RGB_COLORS, (void **)&kpPixels, NULL, NULL);
+
+#ifdef DEBUG
     if(kBitmap == NULL || kpPixels == NULL)
     {
-        RFCore::Logger::GetLogger()->Log(RFCore::Logger::FATAL, "Failed to create bitmap!");
+        RFCore::Logger::GetLogger()->Log(RFCore::Logger::FATAL_TYPE, "Failed to create bitmap!");
     }
     RFCore::Logger::GetLogger()->Log("Created DC and bitmap...");
+#endif
 
     kOldBitmap = (HBITMAP)SelectObject(kBitmapDC, kBitmap);
 }
@@ -155,18 +173,25 @@ void CreateBitmap()
  */
 void Cleanup()
 {
+#ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("SIGNAL: Window was closed");
     RFCore::Logger::GetLogger()->Log("Cleaning up bitmap...");
+#endif
 
     kBitmap = (HBITMAP)SelectObject(kBitmapDC, kOldBitmap);
     DeleteObject(kOldBitmap);
     DeleteObject(kBitmap);
     DeleteDC(kBitmapDC);
 
+#ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Cleaning up Renderfarm resources...");
+#endif
+
     delete kpKernel;
 
+#ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Resources cleaned up. Closing Renderfarm...");
+#endif
 
     PostQuitMessage(0);
 }

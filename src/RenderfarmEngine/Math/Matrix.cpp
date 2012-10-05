@@ -247,7 +247,10 @@ DLL_API RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
     // If the determinant is zero (and the matrix is not invertible)
     if(RFMathIsZero(det))
     {
-        RFCore::Logger::GetLogger()->Log(RFCore::Logger::WARNING, "Matrix has no inverse");
+#ifdef DEBUG
+        RFCore::Logger::GetLogger()->Log(RFCore::Logger::WARNING_TYPE, "Matrix has no inverse");
+#endif
+
         return result;
     }
 

@@ -48,7 +48,7 @@ void RFCore::Logger::Log(char* pFormat, ...)
 {
 	va_list pArguments;
 	va_start(pArguments, pFormat);
-	this->_Log(DEBUG, pFormat, pArguments);
+	this->_Log(DEBUG_TYPE, pFormat, pArguments);
 	va_end(pArguments);
 }
 
@@ -82,10 +82,10 @@ void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)
 	std::string typeString = "";
 	switch(type) 
 	{
-		case FATAL: typeString = "ERROR"; break;
-		case WARNING: typeString = "WARNING"; break;
-		case NOTICE: typeString = "NOTICE"; break;
-		case DEBUG: typeString = "DEBUG"; break;
+		case FATAL_TYPE: typeString = "ERROR"; break;
+		case WARNING_TYPE: typeString = "WARNING"; break;
+		case NOTICE_TYPE: typeString = "NOTICE"; break;
+		case DEBUG_TYPE: typeString = "DEBUG"; break;
 		default: typeString = "UNKNOWN"; break;
 	}
 
