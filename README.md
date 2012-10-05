@@ -10,3 +10,8 @@ For more information on the project and the rendering pipeline, see these docume
 [Rendering Pipeline](http://www.instanceof.nl/doc/RP_SRP_LeonRodenburg.pdf)
 
 A lot of the images in these documents come from the excellent book Real-Time Rendering (3rd Edition) by Tomas Akenine-Möller, Eric Haines and Naty Hoffman.
+
+Prerequisites
+==========
+
+If you want to run the Win32 binary of Renderfarm, make sure you have the [Microsoft Visual C++ 2010 Redistributable Package (x86)](http://www.microsoft.com/en-us/download/details.aspx?id=5555) installed.
