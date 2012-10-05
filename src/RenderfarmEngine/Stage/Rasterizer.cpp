@@ -12,7 +12,7 @@ RFStage::Rasterizer::Rasterizer(unsigned int windowWidth, unsigned int windowHei
 
     this->_clearRed = 0;
     this->_clearGreen = 0;
-    this->_clearBlue = 0;
+    this->_clearBlue = 255;
 }
 
 /**
@@ -127,8 +127,6 @@ unsigned int* RFStage::Rasterizer::Rasterize()
             last = triangle.at(k);
         }
 
-        triangle.clear();
-
         for(unsigned int y = 0; y < this->_windowHeight; ++y)
         {
             int xStart = (int)floor(left[y]);
@@ -144,6 +142,8 @@ unsigned int* RFStage::Rasterizer::Rasterize()
 
         delete[] left;
         delete[] right;
+
+        triangle.clear();
     }
 
     return this->_pOutput;
