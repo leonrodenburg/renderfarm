@@ -46,10 +46,6 @@ void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  */
 std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 {
-    for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
-    {
-        delete this->_pOutput->at(i);
-    }
     this->_pOutput->clear();
 
     std::vector<RFMath::Vector3*> outputList;
@@ -93,8 +89,8 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
                                 if(!intersection.IsZero())
                                 {
-                                    RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                    outputList.push_back(pAdd);
+                                    RFMath::Vector3 add(intersection);
+                                    outputList.push_back(&add);
                                 }
                             }
 
@@ -106,14 +102,41 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
                             if(!intersection.IsZero())
                             {
-                                RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                outputList.push_back(pAdd);
+                                RFMath::Vector3 add(intersection);
+                                outputList.push_back(&add);
                             }
                         }
 
                         pLast = pCurrent;
                     }
                 } 
+            }
+
+            // Post process if result is a polygon (not a triangle anymore)
+            if(outputList.size() > 3)
+            {
+                std::vector<RFMath::Vector3*> triangles;
+                triangles.push_back(outputList.at(0));
+                triangles.push_back(outputList.at(1));
+                triangles.push_back(outputList.at(2));
+
+                triangles.push_back(outputList.at(2));
+                triangles.push_back(outputList.at(3));
+                triangles.push_back(outputList.at(0));
+
+                if(outputList.size() > 4)
+                {
+                    triangles.push_back(outputList.at(3));
+                    triangles.push_back(outputList.at(4));
+                    triangles.push_back(outputList.at(0));
+                }
+
+                outputList.clear();
+                
+                for(unsigned int i = 0; i < triangles.size(); ++i)
+                {
+                    outputList.push_back(triangles.at(i));
+                }
             }
 
             for(unsigned int m = 0; m < outputList.size(); ++m)
@@ -167,13 +190,17 @@ bool RFStage::Clipper::_IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, 
 
     // Calculate triangle -> camera vector
     RFMath::Vector3 origin(0.0f, 0.0f, -1.0f);
-    RFMath::Vector3 toCamera = origin - *p1;
+    RFMath::Vector3 fromCamera = *p1 - origin;
+
+    // Normalize vectors
+    fromCamera = fromCamera.Normalize();
+    normal = normal.Normalize();
 
     // Dot triangle normal with camera vector
-    float dot = normal.Dot(toCamera);
+    float dot = fromCamera.Dot(normal);
 
     // If the angle is equal to or larger than 90 degrees 
-    if(dot <= 0.0f)
+    if(dot > 0.0f)
     {
         return false;
     }

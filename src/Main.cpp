@@ -10,12 +10,14 @@
 #include "Core/Logger.h"
 #include "Core/Kernel.h"
 #include "Math/Vector3.h"
+#include "Geometry/World.h"
 #include "Geometry/Cube.h"
 
 // Forward declarations
 WNDCLASSEX CreateWindowClass(HINSTANCE hInstance);
 HWND OpenWindow(HINSTANCE hInstance, WNDCLASSEX windowClass, unsigned int width, unsigned int height);
 LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM windowParameters, LPARAM userParameters);
+void Initialize();
 int Run();
 void Paint(unsigned int* pBuffer);
 void CreateBitmap();
@@ -35,6 +37,15 @@ HDC kBitmapDC = NULL;
 unsigned int * kpPixels;
 
 RFCore::Kernel* kpKernel;
+RFGeometry::World* kpWorld;
+
+/**
+ * Initialize the world, geometry and kernel.
+ */
+void Initialize()
+{
+    // Initialize geometry and models
+}
 
 /**
  * Main entry point of application.
@@ -66,11 +77,13 @@ int main(int argc, char** argv)
     khWnd = ::OpenWindow(hInstance, windowClass, kWidth, kHeight);
 
     // Initialize world
-    RFGeometry::World world;
+    kpWorld = new RFGeometry::World();
 
-    //RFGeometry::Cube cube(1.0f, RFMath::Vector3(0.5f, 0.7f, 0.8f));
-    //world.AddGeometry(&cube);
-    kpKernel = new RFCore::Kernel(&world, kWidth, kHeight);
+    // Initialize geometry
+    ::Initialize();
+
+    // Initialize kernel
+    kpKernel = new RFCore::Kernel(kpWorld, kWidth, kHeight);
 
     // Start rendering!
     return ::Run();
@@ -188,6 +201,7 @@ void Cleanup()
 #endif
 
     delete kpKernel;
+    delete kpWorld;
 
 #ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Resources cleaned up. Closing Renderfarm...");
