@@ -7,12 +7,7 @@ RFCore::Kernel::Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsi
 {
     this->_pWorld = pWorld;
     this->_pClipper = new RFStage::Clipper();
-
-    this->_windowWidth = windowWidth;
-    this->_windowHeight = windowHeight;
-
-    this->_pFrontBuffer = new unsigned int[(windowWidth * 3) * windowHeight];
-    this->_pBackBuffer = new unsigned int[(windowWidth * 3) * windowHeight];
+    this->_pRasterizer = new RFStage::Rasterizer(windowWidth, windowHeight);
 
 #ifdef DEBUG_BUILD
     Logger::GetLogger()->Log("Created Kernel...");
@@ -24,6 +19,7 @@ RFCore::Kernel::Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsi
  */
 RFCore::Kernel::~Kernel()
 {
+    delete this->_pRasterizer;
     delete this->_pClipper;
 }
 
@@ -45,42 +41,16 @@ unsigned int* RFCore::Kernel::GetFrontBuffer()
  */ 
 unsigned int* RFCore::Kernel::Run()
 {
-    static unsigned int offset = 1;
-    static unsigned int red = 0;
-    static unsigned int green = 0;
-    static unsigned int blue = 0;
-
     // Build geometry (and generate vertex buffer)
-    std::vector<RFMath::Vector3*>* buffer = this->_pWorld->BuildGeometry();
+    std::vector<RFMath::Vector3*>* pBuffer = this->_pWorld->BuildGeometry();
 
     // Bind the buffer to the clipper and clip
-    this->_pClipper->BindBuffer(buffer);
-    std::vector<RFMath::Vector3*>* output = this->_pClipper->Clip();
+    this->_pClipper->BindBuffer(pBuffer);
+    pBuffer = this->_pClipper->Clip();
 
-    // Edit back buffer
-    for(unsigned int y = 0; y < this->_windowHeight; ++y)
-    {
-        for(unsigned int x = 0; x < this->_windowWidth * 3; x += 3)
-        {
-            this->_pBackBuffer[y * (this->_windowWidth * 3) + x] = red;
-            this->_pBackBuffer[y * (this->_windowWidth * 3) + x + 1] = green;
-            this->_pBackBuffer[y * (this->_windowWidth * 3) + x + 2] = blue;
-        }
-    }
-
-    red += offset;
-    green += offset;
-    blue += offset;
-
-    if(red == 255)
-    {
-        offset = -1;
-    }
-    
-    if(red == 0)
-    {
-        offset = +1;
-    }
+    // Bind the buffer to the rasterizer
+    this->_pRasterizer->BindBuffer(pBuffer);
+    this->_pBackBuffer = this->_pRasterizer->Rasterize();
 
     // Swap back and front buffer
     unsigned int* pTemp = this->_pFrontBuffer;

@@ -91,5 +91,28 @@ inline float RFMathRadToDeg(float radians)
     return radians * (180.0f / PI);
 }
 
+/**
+ * Clamp a value to a minimum and maximum value.
+ * 
+ * @param value
+ * @param min
+ * @param max
+ *
+ * @return Clamped value
+ */
+inline float RFMathClamp(float value, float min, float max)
+{
+    if(value > max)
+    {
+        return max;
+    }
+
+    if(value < min)
+    {
+        return min;
+    }
+
+    return value;
+}
 
 #endif

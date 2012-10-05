@@ -5,6 +5,7 @@
 
 #include "../Resources.h"
 #include "../Stage/Clipper.h"
+#include "../Stage/Rasterizer.h"
 #include "../Geometry/World.h"
 
 #include <vector>
@@ -27,10 +28,8 @@ namespace RFCore
         unsigned int* Run();
     private:
         RFStage::Clipper* _pClipper;
+        RFStage::Rasterizer* _pRasterizer;
         RFGeometry::World* _pWorld;
-
-        unsigned int _windowWidth;
-        unsigned int _windowHeight;
 
         unsigned int* _pFrontBuffer;
         unsigned int* _pBackBuffer;

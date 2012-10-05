@@ -46,6 +46,10 @@ void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  */
 std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 {
+    for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
+    {
+        delete this->_pOutput->at(i);
+    }
     this->_pOutput->clear();
 
     std::vector<RFMath::Vector3*> outputList;

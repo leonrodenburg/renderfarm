@@ -3,7 +3,7 @@
 #include <tchar.h>
 #include <iostream>
 
-//#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
 
 #include "Core/Logger.h"
 #include "Core/Kernel.h"
@@ -23,7 +23,7 @@ void Cleanup();
 HWND khWnd;
 
 unsigned int kWidth = 800;
-unsigned int kHeight = 600;
+int kHeight = 600;
 
 BITMAPINFO kBitmapInfo;
 HBITMAP kBitmap = NULL;
@@ -57,8 +57,8 @@ int main(int argc, char** argv)
     // Initialize world
     RFGeometry::World world;
 
-    RFGeometry::Cube cube(1.0f, RFMath::Vector3(0.5f, 0.7f, 0.8f));
-    world.AddGeometry(&cube);
+    //RFGeometry::Cube cube(1.0f, RFMath::Vector3(0.5f, 0.7f, 0.8f));
+    //world.AddGeometry(&cube);
     kpKernel = new RFCore::Kernel(&world, kWidth, kHeight);
 
     // Start rendering!
@@ -76,7 +76,6 @@ int Run()
 
     MSG msg;
     ZeroMemory(&msg, sizeof(msg));
-    static float lastTime = (float)timeGetTime();
 
     while(WM_QUIT != msg.message)
     {
@@ -87,16 +86,11 @@ int Run()
         }
         else
         {
-            //float currentTime = (float)timeGetTime();
-            //float timeDelta = (currentTime - lastTime) / 1000.0f;
-
-            // Render!
+            // Render
             unsigned int* pBuffer = kpKernel->Run();
 
-            // Paint the buffer!
+            // Paint the buffer
             ::Paint(pBuffer);
-
-            //lastTime = currentTime;
         }
     }
 
@@ -104,20 +98,21 @@ int Run()
 }
 
 /**
- * Paint the given buffer in the window.
+ * Paint the given buffer in the window. Pixel colors in the bitmap are 
+ * expected in BGR format.
  *
  * @param pBuffer
  */
 void Paint(unsigned int* pBuffer)
 {
-    for(unsigned int y = 0; y < kHeight; ++y)
+    for(int y = 0; y < kHeight; ++y)
     {
-        for(unsigned int x = 0; x < kWidth; x++)
+        for(unsigned int x = 0; x < kWidth; ++x)
         {
             kpPixels[y * kWidth + x] = RGB(
-                pBuffer[y * (kWidth * 3) + (x * 3)],        // red
+                pBuffer[y * (kWidth * 3) + (x * 3) + 2],    // blue
                 pBuffer[y * (kWidth * 3) + (x * 3) + 1],    // green
-                pBuffer[y * (kWidth * 3) + (x * 3) + 2]     // blue
+                pBuffer[y * (kWidth * 3) + (x * 3) + 0]     // red
             );
         }
     }
@@ -125,6 +120,7 @@ void Paint(unsigned int* pBuffer)
     HDC currentDC = GetDC(khWnd);
     SetDIBits(kBitmapDC, kBitmap, 0, kHeight, (void **)&kpPixels, &kBitmapInfo, DIB_RGB_COLORS);
     BitBlt(currentDC, 0, 0, kWidth, kHeight, kBitmapDC, 0, 0, SRCCOPY);
+    ReleaseDC(khWnd, currentDC);
 }
 
 /**
@@ -137,7 +133,7 @@ void CreateBitmap()
     ZeroMemory(&(kBitmapInfo.bmiHeader), sizeof(kBitmapInfo.bmiHeader));
     kBitmapInfo.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     kBitmapInfo.bmiHeader.biWidth = kWidth;
-    kBitmapInfo.bmiHeader.biHeight = kHeight;
+    kBitmapInfo.bmiHeader.biHeight = -kHeight;
     kBitmapInfo.bmiHeader.biPlanes = 1;
     kBitmapInfo.bmiHeader.biBitCount = 32;
     kBitmapInfo.bmiHeader.biCompression = BI_RGB;
