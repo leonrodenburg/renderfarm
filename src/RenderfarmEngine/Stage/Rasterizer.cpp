@@ -57,72 +57,93 @@ unsigned int* RFStage::Rasterizer::Rasterize()
 {
     this->_Clear();
 
-    float left[600];
-    float right[600];
+    this->_pBuffer->push_back(&RFMath::Vector3(0.0f, 0.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(700.0f, 100.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(200.0f, 500.0f, 0.0f));
 
-    std::vector<RFMath::Vector3> triangle;
+    this->_pBuffer->push_back(&RFMath::Vector3(600.0f, 5.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(600.0f, 30.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(550.0f, 30.0f, 0.0f));
 
-    triangle.push_back(RFMath::Vector3(0.0f, 0.0f, 0.0f));
-    triangle.push_back(RFMath::Vector3(700.0f, 100.0f, 0.0f));
-    triangle.push_back(RFMath::Vector3(200.0f, 500.0f, 0.0f));
+    std::vector<RFMath::Vector3*> triangle;
 
-    RFMath::Vector3 last = triangle.back();
-    for(int i = 0; i < 3; ++i)
+    for(unsigned int i = 0; i < this->_pBuffer->size(); i += 3)
     {
-        float x1 = last[0];
-        float y1 = last[1];
-        float x2 = triangle.at(i)[0];
-        float y2 = triangle.at(i)[1];
+        float* left = new float[this->_windowHeight];
+        float* right = new float[this->_windowHeight];
 
-        float dx = x2 - x1;
-        float dy = y2 - y1;
+        RFMath::Vector3* p1 = this->_pBuffer->at(i);
+        RFMath::Vector3* p2 = this->_pBuffer->at(i + 1);
+        RFMath::Vector3* p3 = this->_pBuffer->at(i + 2);
 
-        if(dy != 0)
+        triangle.push_back(p1);
+        triangle.push_back(p2);
+        triangle.push_back(p3);
+
+        RFMath::Vector3* last = triangle.back();
+
+        for(unsigned int k = 0; k < triangle.size(); ++k)
         {
-            float gradient = dx / dy;
+            float x1 = last->GetX();
+            float y1 = last->GetY();
+            float x2 = triangle.at(k)->GetX();
+            float y2 = triangle.at(k)->GetY();
 
-            float ey = floor(y1 + 1) - y1;
-            float ex = gradient * ey;
+            float dx = x2 - x1;
+            float dy = y2 - y1;
 
-            float Ax = x1 + ex;
-            int Ay = floor(y1 + 1);
-
-            int By = floor(y2);
-
-            float x = Ax;
-
-            if(Ay < By)
+            if(dy != 0)
             {
-                for(int y = Ay; y < By; ++y)
+                float gradient = dx / dy;
+
+                float ey = floor(y1 + 1) - y1;
+                float ex = gradient * ey;
+
+                float Ax = x1 + ex;
+                int Ay = (int)floor(y1 + 1);
+
+                int By = (int)floor(y2);
+
+                float x = Ax;
+
+                if(Ay < By)
                 {
-                    right[y] = x;
-                    x += gradient;
+                    for(int y = Ay; y <= By; ++y)
+                    {
+                        right[y] = x;
+                        x += gradient;
+                    }
+                }
+                else
+                {
+                    for(int y = Ay; y >= By; --y)
+                    {
+                        left[y] = x;
+                        x -= gradient;
+                    }
                 }
             }
-            else
+
+            last = triangle.at(k);
+        }
+
+        triangle.clear();
+
+        for(unsigned int y = 0; y < this->_windowHeight; ++y)
+        {
+            int xStart = (int)floor(left[y]);
+            int xEnd = (int)floor(right[y]);
+
+            for(int x = xStart; x < xEnd; ++x)
             {
-                for(int y = Ay; y > By; --y)
-                {
-                    left[y] = x;
-                    x -= gradient;
-                }
+                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3)] = 255;
+                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 1] = 0;
+                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 2] = 0;
             }
         }
 
-        last = triangle.at(i);
-    }
-
-    for(int y = 0; y < this->_windowHeight; ++y)
-    {
-        int xStart = floor(left[y]);
-        int xEnd = floor(right[y]);
-
-        for(int x = xStart; x < xEnd; ++x)
-        {
-            this->_pOutput[y * (this->_windowWidth * 3) + (x * 3)] = 255;
-            this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 1] = 255;
-            this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 2] = 255;
-        }
+        delete[] left;
+        delete[] right;
     }
 
     return this->_pOutput;

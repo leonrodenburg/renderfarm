@@ -9,7 +9,7 @@ RFCore::Kernel::Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsi
     this->_pClipper = new RFStage::Clipper();
     this->_pRasterizer = new RFStage::Rasterizer(windowWidth, windowHeight);
 
-#ifdef DEBUG_BUILD
+#ifdef DEBUG
     Logger::GetLogger()->Log("Created Kernel...");
 #endif
 }
