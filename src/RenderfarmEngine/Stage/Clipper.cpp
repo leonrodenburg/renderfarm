@@ -190,14 +190,14 @@ bool RFStage::Clipper::_IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, 
 
     // Calculate triangle -> camera vector
     RFMath::Vector3 origin(0.0f, 0.0f, -1.0f);
-    RFMath::Vector3 fromCamera = *p1 - origin;
+    RFMath::Vector3 toCamera = *p1 - origin;
 
     // Normalize vectors
-    fromCamera = fromCamera.Normalize();
+    toCamera = toCamera.Normalize();
     normal = normal.Normalize();
 
     // Dot triangle normal with camera vector
-    float dot = fromCamera.Dot(normal);
+    float dot = toCamera.Dot(normal);
 
     // If the angle is equal to or larger than 90 degrees 
     if(dot > 0.0f)

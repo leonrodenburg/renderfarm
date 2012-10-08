@@ -34,6 +34,26 @@ unsigned int* RFCore::Kernel::GetFrontBuffer()
 }
 
 /**
+ * Return the pointer to the clipper used.
+ *
+ * @return Clipper
+ */
+RFStage::Clipper* RFCore::Kernel::GetClipper()
+{
+    return this->_pClipper;
+}
+
+/**
+ * Return the pointer to the rasterizer used.
+ *
+ * @return Rasterizer
+ */
+RFStage::Rasterizer* RFCore::Kernel::GetRasterizer()
+{
+    return this->_pRasterizer;
+}
+
+/**
  * Traverse the rendering pipeline, draw in the back buffer,
  * swap with the front buffer and return it.
  *

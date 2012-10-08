@@ -2,6 +2,7 @@
 #include <string.h>
 #include <tchar.h>
 #include <iostream>
+#include <vector>
 
 #ifdef DEBUG
     //#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
@@ -38,6 +39,7 @@ unsigned int * kpPixels;
 
 RFCore::Kernel* kpKernel;
 RFGeometry::World* kpWorld;
+std::vector<RFGeometry::Geometry*>* kpGeometry;
 
 /**
  * Initialize the world, geometry and kernel.
@@ -45,6 +47,11 @@ RFGeometry::World* kpWorld;
 void Initialize()
 {
     // Initialize geometry and models
+    RFGeometry::Cube* pCube = new RFGeometry::Cube(30.0f, RFMath::Vector3(0.0f, 0.0f, 30.0f));
+    kpGeometry->push_back(pCube);
+
+    // Set clear color of rasterizer
+    kpKernel->GetRasterizer()->SetClearColor(50, 50, 180);
 }
 
 /**
@@ -78,12 +85,19 @@ int main(int argc, char** argv)
 
     // Initialize world
     kpWorld = new RFGeometry::World();
+    kpGeometry = new std::vector<RFGeometry::Geometry*>();
+
+    // Initialize kernel
+    kpKernel = new RFCore::Kernel(kpWorld, kWidth, kHeight);
 
     // Initialize geometry
     ::Initialize();
 
-    // Initialize kernel
-    kpKernel = new RFCore::Kernel(kpWorld, kWidth, kHeight);
+    // Add geometry to the world
+    for(unsigned int i = 0; i < kpGeometry->size(); ++i)
+    {
+        kpWorld->AddGeometry(kpGeometry->at(i));
+    }
 
     // Start rendering!
     return ::Run();
@@ -202,6 +216,12 @@ void Cleanup()
 
     delete kpKernel;
     delete kpWorld;
+
+    for(unsigned int i = 0; i < kpGeometry->size(); ++i)
+    {
+        delete kpGeometry->at(i);
+    }
+    delete kpGeometry;
 
 #ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Resources cleaned up. Closing Renderfarm...");

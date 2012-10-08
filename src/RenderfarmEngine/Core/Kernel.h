@@ -25,6 +25,8 @@ namespace RFCore
         virtual ~Kernel();
 
         unsigned int* GetFrontBuffer();
+        RFStage::Clipper* GetClipper();
+        RFStage::Rasterizer* GetRasterizer();
         unsigned int* Run();
     private:
         RFStage::Clipper* _pClipper;
