@@ -57,14 +57,6 @@ unsigned int* RFStage::Rasterizer::Rasterize()
 {
     this->_Clear();
 
-    this->_pBuffer->push_back(&RFMath::Vector3(10.0f, 10.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(160.0f, 10.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(10.0f, 160.0f, 0.0f));
-
-    this->_pBuffer->push_back(&RFMath::Vector3(790.0f, 440.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(790.0f, 590.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(640.0f, 590.0f, 0.0f));
-
     std::vector<RFMath::Vector3*> triangle;
 
     for(unsigned int i = 0; i < this->_pBuffer->size(); i += 3)
