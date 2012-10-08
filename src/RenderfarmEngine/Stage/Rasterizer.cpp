@@ -58,8 +58,12 @@ unsigned int* RFStage::Rasterizer::Rasterize()
     this->_Clear();
 
     this->_pBuffer->push_back(&RFMath::Vector3(10.0f, 10.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(60.0f, 10.0f, 0.0f));
-    this->_pBuffer->push_back(&RFMath::Vector3(10.0f, 60.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(160.0f, 10.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(10.0f, 160.0f, 0.0f));
+
+    this->_pBuffer->push_back(&RFMath::Vector3(790.0f, 440.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(790.0f, 590.0f, 0.0f));
+    this->_pBuffer->push_back(&RFMath::Vector3(640.0f, 590.0f, 0.0f));
 
     std::vector<RFMath::Vector3*> triangle;
 
@@ -92,11 +96,11 @@ unsigned int* RFStage::Rasterizer::Rasterize()
             {
                 float gradient = dx / dy;
 
-                float ey = floor(y1 + 1) - y1;
+                float ey = floor(y1) - y1;
                 float ex = gradient * ey;
 
                 float Ax = x1 + ex;
-                int Ay = (int)floor(y1 + 1);
+                int Ay = (int)floor(y1);
 
                 int By = (int)floor(y2);
 
@@ -133,11 +137,15 @@ unsigned int* RFStage::Rasterizer::Rasterize()
             int xStart = (int)floor(left[y]);
             int xEnd = (int)floor(right[y]);
 
-            for(int x = xStart; x < xEnd; ++x)
+            int xFirst = y * (this->_windowWidth * 3) + (xStart * 3);
+
+            for(int x = 0; x < (xEnd - xStart); ++x)
             {
-                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3)] = 255;
-                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 1] = 0;
-                this->_pOutput[y * (this->_windowWidth * 3) + (x * 3) + 2] = 0;
+                int xCurrent = xFirst + (x * 3);
+
+                this->_pOutput[xCurrent] = 255;
+                this->_pOutput[xCurrent + 1] = 0;
+                this->_pOutput[xCurrent + 2] = 0;
             }
         }
 
@@ -148,27 +156,6 @@ unsigned int* RFStage::Rasterizer::Rasterize()
     }
 
     return this->_pOutput;
-}
-
-/**
- * Set whether or not the rasterizer should output wireframe data.
- *
- * @param wireframe
- */
-void RFStage::Rasterizer::SetWireframe(bool wireframe)
-{
-    this->_wireframe = wireframe;
-}
-
-/**
- * Set whether or not the rasterizer should output solid triangles
- * (turn this off and wireframe on to only show wireframe).
- *
- * @param solid
- */
-void RFStage::Rasterizer::SetSolid(bool solid)
-{
-    this->_solid = solid;
 }
 
 /**

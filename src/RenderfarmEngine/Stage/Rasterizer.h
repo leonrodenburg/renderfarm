@@ -25,14 +25,8 @@ namespace RFStage
         void BindBuffer(std::vector<RFMath::Vector3*>* pBuffer);
         void SetClearColor(unsigned int red, unsigned int green, unsigned int blue);
         unsigned int* Rasterize();
-
-        void SetWireframe(bool wireframe);
-        void SetSolid(bool solid);
     private:
         void _Clear();
-
-        bool _wireframe;
-        bool _solid;
 
         std::vector<RFMath::Vector3*>* _pBuffer;
         unsigned int* _pOutput;
