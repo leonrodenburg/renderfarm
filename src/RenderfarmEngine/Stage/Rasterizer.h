@@ -8,12 +8,6 @@
 
 #include <vector>
 
-#ifdef DLL_EXPORT
-#define DLL_API __declspec(dllexport)
-#else
-#define DLL_API __declspec(dllimport)
-#endif
-
 namespace RFStage
 {
     class DLL_API Rasterizer

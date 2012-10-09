@@ -49,9 +49,6 @@ void Initialize()
     // Initialize geometry and models
     RFGeometry::Cube* pCube = new RFGeometry::Cube(30.0f, RFMath::Vector3(0.0f, 0.0f, 30.0f));
     kpGeometry->push_back(pCube);
-
-    // Set clear color of rasterizer
-    kpKernel->GetRasterizer()->SetClearColor(50, 50, 180);
 }
 
 /**
