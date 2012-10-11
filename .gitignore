@@ -12,4 +12,4 @@
 *.a
 
 # Xcode files
-*.DS_Store
+.DS_Store
