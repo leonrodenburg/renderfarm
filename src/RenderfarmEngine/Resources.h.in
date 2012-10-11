@@ -23,6 +23,6 @@
 	#define DLL_API 
 #endif
 
-#include "../Core/Logger.h"
+#include "Core/Logger.h"
 
 #endif

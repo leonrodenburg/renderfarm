@@ -94,7 +94,7 @@ void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)
 
 	time(&currentTime);
 
-	//localtime_s(&timeInfo, &currentTime);
+	localtime_s(&timeInfo, &currentTime);
 
 	std::stringstream timeString;
 	timeString.fill('0');
