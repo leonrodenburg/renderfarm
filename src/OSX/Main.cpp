@@ -14,7 +14,13 @@ int main(int argc, const char * argv[])
     RFGeometry::World* pWorld = new RFGeometry::World();
     RFCore::Kernel* pKernel = new RFCore::Kernel(pWorld, 800, 600);
     
-    std::cout << "Now also on OS X!" << std::endl;
+    std::cout << "Renderfarm 0.1a - by Leon Rodenburg" << std::endl;
+
+#ifdef DEBUG
+    std::cout << "DEBUG BUILD - BE PREPARED TO SEE OUTPUT!" << std::endl;
+#else
+    std::cout << "RELEASE BUILD - CONSOLE OUTPUT SUPPRESSED" << std::endl;
+#endif
     
     delete pKernel;
     delete pWorld;
