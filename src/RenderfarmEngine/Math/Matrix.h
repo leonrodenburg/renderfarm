@@ -29,11 +29,11 @@ namespace RFMath
 
         Vector3 Transform(const Vector3& vector);
 
-        Matrix& Transpose();
         DLL_API friend Matrix Transpose(const Matrix& matrix);
+        Matrix& Transpose();
 
-        Matrix& Inverse();
         DLL_API friend Matrix Inverse(const Matrix& matrix);
+        Matrix& Inverse();
 
         Matrix& Translate(const Vector3& vector);
         Matrix& Translate(float x, float y, float z);

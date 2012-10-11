@@ -3,7 +3,7 @@
 #ifndef _RESOURCES_H_
 #define _RESOURCES_H_
 
-#define RF_PLATFORM 1
+#define RF_PLATFORM 2
 
 #define RF_PLATFORM_WIN 1
 #define RF_PLATFORM_OSX 2
@@ -23,6 +23,6 @@
 	#define DLL_API 
 #endif
 
-#include "../Core/Logger.h"
+#include "Core/Logger.h"
 
 #endif

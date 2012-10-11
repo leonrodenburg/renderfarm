@@ -8,6 +8,8 @@
 #define HALFPI 1.5707963267948966192313216916398f
 #define TWOPI 2.0f * PI
 
+#include <cmath>
+
 /**
  * Test whether a number is zero, considering an epsilon value
  * (to correct small accuracy problems).
@@ -18,7 +20,7 @@
  */
 inline bool RFMathIsZero(float a) 
 {
-    return (fabsf(a) < EPSILON);
+    return (fabs(a) < EPSILON);
 }
 
 /**

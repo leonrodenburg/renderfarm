@@ -144,41 +144,6 @@ RFMath::Vector3 RFMath::Matrix::Transform(const Vector3& vector)
 }
 
 /**
- * Get the transpose of this matrix.
- *
- * @return Tranposed matrix
- */
-RFMath::Matrix& RFMath::Matrix::Transpose()
-{
-    // Swap elements 1 / 4
-    float temp = this->_elements[1];
-    this->_elements[1] = this->_elements[4];
-    this->_elements[4] = temp;
-
-    // Swap elements 2 / 8
-    temp = this->_elements[2];
-    this->_elements[2] = this->_elements[8];
-    this->_elements[8] = temp;
-
-    // Swap elements 6 / 9
-    temp = this->_elements[6];
-    this->_elements[6] = this->_elements[9];
-    this->_elements[9] = temp;
-
-    // Swap elements 7 / 13
-    temp = this->_elements[7];
-    this->_elements[7] = this->_elements[13];
-    this->_elements[13] = temp;
-
-    // Swap elements 11 / 14
-    temp = this->_elements[11];
-    this->_elements[11] = this->_elements[14];
-    this->_elements[14] = temp;
-
-    return *this;
-}
-
-/**
  * Calculate the transpose of a matrix and return a new
  * matrix.
  *
@@ -214,14 +179,37 @@ DLL_API RFMath::Matrix RFMath::Transpose(const Matrix& matrix)
 }
 
 /**
- * Calculate the inverse of this matrix and return
- * the inverse (if it exists).
+ * Get the transpose of this matrix.
  *
- * @return Inverted matrix
+ * @return Tranposed matrix
  */
-RFMath::Matrix& RFMath::Matrix::Inverse()
+RFMath::Matrix& RFMath::Matrix::Transpose()
 {
-    *this = RFMath::Inverse(*this);
+    // Swap elements 1 / 4
+    float temp = this->_elements[1];
+    this->_elements[1] = this->_elements[4];
+    this->_elements[4] = temp;
+    
+    // Swap elements 2 / 8
+    temp = this->_elements[2];
+    this->_elements[2] = this->_elements[8];
+    this->_elements[8] = temp;
+    
+    // Swap elements 6 / 9
+    temp = this->_elements[6];
+    this->_elements[6] = this->_elements[9];
+    this->_elements[9] = temp;
+    
+    // Swap elements 7 / 13
+    temp = this->_elements[7];
+    this->_elements[7] = this->_elements[13];
+    this->_elements[13] = temp;
+    
+    // Swap elements 11 / 14
+    temp = this->_elements[11];
+    this->_elements[11] = this->_elements[14];
+    this->_elements[14] = temp;
+    
     return *this;
 }
 
@@ -276,6 +264,18 @@ DLL_API RFMath::Matrix RFMath::Inverse(const Matrix& matrix)
     result.Clean();
 
     return result;
+}
+
+/**
+ * Calculate the inverse of this matrix and return
+ * the inverse (if it exists).
+ *
+ * @return Inverted matrix
+ */
+RFMath::Matrix& RFMath::Matrix::Inverse()
+{
+    *this = RFMath::Inverse(*this);
+    return *this;
 }
 
 /**

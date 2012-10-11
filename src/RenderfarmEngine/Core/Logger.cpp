@@ -94,7 +94,7 @@ void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)
 
 	time(&currentTime);
 
-	localtime_s(&timeInfo, &currentTime);
+	//localtime_s(&timeInfo, &currentTime);
 
 	std::stringstream timeString;
 	timeString.fill('0');
@@ -107,7 +107,7 @@ void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)
 
 	char logMessage[256];
 
-	vsprintf_s(logMessage, pFormat, pArguments);
+	vsprintf(logMessage, pFormat, pArguments);
 
 	std::stringstream outputMessage;
 	outputMessage << timeString.str() << " " << typeString << ": " << logMessage << std::endl;
