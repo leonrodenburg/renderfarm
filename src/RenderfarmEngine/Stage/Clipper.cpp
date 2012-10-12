@@ -14,6 +14,10 @@ RFStage::Clipper::Clipper()
     _planeNormals[3] = -RFMath::Vector3::xAxis;
     _planeNormals[4] = -RFMath::Vector3::yAxis;
     _planeNormals[5] = -RFMath::Vector3::zAxis;
+
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Clipper initialized...");
+#endif
 }
 
 /**
@@ -22,6 +26,10 @@ RFStage::Clipper::Clipper()
 RFStage::Clipper::~Clipper()
 {
     delete this->_pOutput;
+
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Clipper destroyed...");
+#endif
 }
 
 /**

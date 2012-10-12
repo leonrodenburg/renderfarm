@@ -13,6 +13,10 @@ RFStage::Rasterizer::Rasterizer(unsigned int windowWidth, unsigned int windowHei
     this->_clearRed = 0;
     this->_clearGreen = 0;
     this->_clearBlue = 255;
+
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Rasterizer initialized...");
+#endif
 }
 
 /**
@@ -21,6 +25,10 @@ RFStage::Rasterizer::Rasterizer(unsigned int windowWidth, unsigned int windowHei
 RFStage::Rasterizer::~Rasterizer()
 {
     delete[] this->_pOutput;
+
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Rasterizer destroyed...");
+#endif
 }
 
 /**

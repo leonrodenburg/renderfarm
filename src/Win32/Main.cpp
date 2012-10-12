@@ -13,6 +13,7 @@
 #include "Math/Vector3.h"
 #include "Geometry/World.h"
 #include "Geometry/Cube.h"
+#include "Math/Utility.h"
 
 // Forward declarations
 WNDCLASSEX CreateWindowClass(HINSTANCE hInstance);
@@ -29,6 +30,9 @@ HWND khWnd;
 
 unsigned int kWidth = 800;
 int kHeight = 600;
+float kNearView = 1.0f;
+float kFarView = 500.0f;
+float kFieldOfView = RFMathDegToRad(45.0f);
 
 BITMAPINFO kBitmapInfo;
 HBITMAP kBitmap = NULL;
@@ -47,8 +51,11 @@ std::vector<RFGeometry::Geometry*>* kpGeometry;
 void Initialize()
 {
     // Initialize geometry and models
-    RFGeometry::Cube* pCube = new RFGeometry::Cube(30.0f, RFMath::Vector3(0.0f, 0.0f, 30.0f));
+    RFGeometry::Cube* pCube = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.5f, 1.0f, 5.0f));
     kpGeometry->push_back(pCube);
+
+    RFGeometry::Cube* pCube2 = new RFGeometry::Cube(1.0f, RFMath::Vector3(-2.0f, -1.0f, 10.0f));
+    kpGeometry->push_back(pCube2);
 }
 
 /**
@@ -85,7 +92,7 @@ int main(int argc, char** argv)
     kpGeometry = new std::vector<RFGeometry::Geometry*>();
 
     // Initialize kernel
-    kpKernel = new RFCore::Kernel(kpWorld, kWidth, kHeight);
+    kpKernel = new RFCore::Kernel(kpWorld, kNearView, kFarView, kFieldOfView, kWidth, kHeight);
 
     // Initialize geometry
     ::Initialize();
