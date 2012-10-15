@@ -6,7 +6,7 @@
  */
 RFStage::Clipper::Clipper()
 {
-    this->_pOutput = new std::vector<RFMath::Vector3*>();
+    this->_pOutput = new std::vector<RFGeometry::Vertex*>();
 
     _planeNormals[0] = RFMath::Vector3::xAxis;
     _planeNormals[1] = RFMath::Vector3::yAxis;
@@ -25,8 +25,6 @@ RFStage::Clipper::Clipper()
  */
 RFStage::Clipper::~Clipper()
 {
-    delete this->_pOutput;
-
 #ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Clipper destroyed...");
 #endif
@@ -40,7 +38,7 @@ RFStage::Clipper::~Clipper()
  *
  * @param pBuffer
  */
-void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
+void RFStage::Clipper::BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer)
 {
     this->_pBuffer = pBuffer;
 }
@@ -52,28 +50,28 @@ void RFStage::Clipper::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  *
  * @return Vertices to be rendered
  */
-std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
+std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
 {
     this->_pOutput->clear();
 
-    std::vector<RFMath::Vector3*> outputList;
-    std::vector<RFMath::Vector3*> inputList;
+    std::vector<RFGeometry::Vertex*> outputList;
+    std::vector<RFGeometry::Vertex*> inputList;
     float dot;
     float lastDot;
 
     for(unsigned int i = 0; i < this->_pBuffer->size(); i += 3)
     {
-        RFMath::Vector3* p1 = this->_pBuffer->at(i);
-        RFMath::Vector3* p2 = this->_pBuffer->at(i + 1);
-        RFMath::Vector3* p3 = this->_pBuffer->at(i + 2);
+        RFGeometry::Vertex* v1 = this->_pBuffer->at(i);
+        RFGeometry::Vertex* v2 = this->_pBuffer->at(i + 1);
+        RFGeometry::Vertex* v3 = this->_pBuffer->at(i + 2);
 
         // If the triangle is front facing (otherwise it can be clipped / culled)
-        if(this->_IsFrontFacing(p1, p2, p3))
+        if(this->_IsFrontFacing(v1->GetPosition(), v2->GetPosition(), v3->GetPosition()))
         {
             outputList.clear();
-            outputList.push_back(p1);
-            outputList.push_back(p2);
-            outputList.push_back(p3);
+            outputList.push_back(v1);
+            outputList.push_back(v2);
+            outputList.push_back(v3);
 
             for(int j = 0; j < 6; ++j)
             {
@@ -82,23 +80,23 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
 
                 if(inputList.size() > 0)
                 {
-                    RFMath::Vector3* pLast = inputList.back();
+                    RFGeometry::Vertex* pLast = inputList.back();
                     for(unsigned int k = 0; k < inputList.size(); ++k)
                     {
-                        RFMath::Vector3* pCurrent = inputList.at(k);
-                        dot = pCurrent->Dot(this->_planeNormals[j]) - 1.0f;
-                        lastDot = pLast->Dot(this->_planeNormals[j]) - 1.0f;
+                        RFGeometry::Vertex* pCurrent = inputList.at(k);
+                        dot = pCurrent->GetPosition()->Dot(this->_planeNormals[j]) - 1.0f;
+                        lastDot = pLast->GetPosition()->Dot(this->_planeNormals[j]) - 1.0f;
 
                         if(dot <= 0.0f) // Current vertex 'inside' current plane
                         {
-                            if(lastDot > 0.0f) // Last vertex 'inside' current plane
+                            if(lastDot > 0.0f) // Last vertex 'outside' current plane
                             {
-                                RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+                                RFMath::Vector3 intersection = this->_CalculateIntersection(pLast->GetPosition(), pCurrent->GetPosition(), &this->_planeNormals[j]);
 
                                 if(!intersection.IsZero())
                                 {
-                                    RFMath::Vector3 add(intersection);
-                                    outputList.push_back(&add);
+                                    RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                                    outputList.push_back(&RFGeometry::Vertex(pAdd, pLast->GetColor()));
                                 }
                             }
 
@@ -106,12 +104,12 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
                         }
                         else if(lastDot <= 0.0f) // Last vertex 'inside' current plane
                         {
-                            RFMath::Vector3 intersection = this->_CalculateIntersection(pLast, pCurrent, &this->_planeNormals[j]);
+                            RFMath::Vector3 intersection = this->_CalculateIntersection(pLast->GetPosition(), pCurrent->GetPosition(), &this->_planeNormals[j]);
 
                             if(!intersection.IsZero())
                             {
-                                RFMath::Vector3 add(intersection);
-                                outputList.push_back(&add);
+                                RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
+                                outputList.push_back(&RFGeometry::Vertex(pAdd, pLast->GetColor()));
                             }
                         }
 
@@ -123,7 +121,7 @@ std::vector<RFMath::Vector3*>* RFStage::Clipper::Clip()
             // Post process if result is a polygon (not a triangle anymore)
             if(outputList.size() > 3)
             {
-                std::vector<RFMath::Vector3*> triangles;
+                std::vector<RFGeometry::Vertex*> triangles;
                 triangles.push_back(outputList.at(0));
                 triangles.push_back(outputList.at(1));
                 triangles.push_back(outputList.at(2));

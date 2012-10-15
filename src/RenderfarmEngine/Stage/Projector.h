@@ -6,6 +6,7 @@
 #include "../Resources.h"
 #include "../Math/Matrix.h"
 #include "../Math/Vector3.h"
+#include "../Geometry/Vertex.h"
 
 #include <vector>
 
@@ -17,13 +18,13 @@ namespace RFStage
         Projector(float nearView, float farView, float fieldOfView, unsigned int windowWidth, unsigned int windowHeight);
         virtual ~Projector();
 
-        void BindBuffer(std::vector<RFMath::Vector3*>* pBuffer);
-        std::vector<RFMath::Vector3*>* Project();
-        std::vector<RFMath::Vector3*>* Map();
+        void BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer);
+        std::vector<RFGeometry::Vertex*>* Project();
+        std::vector<RFGeometry::Vertex*>* Map();
     private:
-        std::vector<RFMath::Vector3*>* _pBuffer;
-        std::vector<RFMath::Vector3*>* _pOutput;
-        std::vector<RFMath::Vector3*>* _pOutputMap;
+        std::vector<RFGeometry::Vertex*>* _pBuffer;
+        std::vector<RFGeometry::Vertex*>* _pOutput;
+        std::vector<RFGeometry::Vertex*>* _pOutputMap;
 
         RFMath::Matrix _projectionTransform;
         RFMath::Matrix _mapTransform;

@@ -13,8 +13,8 @@
  */
 RFStage::Projector::Projector(float nearView, float farView, float fieldOfView, unsigned int windowWidth, unsigned int windowHeight)
 {
-    this->_pOutput = new std::vector<RFMath::Vector3*>();
-    this->_pOutputMap = new std::vector<RFMath::Vector3*>();
+    this->_pOutput = new std::vector<RFGeometry::Vertex*>();
+    this->_pOutputMap = new std::vector<RFGeometry::Vertex*>();
     
     this->_nearView = nearView;
     this->_farView = farView;
@@ -85,7 +85,7 @@ RFStage::Projector::~Projector()
  *
  * @param pBuffer
  */
-void RFStage::Projector::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
+void RFStage::Projector::BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer)
 {
     this->_pBuffer = pBuffer;
 }
@@ -96,7 +96,7 @@ void RFStage::Projector::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
  *
  * @return Projected vertices
  */
-std::vector<RFMath::Vector3*>* RFStage::Projector::Project()
+std::vector<RFGeometry::Vertex*>* RFStage::Projector::Project()
 {
     for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
     {
@@ -106,16 +106,23 @@ std::vector<RFMath::Vector3*>* RFStage::Projector::Project()
 
     for(unsigned int i = 0; i < this->_pBuffer->size(); ++i)
     {
-        RFMath::Vector3 vec = *this->_pBuffer->at(i);
+        RFMath::Vector3 vec = *this->_pBuffer->at(i)->GetPosition();
         RFMath::Vector4 vec4(vec, 1.0f);
         vec4 = vec4 * this->_projectionTransform;
 
-        RFMath::Vector3* pNew = new RFMath::Vector3();
-        pNew->SetX(vec4[0] / vec4[3]);
-        pNew->SetY(vec4[1] / vec4[3]);
-        pNew->SetZ(vec4[2] / vec4[3]);
+        RFMath::Vector3* pNewVec = new RFMath::Vector3();
+        pNewVec->SetX(vec4[0] / vec4[3]);
+        pNewVec->SetY(vec4[1] / vec4[3]);
+        pNewVec->SetZ(vec4[2] / vec4[3]);
 
-        this->_pOutput->push_back(pNew);
+        RFMath::Vector3* pColorCopy = new RFMath::Vector3();
+        pColorCopy->SetX(this->_pBuffer->at(i)->GetColor()->GetX());
+        pColorCopy->SetY(this->_pBuffer->at(i)->GetColor()->GetY());
+        pColorCopy->SetZ(this->_pBuffer->at(i)->GetColor()->GetZ());
+
+        RFGeometry::Vertex* pNewVert = new RFGeometry::Vertex(pNewVec, pColorCopy);
+
+        this->_pOutput->push_back(pNewVert);
     }
 
     return this->_pOutput;
@@ -126,7 +133,7 @@ std::vector<RFMath::Vector3*>* RFStage::Projector::Project()
  *
  * @return Buffer in screen coordinates
  */
-std::vector<RFMath::Vector3*>* RFStage::Projector::Map()
+std::vector<RFGeometry::Vertex*>* RFStage::Projector::Map()
 {
     for(unsigned int i = 0; i < this->_pOutputMap->size(); ++i)
     {
@@ -136,15 +143,22 @@ std::vector<RFMath::Vector3*>* RFStage::Projector::Map()
 
     for(unsigned int i = 0; i < this->_pBuffer->size(); ++i)
     {
-        RFMath::Vector3 vec = *this->_pBuffer->at(i);
-        vec = this->_mapTransform.Transform(vec);
+        RFMath::Vector3 vec = *this->_pBuffer->at(i)->GetPosition();
+        RFMath::Vector3 transformVec = this->_mapTransform.Transform(vec);
 
-        RFMath::Vector3* pNew = new RFMath::Vector3();
-        pNew->SetX(vec[0]);
-        pNew->SetY(vec[1]);
-        pNew->SetZ(vec[2]);
+        RFMath::Vector3* pNewVec = new RFMath::Vector3();
+        pNewVec->SetX(transformVec[0]);
+        pNewVec->SetY(transformVec[1]);
+        pNewVec->SetZ(transformVec[2]);
 
-        this->_pOutputMap->push_back(pNew);
+        RFMath::Vector3* pColorCopy = new RFMath::Vector3();
+        pColorCopy->SetX(this->_pBuffer->at(i)->GetColor()->GetX());
+        pColorCopy->SetY(this->_pBuffer->at(i)->GetColor()->GetY());
+        pColorCopy->SetZ(this->_pBuffer->at(i)->GetColor()->GetZ());
+
+        RFGeometry::Vertex* pNewVert = new RFGeometry::Vertex(pNewVec, pColorCopy);
+
+        this->_pOutputMap->push_back(pNewVert);
     }
 
     return this->_pOutputMap;

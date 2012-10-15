@@ -24,7 +24,7 @@ RFGeometry::Geometry::Geometry(const RFMath::Vector3& position)
  */
 RFGeometry::Geometry::~Geometry()
 {
-    delete this->_pVertices;
+    delete this->_pVertexPositions;
     delete this->_pVertexBuffer;
 }
 
@@ -54,9 +54,9 @@ void RFGeometry::Geometry::SetPosition(const RFMath::Vector3& position)
  *
  * @return Vertices
  */
-std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertices()
+std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertexPositions()
 {
-    return this->_pVertices;
+    return this->_pVertexPositions;
 }
 
 /**
@@ -65,7 +65,7 @@ std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertices()
  *
  * @return Vertex buffer
  */
-std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertexBuffer()
+std::vector<RFGeometry::Vertex*>* RFGeometry::Geometry::GetVertexBuffer()
 {
     return this->_pVertexBuffer;
 }
@@ -96,6 +96,6 @@ DLL_API std::ostream& RFGeometry::operator<<(std::ostream& output, Geometry& geo
 void RFGeometry::Geometry::_Construct(const RFMath::Vector3& position)
 {
     this->_position = position;
-    this->_pVertices = new std::vector<RFMath::Vector3*>();
-    this->_pVertexBuffer = new std::vector<RFMath::Vector3*>();
+    this->_pVertexPositions = new std::vector<RFMath::Vector3*>();
+    this->_pVertexBuffer = new std::vector<RFGeometry::Vertex*>();
 }

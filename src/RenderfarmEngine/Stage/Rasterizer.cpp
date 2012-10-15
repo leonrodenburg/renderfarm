@@ -36,7 +36,7 @@ RFStage::Rasterizer::~Rasterizer()
  *
  * @param pBuffer
  */
-void RFStage::Rasterizer::BindBuffer(std::vector<RFMath::Vector3*>* pBuffer)
+void RFStage::Rasterizer::BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer)
 {
     this->_pBuffer = pBuffer;
 }
@@ -72,9 +72,13 @@ unsigned int* RFStage::Rasterizer::Rasterize()
         float* left = new float[this->_windowHeight];
         float* right = new float[this->_windowHeight];
 
-        RFMath::Vector3* p1 = this->_pBuffer->at(i);
-        RFMath::Vector3* p2 = this->_pBuffer->at(i + 1);
-        RFMath::Vector3* p3 = this->_pBuffer->at(i + 2);
+        RFGeometry::Vertex* v1 = this->_pBuffer->at(i);
+        RFGeometry::Vertex* v2 = this->_pBuffer->at(i + 1);
+        RFGeometry::Vertex* v3 = this->_pBuffer->at(i + 2);
+
+        RFMath::Vector3* p1 = v1->GetPosition();
+        RFMath::Vector3* p2 = v2->GetPosition();
+        RFMath::Vector3* p3 = v3->GetPosition();
 
         triangle.push_back(p1);
         triangle.push_back(p2);
@@ -108,7 +112,7 @@ unsigned int* RFStage::Rasterizer::Rasterize()
 
                 if(Ay < By)
                 {
-                    for(int y = Ay; y <= By; ++y)
+                    for(int y = Ay; y < By; ++y)
                     {
                         right[y] = x;
                         x += gradient;
@@ -116,7 +120,7 @@ unsigned int* RFStage::Rasterizer::Rasterize()
                 }
                 else
                 {
-                    for(int y = Ay; y >= By; --y)
+                    for(int y = Ay; y > By; --y)
                     {
                         left[y] = x;
                         x -= gradient;
@@ -134,18 +138,21 @@ unsigned int* RFStage::Rasterizer::Rasterize()
 
         for(unsigned int y = 0; y < this->_windowHeight; ++y)
         {
-            int xStart = (int)floor(left[y]);
+            int xStart = (int)ceil(left[y]);
             int xEnd = (int)floor(right[y]);
 
-            int xFirst = y * (this->_windowWidth * 3) + (xStart * 3);
-
-            for(int x = 0; x < (xEnd - xStart); ++x)
+            if(xStart > 0 && xEnd > 0)
             {
-                int xCurrent = xFirst + (x * 3);
+                int xFirst = y * (this->_windowWidth * 3) + (xStart * 3);
 
-                this->_pOutput[xCurrent] = 255;
-                this->_pOutput[xCurrent + 1] = 0;
-                this->_pOutput[xCurrent + 2] = 0;
+                for(int x = 0; x < (xEnd - xStart); ++x)
+                {
+                    int xCurrent = xFirst + (x * 3);
+
+                    this->_pOutput[xCurrent] = 255;
+                    this->_pOutput[xCurrent + 1] = 0;
+                    this->_pOutput[xCurrent + 2] = 0;
+                }
             }
         }
 

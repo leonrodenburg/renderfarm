@@ -76,7 +76,7 @@ RFStage::Rasterizer* RFCore::Kernel::GetRasterizer()
 unsigned int* RFCore::Kernel::Run()
 {
     // Build geometry (and generate vertex buffer)
-    std::vector<RFMath::Vector3*>* pBuffer = this->_pWorld->BuildGeometry();
+    std::vector<RFGeometry::Vertex*>* pBuffer = this->_pWorld->BuildGeometry();
 
     // Project the vertices
     this->_pProjector->BindBuffer(pBuffer);
@@ -89,11 +89,6 @@ unsigned int* RFCore::Kernel::Run()
     // Map the vertices to screen coordinates
     this->_pProjector->BindBuffer(pBuffer);
     pBuffer = this->_pProjector->Map();
-
-    /*for(unsigned int i = 0; i < pBuffer->size(); ++i)
-    {
-        std::cout << *pBuffer->at(i) << std::endl;
-    }*/
 
     // Bind the buffer to the rasterizer
     this->_pRasterizer->BindBuffer(pBuffer);
