@@ -22,6 +22,7 @@ namespace RFStage
         unsigned int* Rasterize();
     private:
         void _Clear();
+        void _GetPixelColor(RFGeometry::Vertex* v1, RFGeometry::Vertex* v2, RFGeometry::Vertex* v3, float area, RFMath::Vector3* pCurrent, unsigned int* pOut);
 
         std::vector<RFGeometry::Vertex*>* _pBuffer;
         unsigned int* _pOutput;

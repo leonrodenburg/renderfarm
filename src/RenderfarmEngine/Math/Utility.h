@@ -115,4 +115,35 @@ inline float RFMathClamp(float value, float min, float max)
     return value;
 }
 
+/**
+ * Linear interpolate between value a and b. T should be
+ * between 0 and 1.
+ *
+ * @param a
+ * @param b
+ * @param t
+ *
+ * @return Linearly interpolated value
+ */
+inline float RFMathLerp(float a, float b, float t)
+{
+    return a + t * (b - a);
+}
+
+/**
+ * Use Heron's method to calculate the area of a triangle
+ * given its three side's lengths.
+ *
+ * @param a
+ * @param b
+ * @param c
+ *
+ * @return Area
+ */
+inline float RFMathArea(float a, float b, float c)
+{
+    float semiPerimeter = (a + b + c) * 0.5f;
+    return sqrtf(semiPerimeter * (semiPerimeter - a) * (semiPerimeter - b) * (semiPerimeter - c));
+}
+
 #endif
