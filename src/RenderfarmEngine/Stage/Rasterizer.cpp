@@ -105,16 +105,6 @@ unsigned int* RFStage::Rasterizer::Rasterize()
         yMax = (p3->GetY() > yMax) ? p3->GetY() : yMax;
         unsigned int yMaxInt = (unsigned int)floor(yMax);
 
-        float xMin = p1->GetX();
-        xMin = (p2->GetX() < xMin) ? p2->GetX() : xMin;
-        xMin = (p3->GetX() < xMin) ? p3->GetX() : xMin;
-        int xMinInt = (int)ceil(xMin);
-
-        float xMax = p1->GetX();
-        xMax = (p2->GetX() > xMax) ? p2->GetX() : xMax;
-        xMax = (p3->GetX() > xMax) ? p3->GetX() : xMax;
-        int xMaxInt = (int)floor(xMax);
-
         RFMath::Vector3* last = triangle.back();
 
         // Scan convert triangle and calculate left and right boundaries
@@ -176,7 +166,7 @@ unsigned int* RFStage::Rasterizer::Rasterize()
             int xEnd = (int)floor(right[y]);
 
             // If boundaries are valid
-            if(xStart >= 0 && xEnd > 0)
+            if(xStart >= 0 && xEnd >= xStart)
             {
                 // Prepare interpolation values
                 float Da, Db;
