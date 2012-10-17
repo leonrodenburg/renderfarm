@@ -5,6 +5,7 @@
 
 #include "../Resources.h"
 #include "../Math/Vector3.h"
+#include "../Math/Matrix.h"
 #include "../Geometry/Vertex.h"
 
 #include <iostream>
@@ -21,6 +22,8 @@ namespace RFGeometry
 
         RFMath::Vector3& GetPosition();
         void SetPosition(const RFMath::Vector3& position);
+
+        void Transform(RFMath::Matrix& matrix, bool toOrigin);
 
         std::vector<RFMath::Vector3*>* GetVertexPositions();
         std::vector<RFGeometry::Vertex*>* GetVertexBuffer();

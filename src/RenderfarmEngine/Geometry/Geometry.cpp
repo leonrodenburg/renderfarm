@@ -49,6 +49,40 @@ void RFGeometry::Geometry::SetPosition(const RFMath::Vector3& position)
 }
 
 /**
+ * Multiply all vertices of the cube by a transformation matrix.
+ *
+ * @param matrix
+ * @param toOrigin
+ */
+void RFGeometry::Geometry::Transform(RFMath::Matrix& matrix, bool toOrigin)
+{
+    if(toOrigin)
+    {
+        RFMath::Matrix translation;
+        translation.Translate(-this->_position.GetX(), -this->_position.GetY(), -this->_position.GetZ());
+        this->Transform(translation, false);
+    }
+
+    for(unsigned int i = 0; i < this->_pVertexBuffer->size(); ++i)
+    {
+        RFMath::Vector3 currentVector = *this->_pVertexBuffer->at(i)->GetPosition();
+        RFMath::Vector3 newVector = matrix.Transform(currentVector);
+        RFMath::Vector3* pNewVector = new RFMath::Vector3();
+        pNewVector->SetX(newVector.GetX());
+        pNewVector->SetY(newVector.GetY());
+        pNewVector->SetZ(newVector.GetZ());
+        this->_pVertexBuffer->at(i)->SetPosition(pNewVector);
+    }
+
+    if(toOrigin)
+    {
+        RFMath::Matrix translation;
+        translation.Translate(this->_position.GetX(), this->_position.GetY(), this->_position.GetZ());
+        this->Transform(translation, false);
+    }
+}
+
+/**
  * Return the vertices that make up this geometry (should be filled
  * in subclasses.
  *

@@ -39,10 +39,6 @@ RFGeometry::Cube::~Cube()
     // Delete vertices
     if(this->_pVertexBuffer != 0)
     {
-        for(unsigned int i = 0; i < this->_pVertexBuffer->size(); ++i)
-        {
-            //delete this->_pVertexBuffer->at(i);
-        }
         this->_pVertexBuffer->clear();
     }
 }
@@ -156,14 +152,14 @@ void RFGeometry::Cube::PrepareBuffers()
     this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(1), new RFMath::Vector3(255.0f, 255.0f, 0.0f)));
 
     // Back square, triangle 1
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(2), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(6), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(5), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(2), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(6), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(5), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
 
     // Back square, triangle 2
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(5), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(1), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(2), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(5), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(1), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(2), new RFMath::Vector3(0.0f, 255.0f, 255.0f)));
 
     // Right square, triangle 1
     this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(3), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));

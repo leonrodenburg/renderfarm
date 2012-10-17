@@ -113,7 +113,7 @@ std::vector<RFGeometry::Vertex*>* RFStage::Projector::Project()
         RFMath::Vector3* pNewVec = new RFMath::Vector3();
         pNewVec->SetX(vec4[0] / vec4[3]);
         pNewVec->SetY(vec4[1] / vec4[3]);
-        pNewVec->SetZ(vec4[2] / vec4[3]);
+        pNewVec->SetZ(vec4[2]);
 
         RFMath::Vector3* pColorCopy = new RFMath::Vector3();
         pColorCopy->SetX(this->_pBuffer->at(i)->GetColor()->GetX());

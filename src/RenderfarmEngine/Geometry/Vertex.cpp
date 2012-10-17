@@ -1,6 +1,15 @@
 #include "Vertex.h"
 
 /**
+ * Default constructor.
+ */
+RFGeometry::Vertex::Vertex()
+{
+    this->_pPosition = 0;
+    this->_pColor = 0;
+}
+
+/**
  * Constructor, setting position and color.
  *
  * @param pPosition
@@ -17,8 +26,15 @@ RFGeometry::Vertex::Vertex(RFMath::Vector3* pPosition, RFMath::Vector3* pColor)
  */
 RFGeometry::Vertex::~Vertex()
 {
-    delete this->_pPosition;
-    delete this->_pColor;
+    if(this->_pPosition != 0)
+    {
+        delete this->_pPosition;
+    }
+    
+    if(this->_pColor != 0)
+    {
+        delete this->_pColor;
+    }
 }
 
 /**

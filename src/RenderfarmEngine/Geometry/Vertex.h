@@ -13,6 +13,7 @@ namespace RFGeometry
     class DLL_API Vertex
     {
     public:
+        Vertex();
         Vertex(RFMath::Vector3* pPosition, RFMath::Vector3* pColor);
         virtual ~Vertex();
 
