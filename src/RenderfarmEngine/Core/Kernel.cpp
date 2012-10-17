@@ -1,11 +1,20 @@
 #include "Kernel.h"
 
 /**
- * Default constructor.
+ * Constructor, setting the world, near and far view clipping plane distances,
+ * the field of view in degrees and the window size.
+ *
+ * @param pWorld
+ * @param nearView
+ * @param farView
+ * @param fieldOfView
+ * @param windowWidth
+ * @param windowHeight
  */
-RFCore::Kernel::Kernel(RFGeometry::World* pWorld, unsigned int windowWidth, unsigned int windowHeight)
+RFCore::Kernel::Kernel(RFGeometry::World* pWorld, float nearView, float farView, float fieldOfView, unsigned int windowWidth, unsigned int windowHeight)
 {
     this->_pWorld = pWorld;
+    this->_pProjector = new RFStage::Projector(nearView, farView, fieldOfView, windowWidth, windowHeight);
     this->_pClipper = new RFStage::Clipper();
     this->_pRasterizer = new RFStage::Rasterizer(windowWidth, windowHeight);
 
@@ -21,6 +30,11 @@ RFCore::Kernel::~Kernel()
 {
     delete this->_pRasterizer;
     delete this->_pClipper;
+    delete this->_pProjector;
+
+#ifdef DEBUG
+    RFCore::Logger::GetLogger()->Log("Kernel destroyed...");
+#endif
 }
 
 /**
@@ -62,11 +76,19 @@ RFStage::Rasterizer* RFCore::Kernel::GetRasterizer()
 unsigned int* RFCore::Kernel::Run()
 {
     // Build geometry (and generate vertex buffer)
-    std::vector<RFMath::Vector3*>* pBuffer = this->_pWorld->BuildGeometry();
+    std::vector<RFGeometry::Vertex*>* pBuffer = this->_pWorld->BuildGeometry();
+
+    // Project the vertices
+    this->_pProjector->BindBuffer(pBuffer);
+    pBuffer = this->_pProjector->Project();
 
     // Bind the buffer to the clipper and clip
-    this->_pClipper->BindBuffer(pBuffer);
-    pBuffer = this->_pClipper->Clip();
+    //this->_pClipper->BindBuffer(pBuffer);
+    //pBuffer = this->_pClipper->Clip();
+
+    // Map the vertices to screen coordinates
+    this->_pProjector->BindBuffer(pBuffer);
+    pBuffer = this->_pProjector->Map();
 
     // Bind the buffer to the rasterizer
     this->_pRasterizer->BindBuffer(pBuffer);

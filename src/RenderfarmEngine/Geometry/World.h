@@ -20,10 +20,10 @@ namespace RFGeometry
         int AddGeometry(Geometry* pGeometry);
         void RemoveGeometry(int index);
 
-        std::vector<RFMath::Vector3*>* BuildGeometry();
+        std::vector<RFGeometry::Vertex*>* BuildGeometry();
     protected:
         std::map<int, Geometry*>* _pGeometry;
-        std::vector<RFMath::Vector3*>* _pVertices;
+        std::vector<RFGeometry::Vertex*>* _pVertices;
         int _currentIndex;
     };
 }

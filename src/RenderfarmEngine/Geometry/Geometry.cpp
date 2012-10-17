@@ -24,7 +24,7 @@ RFGeometry::Geometry::Geometry(const RFMath::Vector3& position)
  */
 RFGeometry::Geometry::~Geometry()
 {
-    delete this->_pVertices;
+    delete this->_pVertexPositions;
     delete this->_pVertexBuffer;
 }
 
@@ -49,14 +49,48 @@ void RFGeometry::Geometry::SetPosition(const RFMath::Vector3& position)
 }
 
 /**
+ * Multiply all vertices of the cube by a transformation matrix.
+ *
+ * @param matrix
+ * @param toOrigin
+ */
+void RFGeometry::Geometry::Transform(RFMath::Matrix& matrix, bool toOrigin)
+{
+    if(toOrigin)
+    {
+        RFMath::Matrix translation;
+        translation.Translate(-this->_position.GetX(), -this->_position.GetY(), -this->_position.GetZ());
+        this->Transform(translation, false);
+    }
+
+    for(unsigned int i = 0; i < this->_pVertexBuffer->size(); ++i)
+    {
+        RFMath::Vector3 currentVector = *this->_pVertexBuffer->at(i)->GetPosition();
+        RFMath::Vector3 newVector = matrix.Transform(currentVector);
+        RFMath::Vector3* pNewVector = new RFMath::Vector3();
+        pNewVector->SetX(newVector.GetX());
+        pNewVector->SetY(newVector.GetY());
+        pNewVector->SetZ(newVector.GetZ());
+        this->_pVertexBuffer->at(i)->SetPosition(pNewVector);
+    }
+
+    if(toOrigin)
+    {
+        RFMath::Matrix translation;
+        translation.Translate(this->_position.GetX(), this->_position.GetY(), this->_position.GetZ());
+        this->Transform(translation, false);
+    }
+}
+
+/**
  * Return the vertices that make up this geometry (should be filled
  * in subclasses.
  *
  * @return Vertices
  */
-std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertices()
+std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertexPositions()
 {
-    return this->_pVertices;
+    return this->_pVertexPositions;
 }
 
 /**
@@ -65,7 +99,7 @@ std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertices()
  *
  * @return Vertex buffer
  */
-std::vector<RFMath::Vector3*>* RFGeometry::Geometry::GetVertexBuffer()
+std::vector<RFGeometry::Vertex*>* RFGeometry::Geometry::GetVertexBuffer()
 {
     return this->_pVertexBuffer;
 }
@@ -96,6 +130,6 @@ DLL_API std::ostream& RFGeometry::operator<<(std::ostream& output, Geometry& geo
 void RFGeometry::Geometry::_Construct(const RFMath::Vector3& position)
 {
     this->_position = position;
-    this->_pVertices = new std::vector<RFMath::Vector3*>();
-    this->_pVertexBuffer = new std::vector<RFMath::Vector3*>();
+    this->_pVertexPositions = new std::vector<RFMath::Vector3*>();
+    this->_pVertexBuffer = new std::vector<RFGeometry::Vertex*>();
 }

@@ -5,6 +5,7 @@
 
 #include "../Resources.h"
 #include "../Math/Vector3.h"
+#include "../Geometry/Vertex.h"
 
 #include <vector>
 
@@ -16,14 +17,14 @@ namespace RFStage
         Clipper();
         virtual ~Clipper();
 
-        void BindBuffer(std::vector<RFMath::Vector3*>* pBuffer);
-        std::vector<RFMath::Vector3*>* Clip();
+        void BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer);
+        std::vector<RFGeometry::Vertex*>* Clip();
     private:
         RFMath::Vector3 _CalculateIntersection(RFMath::Vector3* pFrom, RFMath::Vector3* pTo, RFMath::Vector3* pPlaneNormal);
         bool _IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, RFMath::Vector3* p3);
 
-        std::vector<RFMath::Vector3*>* _pBuffer;
-        std::vector<RFMath::Vector3*>* _pOutput;
+        std::vector<RFGeometry::Vertex*>* _pBuffer;
+        std::vector<RFGeometry::Vertex*>* _pOutput;
 
         RFMath::Vector3 _planeNormals[6];
     };
