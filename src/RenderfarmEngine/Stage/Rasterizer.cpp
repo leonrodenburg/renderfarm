@@ -91,6 +91,11 @@ unsigned int* RFStage::Rasterizer::Rasterize()
         RFMath::Vector3* p2 = v2->GetPosition();
         RFMath::Vector3* p3 = v3->GetPosition();
 
+        float side1 = (*p1 - *p3).Length();
+        float side2 = (*p2 - *p1).Length();
+        float side3 = (*p3 - *p2).Length();
+        float area = RFMathArea(side1, side2, side3);
+
         triangle.push_back(p1);
         triangle.push_back(p2);
         triangle.push_back(p3);
@@ -168,32 +173,6 @@ unsigned int* RFStage::Rasterizer::Rasterize()
             // If boundaries are valid
             if(xStart >= 0 && xEnd >= xStart)
             {
-                // Prepare interpolation values
-                float Da, Db;
-                if(p1->GetY() != p2->GetY())
-                {
-                    Da = (p1->GetY()) / (p1->GetY() - p2->GetY());
-
-                }
-                else
-                {
-                    Da = (p1->GetY());
-                }
-
-                if(p1->GetY() != p3->GetY())
-                {
-                    Db = (p1->GetY()) / (p1->GetY() - p3->GetY());
-                }
-                else
-                {
-                    Db = (p1->GetY());
-                }
-
-                RFMath::Vector3 Pa = *p1 - ((*p1 - *p2) * Da);
-                RFMath::Vector3 Pb = *p1 - ((*p1 - *p3) * Db);
-                RFMath::Vector3 Ia = *v1->GetColor() - ((*v1->GetColor() - *v2->GetColor()) * Da);
-                RFMath::Vector3 Ib = *v1->GetColor() - ((*v1->GetColor() - *v3->GetColor()) * Db);
-
                 int xFirst = y * (this->_windowWidth * 3) + (xStart * 3);
 
                 // Loop from left boundary to right boundary
@@ -202,20 +181,21 @@ unsigned int* RFStage::Rasterizer::Rasterize()
                     // Calculate interpolated values
                     int xCurrent = xFirst + (x * 3);
 
-                    float Dx = (Pb.GetX() - (xFirst + x)) / (Pb.GetX() - Pa.GetX());
-                    RFMath::Vector3 color = Ib - ((Ib - Ia) * Dx);
-                    RFMath::Vector3 position = Pb - ((Pb - Pa) * Dx);
+                    RFMath::Vector3 position;
+                    RFMath::Vector3 color;
+
+                    this->_Interpolate(v1, v2, v3, area, xStart + x, y, &position, &color);
 
                     // Depth test
-                    //if(position.GetZ() < this->_pDepthBuffer[y * xStart + x])
-                    //{
+                    if(position.GetZ() < this->_pDepthBuffer[y * xStart + x])
+                    {
                         // Draw pixel
                         this->_pOutput[xCurrent] = (int)RFMathClamp(color.GetX(), 0.0f, 255.0f);
                         this->_pOutput[xCurrent + 1] = (int)RFMathClamp(color.GetY(), 0.0f, 255.0f);
                         this->_pOutput[xCurrent + 2] = (int)RFMathClamp(color.GetZ(), 0.0f, 255.0f);
 
                         this->_pDepthBuffer[y * xStart + x] = position.GetZ();
-                    //}
+                    }
                 }
             }
         }
@@ -245,4 +225,58 @@ void RFStage::Rasterizer::_Clear()
             this->_pOutput[y * (this->_windowWidth * 3) + x + 2] = this->_clearBlue;
         }
     }
+}
+
+/**
+ * Calculate the pixel color using barycentric interpolation.
+ *
+ * @param v1
+ * @param v2
+ * @param v3
+ * @param area
+ * @param pCurrent
+ *
+ * @return Array of colors
+ */
+void RFStage::Rasterizer::_Interpolate(RFGeometry::Vertex* v1, RFGeometry::Vertex* v2, RFGeometry::Vertex* v3, float area, int xCurrent, int yCurrent, RFMath::Vector3* pPosOut, RFMath::Vector3* pColorOut)
+{   
+    RFMath::Vector3* p1 = v1->GetPosition();
+    RFMath::Vector3* p2 = v2->GetPosition();
+    RFMath::Vector3* p3 = v3->GetPosition();
+
+    RFMath::Vector3* c1 = v1->GetColor();
+    RFMath::Vector3* c2 = v2->GetColor();
+    RFMath::Vector3* c3 = v3->GetColor();
+
+    RFMath::Vector3 current((float)xCurrent, (float)yCurrent, 0.0f);
+
+    float area1dist1 = (*v2->GetPosition() - current).Length();
+    float area1dist2 = (*v3->GetPosition() - *v2->GetPosition()).Length();
+    float area1dist3 = (current - *v3->GetPosition()).Length();
+    float area1 = RFMathArea(area1dist1, area1dist2, area1dist3);
+
+    float area2dist1 = (*v3->GetPosition() - current).Length();
+    float area2dist2 = (*v1->GetPosition() - *v3->GetPosition()).Length();
+    float area2dist3 = (current - *v1->GetPosition()).Length();
+    float area2 = RFMathArea(area2dist1, area2dist2, area2dist3);
+
+    float area3dist1 = (*v1->GetPosition() - current).Length();
+    float area3dist2 = (*v2->GetPosition() - *v1->GetPosition()).Length();
+    float area3dist3 = (current - *v2->GetPosition()).Length();
+    float area3 = RFMathArea(area3dist1, area3dist2, area3dist3);
+
+    float x1perc = area1 / area;
+    float x2perc = area2 / area;
+    float x3perc = area3 / area;
+
+    RFMath::Vector3 finalPosition = (x1perc * *p1) + (x2perc * *p2) + (x3perc * *p3);
+    RFMath::Vector3 finalColor = (x1perc * *c1) + (x2perc * *c2) + (x3perc * *c3);
+
+    pPosOut->SetX(finalPosition.GetX());
+    pPosOut->SetY(finalPosition.GetY());
+    pPosOut->SetZ(finalPosition.GetZ());
+
+    pColorOut->SetX(RFMathClamp(finalColor.GetX(), 0.0f, 255.0f));
+    pColorOut->SetY(RFMathClamp(finalColor.GetY(), 0.0f, 255.0f));
+    pColorOut->SetZ(RFMathClamp(finalColor.GetZ(), 0.0f, 255.0f));
 }
