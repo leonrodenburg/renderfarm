@@ -65,12 +65,12 @@ void RFGeometry::Geometry::Transform(RFMath::Matrix& matrix, bool toOrigin)
 
     for(unsigned int i = 0; i < this->_pVertexBuffer->size(); ++i)
     {
-        RFMath::Vector3 currentVector = *this->_pVertexBuffer->at(i)->GetPosition();
-        RFMath::Vector3 newVector = matrix.Transform(currentVector);
-        RFMath::Vector3* pNewVector = new RFMath::Vector3();
-        pNewVector->SetX(newVector.GetX());
-        pNewVector->SetY(newVector.GetY());
-        pNewVector->SetZ(newVector.GetZ());
+        RFMath::Vector3 newVector = matrix.Transform(*this->_pVertexBuffer->at(i)->GetPosition());
+        RFMath::Vector3* pNewVector = this->_CopyVector(&newVector);
+
+        RFMath::Vector3* currentVector = this->_pVertexBuffer->at(i)->GetPosition();
+        delete currentVector;
+
         this->_pVertexBuffer->at(i)->SetPosition(pNewVector);
     }
 
@@ -120,6 +120,18 @@ DLL_API std::ostream& RFGeometry::operator<<(std::ostream& output, Geometry& geo
     output << "}";
 
     return output;
+}
+
+/**
+ * Copy a vector and return the pointer.
+ *
+ * @param pVector
+ *
+ * @return Copy of vector
+ */
+RFMath::Vector3* RFGeometry::Geometry::_CopyVector(RFMath::Vector3* pVector)
+{
+    return new RFMath::Vector3(pVector->GetX(), pVector->GetY(), pVector->GetZ());
 }
 
 /**

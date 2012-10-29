@@ -9,12 +9,6 @@ endif()
 
 # if the generator is Xcode
 if (CMAKE_GENERATOR MATCHES Xcode)
-	# find Cocoa library
-	find_library (COCOA_LIBRARY NAMES Cocoa)
-
-	# include Cocoa library
-	set (EXTRA_LIBS ${EXTRA_LIBS} ${COCOA_LIBRARY})
-
 	# set library name
 	set (LIBRARY_NAME renderfarm-engine-0.1a-osx)
 
@@ -50,6 +44,8 @@ add_library (${LIBRARY_NAME} SHARED
 			Geometry/Cube.cpp
 			Geometry/Geometry.h
 			Geometry/Geometry.cpp
+            Geometry/Vertex.h
+            Geometry/Vertex.cpp
 			Geometry/World.h
 			Geometry/World.cpp
 			Math/Matrix.h
@@ -61,6 +57,8 @@ add_library (${LIBRARY_NAME} SHARED
 			Math/Vector4.cpp
 			Stage/Clipper.h
 			Stage/Clipper.cpp
+            Stage/Projector.h
+            Stage/Projector.cpp
 			Stage/Rasterizer.h
 			Stage/Rasterizer.cpp
 )

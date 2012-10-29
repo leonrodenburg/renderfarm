@@ -33,6 +33,8 @@ namespace RFGeometry
 
         DLL_API friend std::ostream& operator<<(std::ostream& output, Geometry& geometry);
     protected:
+        RFMath::Vector3* _CopyVector(RFMath::Vector3* pVector);
+
         RFMath::Vector3 _position;
         std::vector<RFMath::Vector3*>* _pVertexPositions;
         std::vector<RFGeometry::Vertex*>* _pVertexBuffer;
