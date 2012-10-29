@@ -89,21 +89,17 @@ void RFCore::Logger::_Log(LogType type, char* pFormat, va_list pArguments)
 		default: typeString = "UNKNOWN"; break;
 	}
 
-	std::time_t currentTime;
-	std::tm timeInfo;
-
-	time(&currentTime);
-
-	localtime_s(&timeInfo, &currentTime);
+	std::time_t currentTime = time(0);
+	std::tm* timeInfo = localtime(&currentTime);
 
 	std::stringstream timeString;
 	timeString.fill('0');
-	timeString  << std::setw(2) << timeInfo.tm_mday << "-" 
-				<< std::setw(2) << timeInfo.tm_mon + 1 << "-" 
-				<< std::setw(4) << timeInfo.tm_year + 1900 << " " 
-				<< std::setw(2) << timeInfo.tm_hour << ":" 
-				<< std::setw(2) << timeInfo.tm_min << ":"
-				<< std::setw(2) << timeInfo.tm_sec;
+	timeString  << std::setw(2) << timeInfo->tm_mday << "-"
+				<< std::setw(2) << timeInfo->tm_mon + 1 << "-"
+				<< std::setw(4) << timeInfo->tm_year + 1900 << " "
+				<< std::setw(2) << timeInfo->tm_hour << ":"
+				<< std::setw(2) << timeInfo->tm_min << ":"
+				<< std::setw(2) << timeInfo->tm_sec;
 
 	char logMessage[256];
 
