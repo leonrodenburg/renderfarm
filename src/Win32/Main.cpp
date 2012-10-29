@@ -72,7 +72,13 @@ void Initialize()
  */
 void Update()
 {
-    
+    RFMath::Matrix rotation;
+    rotation.RotateY(0.1f);
+
+    for(unsigned int i = 0; i < kpGeometry->size(); ++i)
+    {
+        kpGeometry->at(i)->Transform(rotation, true);
+    }
 }
 
 /**

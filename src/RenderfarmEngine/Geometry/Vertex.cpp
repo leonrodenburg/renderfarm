@@ -30,7 +30,7 @@ RFGeometry::Vertex::~Vertex()
     {
         delete this->_pPosition;
     }
-    
+
     if(this->_pColor != 0)
     {
         delete this->_pColor;
