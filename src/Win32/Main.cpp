@@ -5,7 +5,7 @@
 #include <vector>
 
 #ifdef DEBUG
-    //#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+    #include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
 #endif
 
 #include "Core/Logger.h"
@@ -63,7 +63,7 @@ void Initialize()
     RFGeometry::Cube* pCube3 = new RFGeometry::Cube(1.0f, RFMath::Vector3(2.0f, -2.5f, 10.0f));
     kpGeometry->push_back(pCube3);
 
-    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(4.0f, 1.0f, 15.0f));
+    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 15.0f));
     kpGeometry->push_back(pCube4);   
 }
 
@@ -77,7 +77,7 @@ void Update()
 
     for(unsigned int i = 0; i < kpGeometry->size(); ++i)
     {
-        kpGeometry->at(i)->Transform(rotation, true);
+        //kpGeometry->at(i)->Transform(rotation, true);
     }
 }
 

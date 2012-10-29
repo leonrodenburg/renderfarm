@@ -68,8 +68,8 @@ void RFGeometry::Geometry::Transform(RFMath::Matrix& matrix, bool toOrigin)
         RFMath::Vector3 newVector = matrix.Transform(*this->_pVertexBuffer->at(i)->GetPosition());
         RFMath::Vector3* pNewVector = this->_CopyVector(&newVector);
 
-        RFMath::Vector3* currentVector = this->_pVertexBuffer->at(i)->GetPosition();
-        delete currentVector;
+        RFMath::Vector3* pCurrentVector = this->_pVertexBuffer->at(i)->GetPosition();
+        delete pCurrentVector;
 
         this->_pVertexBuffer->at(i)->SetPosition(pNewVector);
     }
