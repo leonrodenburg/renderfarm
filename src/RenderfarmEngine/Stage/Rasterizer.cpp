@@ -185,16 +185,16 @@ unsigned int* RFStage::Rasterizer::Rasterize()
                     RFMath::Vector3 color;
 
                     this->_Interpolate(v1, v2, v3, area, xStart + x, y, &position, &color);
-
+                    
                     // Depth test
-                    if(position.GetZ() < this->_pDepthBuffer[y * xStart + x])
+                    if(position.GetZ() < this->_pDepthBuffer[y * this->_windowWidth + xStart + x])
                     {
                         // Draw pixel
-                        this->_pOutput[xCurrent] = (int)RFMathClamp(color.GetX(), 0.0f, 255.0f);
-                        this->_pOutput[xCurrent + 1] = (int)RFMathClamp(color.GetY(), 0.0f, 255.0f);
-                        this->_pOutput[xCurrent + 2] = (int)RFMathClamp(color.GetZ(), 0.0f, 255.0f);
+                        this->_pOutput[xCurrent] = (int)color.GetX();
+                        this->_pOutput[xCurrent + 1] = (int)color.GetY();
+                        this->_pOutput[xCurrent + 2] = (int)color.GetZ();
 
-                        this->_pDepthBuffer[y * xStart + x] = position.GetZ();
+                        this->_pDepthBuffer[y * this->_windowWidth + xStart + x] = position.GetZ();
                     }
                 }
             }
@@ -218,7 +218,7 @@ void RFStage::Rasterizer::_Clear()
     {
         for(unsigned int x = 0; x < (this->_windowWidth * 3); x += 3)
         {
-            this->_pDepthBuffer[y * (x / 3)] = FLT_MAX;
+            this->_pDepthBuffer[y * this->_windowWidth + (x / 3)] = FLT_MAX;
 
             this->_pOutput[y * (this->_windowWidth * 3) + x] = this->_clearRed;
             this->_pOutput[y * (this->_windowWidth * 3) + x + 1] = this->_clearGreen;
@@ -248,6 +248,7 @@ void RFStage::Rasterizer::_Interpolate(RFGeometry::Vertex* v1, RFGeometry::Verte
     RFMath::Vector3* c2 = v2->GetColor();
     RFMath::Vector3* c3 = v3->GetColor();
 
+    // Barycentric interpolation
     RFMath::Vector3 current((float)xCurrent, (float)yCurrent, 0.0f);
 
     float area1dist1 = (*v2->GetPosition() - current).Length();

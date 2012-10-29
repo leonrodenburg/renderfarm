@@ -63,10 +63,13 @@ void Initialize()
     RFGeometry::Cube* pCube3 = new RFGeometry::Cube(1.0f, RFMath::Vector3(2.0f, -2.5f, 10.0f));
     kpGeometry->push_back(pCube3);
 
-    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(0.0f, 1.0f, 15.0f));
+    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(4.0f, 1.0f, 15.0f));
     kpGeometry->push_back(pCube4);   
 }
 
+/**
+ * Update the geometry in the world (called every frame, used for animation).
+ */
 void Update()
 {
     
