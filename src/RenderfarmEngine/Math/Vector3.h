@@ -48,7 +48,10 @@ namespace RFMath
         Vector3& operator-=(const Vector3& vector);
         Vector3 operator*(const float scalar) const;
         DLL_API friend Vector3 operator*(const float scalar, const Vector3& vector);
+        Vector3 operator/(const float scalar) const;
+        DLL_API friend Vector3 operator/(const float scalar, const Vector3& vector);
         Vector3& operator*=(const float scalar);
+        Vector3& operator/=(const float scalar);
         float operator[](unsigned int i) const;
         bool operator==(const Vector3& vector) const;
         DLL_API friend std::ostream& operator<<(std::ostream& output, const Vector3& vector);

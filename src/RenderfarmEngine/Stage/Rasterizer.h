@@ -22,7 +22,7 @@ namespace RFStage
         unsigned int* Rasterize();
     private:
         void _Clear();
-        void _Interpolate(RFGeometry::Vertex* v1, RFGeometry::Vertex* v2, RFGeometry::Vertex* v3, float area, RFMath::Vector3* pCurrent, RFGeometry::Vertex* pOut);
+        void _Interpolate(RFGeometry::Vertex* v1, RFGeometry::Vertex* v2, RFGeometry::Vertex* v3, float area, int xCurrent, int yCurrent, RFMath::Vector3* pPosOut, RFMath::Vector3* pColorOut);
 
         std::vector<RFGeometry::Vertex*>* _pBuffer;
    

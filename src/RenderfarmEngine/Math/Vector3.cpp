@@ -299,6 +299,31 @@ DLL_API RFMath::Vector3 RFMath::operator*(const float scalar, const Vector3& vec
 }
 
 /**
+ * Scalar division overload
+ *
+ * @param scalar
+ *
+ * @return New vector with divided components
+ */
+RFMath::Vector3 RFMath::Vector3::operator/(const float scalar) const
+{
+    return Vector3(this->_x / scalar, this->_y / scalar, this->_z / scalar);
+}
+
+/**
+ * Scalar division overload
+ *
+ * @param vector
+ * @param scalar
+ *
+ * @return New vector with divided components
+ */
+DLL_API RFMath::Vector3 RFMath::operator/(const float scalar, const Vector3& vector)
+{
+    return Vector3(vector._x / scalar, vector._y / scalar, vector._z / scalar);
+}
+
+/**
  * Multiplication assign operator overload, multiplying vector
  * by a scalar;
  *
@@ -311,6 +336,22 @@ RFMath::Vector3& RFMath::Vector3::operator*=(const float scalar)
     this->_x *= scalar;
     this->_y *= scalar;
     this->_z *= scalar;
+    return *this;
+}
+
+/**
+ * Division assign operator overload, dividing vector
+ * by a scalar;
+ *
+ * @param scalar
+ *
+ * @return Same vector with modified components
+ */
+RFMath::Vector3& RFMath::Vector3::operator/=(const float scalar)
+{
+    this->_x /= scalar;
+    this->_y /= scalar;
+    this->_z /= scalar;
     return *this;
 }
 

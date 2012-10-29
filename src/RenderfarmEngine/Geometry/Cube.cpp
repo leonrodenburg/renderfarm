@@ -132,9 +132,9 @@ void RFGeometry::Cube::PrepareBuffers()
     this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(2), new RFMath::Vector3(255.0f, 0.0f, 0.0f)));
 
     // Front square, triangle 1
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(0), new RFMath::Vector3(0.0f, 255.0f, 0.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(0), new RFMath::Vector3(255.0f, 0.0f, 0.0f)));
     this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(4), new RFMath::Vector3(0.0f, 255.0f, 0.0f)));
-    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(7), new RFMath::Vector3(0.0f, 255.0f, 0.0f)));
+    this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(7), new RFMath::Vector3(0.0f, 0.0f, 255.0f)));
     
     // Front square, triangle 2
     this->_pVertexBuffer->push_back(new RFGeometry::Vertex(this->_pVertexPositions->at(7), new RFMath::Vector3(0.0f, 255.0f, 0.0f)));
