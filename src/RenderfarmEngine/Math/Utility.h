@@ -7,7 +7,10 @@
 #define PI 3.1415926535897932384626433832795f
 #define HALFPI 1.5707963267948966192313216916398f
 #define TWOPI 2.0f * PI
-#define FLT_MAX std::numeric_limits<float>::max()
+
+#ifndef FLT_MAX
+    #define FLT_MAX std::numeric_limits<float>::max()
+#endif
 
 #include <cmath>
 
