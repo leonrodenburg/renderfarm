@@ -96,7 +96,8 @@ std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
                                 if(!intersection.IsZero())
                                 {
                                     RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                    outputList.push_back(&RFGeometry::Vertex(pAdd, pLast->GetColor()));
+                                    RFGeometry::Vertex vert(pAdd, pLast->GetColor());
+                                    outputList.push_back(&vert);
                                 }
                             }
 
@@ -109,7 +110,8 @@ std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
                             if(!intersection.IsZero())
                             {
                                 RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                outputList.push_back(&RFGeometry::Vertex(pAdd, pLast->GetColor()));
+                                RFGeometry::Vertex vert(pAdd, pLast->GetColor());
+                                outputList.push_back(&vert);
                             }
                         }
 
