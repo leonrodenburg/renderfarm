@@ -62,8 +62,8 @@ inline float RFMathInvSqrt(float x)
  * Calculate the sine and cosine of an angle.
  *
  * @param angle
- * @param sina out
- * @param cosa out
+ * @param sin
+ * @param cos
  */
 inline void RFMathSinCos(float angle, float& sin, float& cos)
 {

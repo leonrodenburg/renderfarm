@@ -55,7 +55,7 @@ RFMath::Vector4::Vector4(float x, float y, float z, float w)
 /**
  * Copy constructor.
  *
- * @param other
+ * @param vector
  */
 RFMath::Vector4::Vector4(const Vector4& vector)
 {

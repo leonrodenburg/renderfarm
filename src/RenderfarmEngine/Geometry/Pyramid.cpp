@@ -9,10 +9,11 @@ RFGeometry::Pyramid::Pyramid() : Geometry(RFMath::Vector3(0.0f, 0.0f, 0.0f))
 }
 
 /**
- * Constructor, setting the size and initializing the position at the
+ * Constructor, setting the base width, height and initializing the position at the
  * origin.
  *
- * @param size
+ * @param base
+ * @param height
  */
 RFGeometry::Pyramid::Pyramid(float base, float height) : Geometry(RFMath::Vector3(0.0f, 0.0f, 0.0f))
 {
@@ -20,10 +21,11 @@ RFGeometry::Pyramid::Pyramid(float base, float height) : Geometry(RFMath::Vector
 }
 
 /**
- * Constructor, setting the position and size of the
+ * Constructor, setting the position, base width and height of the
  * cube.
  *
- * @param size
+ * @param base
+ * @param height
  * @parma position
  */
 RFGeometry::Pyramid::Pyramid(float base, float height, const RFMath::Vector3& position) : Geometry(position)

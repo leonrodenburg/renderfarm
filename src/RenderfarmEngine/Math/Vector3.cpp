@@ -35,7 +35,7 @@ RFMath::Vector3::Vector3(float x, float y, float z)
 /**
  * Copy constructor.
  *
- * @param other
+ * @param vector
  */
 RFMath::Vector3::Vector3(const Vector3& vector)
 {

@@ -24,7 +24,7 @@ RFGeometry::Cube::Cube(float size) : Geometry(RFMath::Vector3(0.0f, 0.0f, 0.0f))
  * cube.
  *
  * @param size
- * @parma position
+ * @param position
  */
 RFGeometry::Cube::Cube(float size, const RFMath::Vector3& position) : Geometry(position)
 {
