@@ -16,11 +16,11 @@
 -(void)initialize
 {
     // Initialize geometry and models
-    RFGeometry::Cube* pCube = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.7f, 1.0f, 6.0f));
+    RFGeometry::Cube* pCube = new RFGeometry::Cube(1.0f, RFMath::Vector3(0.9f, 1.0f, 3.0f));
     pGeometry->push_back(pCube);
     
-    RFGeometry::Cube* pCube5 = new RFGeometry::Cube(1.0f, RFMath::Vector3(-1.0f, -1.0f, 10.0f));
-    pGeometry->push_back(pCube5);
+    RFGeometry::Pyramid* pPyramid = new RFGeometry::Pyramid(1.0f, 1.0f, RFMath::Vector3(-1.5f, 0.0f, 7.0f));
+    pGeometry->push_back(pPyramid);
     
     RFGeometry::Cube* pCube2 = new RFGeometry::Cube(1.0f, RFMath::Vector3(-3.0f, -2.0f, 10.0f));
     pGeometry->push_back(pCube2);
@@ -28,7 +28,7 @@
     RFGeometry::Cube* pCube3 = new RFGeometry::Cube(1.0f, RFMath::Vector3(2.0f, -2.5f, 10.0f));
     pGeometry->push_back(pCube3);
     
-    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(4.0f, 1.0f, 15.0f));
+    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.7f, 1.7f, 15.0f));
     pGeometry->push_back(pCube4);
 }
 

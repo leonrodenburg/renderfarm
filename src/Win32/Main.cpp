@@ -65,7 +65,7 @@ void Initialize()
     kpGeometry->push_back(pCube3);
 
     RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.7f, 1.7f, 15.0f));
-    kpGeometry->push_back(pCube4);   
+    kpGeometry->push_back(pCube4);
 }
 
 /**
