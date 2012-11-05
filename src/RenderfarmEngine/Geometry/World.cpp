@@ -56,6 +56,7 @@ std::vector<RFGeometry::Vertex*>* RFGeometry::World::BuildGeometry()
 
     for(std::map<int, Geometry*>::iterator it = this->_pGeometry->begin(); it != this->_pGeometry->end(); ++it)
     {
+        it->second->PrepareBuffers();
         std::vector<RFGeometry::Vertex*>* vertexBuffer = it->second->GetVertexBuffer();
         for(unsigned int i = 0; i < vertexBuffer->size(); ++i)
         {

@@ -63,14 +63,21 @@ RFStage::Projector::~Projector()
 {
     for(unsigned int i = 0; i < this->_pOutputMap->size(); ++i)
     {
-        delete this->_pOutputMap->at(i);
+        if(this->_pOutputMap->at(i) != 0)
+        {
+            delete this->_pOutputMap->at(i);
+        }
     }
 
     delete this->_pOutputMap;
 
     for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
     {
-        delete this->_pOutput->at(i);
+        if(this->_pOutput->at(i) != 0)
+        {
+            delete this->_pOutput->at(i);
+        }
+        
     }
 
     delete this->_pOutput;
@@ -100,7 +107,10 @@ std::vector<RFGeometry::Vertex*>* RFStage::Projector::Project()
 {
     for(unsigned int i = 0; i < this->_pOutput->size(); ++i)
     {
-        delete this->_pOutput->at(i);
+        if(this->_pOutput->at(i) != 0)
+        {
+            delete this->_pOutput->at(i);
+        }
     }
     this->_pOutput->clear();
 
@@ -138,7 +148,10 @@ std::vector<RFGeometry::Vertex*>* RFStage::Projector::Map()
 {
     for(unsigned int i = 0; i < this->_pOutputMap->size(); ++i)
     {
-        delete this->_pOutputMap->at(i);
+        if(this->_pOutputMap->at(i) != 0)
+        {
+            delete this->_pOutputMap->at(i);
+        }
     }
     this->_pOutputMap->clear();
 

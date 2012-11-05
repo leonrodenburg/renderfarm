@@ -24,8 +24,27 @@ RFGeometry::Geometry::Geometry(const RFMath::Vector3& position)
  */
 RFGeometry::Geometry::~Geometry()
 {
-    delete this->_pVertexPositions;
+    // Delete vertices
+    if(this->_pVertexBuffer != 0)
+    {
+        for(unsigned int i = 0; i < this->_pVertexBuffer->size(); ++i)
+        {
+            delete this->_pVertexBuffer->at(i);
+        }
+        this->_pVertexBuffer->clear();
+    }
     delete this->_pVertexBuffer;
+
+    // Delete vertex positions
+    if(this->_pVertexPositions != 0)
+    {
+        for(unsigned int i = 0; i < this->_pVertexPositions->size(); ++i)
+        {
+            delete this->_pVertexPositions->at(i);
+        }
+        this->_pVertexPositions->clear();
+    }
+    delete this->_pVertexPositions;  
 }
 
 /**
@@ -68,8 +87,8 @@ void RFGeometry::Geometry::Transform(RFMath::Matrix& matrix, bool toOrigin)
         RFMath::Vector3 newVector = matrix.Transform(*this->_pVertexBuffer->at(i)->GetPosition());
         RFMath::Vector3* pNewVector = this->_CopyVector(&newVector);
 
-        RFMath::Vector3* currentVector = this->_pVertexBuffer->at(i)->GetPosition();
-        delete currentVector;
+        RFMath::Vector3* pCurrentVector = this->_pVertexBuffer->at(i)->GetPosition();
+        delete pCurrentVector;
 
         this->_pVertexBuffer->at(i)->SetPosition(pNewVector);
     }

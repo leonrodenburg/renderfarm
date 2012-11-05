@@ -4,9 +4,10 @@
 /**
  * Default constructor.
  */
-RFStage::Clipper::Clipper()
+RFStage::Clipper::Clipper(float zNear, float zFar)
 {
     this->_pOutput = new std::vector<RFGeometry::Vertex*>();
+    this->_pTemp = new std::vector<RFGeometry::Vertex*>();
 
     _planeNormals[0] = RFMath::Vector3::xAxis;
     _planeNormals[1] = RFMath::Vector3::yAxis;
@@ -25,6 +26,16 @@ RFStage::Clipper::Clipper()
  */
 RFStage::Clipper::~Clipper()
 {
+    for(unsigned int i = 0; i < this->_pTemp->size(); ++i)
+    {
+        if(this->_pTemp->at(i) != 0)
+        {
+            delete this->_pTemp->at(i);
+        }
+    }
+    delete this->_pTemp;
+    delete this->_pOutput;
+
 #ifdef DEBUG
     RFCore::Logger::GetLogger()->Log("Clipper destroyed...");
 #endif
@@ -33,8 +44,8 @@ RFStage::Clipper::~Clipper()
 /**
  * Bind a vertex buffer to the clipping stage. The vertices in the buffer
  * should be in normalized device coordinates (NDC). They will be clipped
- * against a cube with minimum point (-1, -1, -1) and maximum point
- * (1, 1, 1).
+ * against a cube with minimum point (-1, -1, zNear) and maximum point
+ * (1, 1, zFar).
  *
  * @param pBuffer
  */
@@ -52,6 +63,14 @@ void RFStage::Clipper::BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer)
  */
 std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
 {
+    for(unsigned int i = 0; i < this->_pTemp->size(); ++i)
+    {
+        if(this->_pTemp->at(i) != 0)
+        {
+            delete this->_pTemp->at(i);
+        }
+    }
+    this->_pTemp->clear();
     this->_pOutput->clear();
 
     std::vector<RFGeometry::Vertex*> outputList;
@@ -84,8 +103,19 @@ std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
                     for(unsigned int k = 0; k < inputList.size(); ++k)
                     {
                         RFGeometry::Vertex* pCurrent = inputList.at(k);
-                        dot = pCurrent->GetPosition()->Dot(this->_planeNormals[j]) - 1.0f;
-                        lastDot = pLast->GetPosition()->Dot(this->_planeNormals[j]) - 1.0f;
+
+                        RFMath::Vector3 current(pCurrent->GetPosition()->GetX(), pCurrent->GetPosition()->GetY(), pCurrent->GetPosition()->GetZ());
+                        RFMath::Vector3 last(pLast->GetPosition()->GetX(), pLast->GetPosition()->GetY(), pLast->GetPosition()->GetZ());
+                        
+                        // If the plane is on the z-axis (so near and far view plane)
+                        if(this->_planeNormals[j].GetZ() > 0.0f)
+                        {
+                            current.Normalize();
+                            last.Normalize();
+                        }
+
+                        dot = current.Dot(this->_planeNormals[j]) - 1.0f;
+                        lastDot = last.Dot(this->_planeNormals[j]) - 1.0f;
 
                         if(dot <= 0.0f) // Current vertex 'inside' current plane
                         {
@@ -96,8 +126,10 @@ std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
                                 if(!intersection.IsZero())
                                 {
                                     RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                    RFGeometry::Vertex vert(pAdd, pLast->GetColor());
-                                    outputList.push_back(&vert);
+                                    RFMath::Vector3* pColor = new RFMath::Vector3(*pLast->GetColor());
+                                    RFGeometry::Vertex* pNewVert = new RFGeometry::Vertex(pAdd, pColor);
+                                    outputList.push_back(pNewVert);
+                                    this->_pTemp->push_back(pNewVert);
                                 }
                             }
 
@@ -110,8 +142,10 @@ std::vector<RFGeometry::Vertex*>* RFStage::Clipper::Clip()
                             if(!intersection.IsZero())
                             {
                                 RFMath::Vector3* pAdd = new RFMath::Vector3(intersection);
-                                RFGeometry::Vertex vert(pAdd, pLast->GetColor());
-                                outputList.push_back(&vert);
+                                RFMath::Vector3* pColor = new RFMath::Vector3(*pLast->GetColor());
+                                RFGeometry::Vertex* pNewVert = new RFGeometry::Vertex(pAdd, pColor);
+                                outputList.push_back(pNewVert);
+                                this->_pTemp->push_back(pNewVert);
                             }
                         }
 
@@ -205,10 +239,10 @@ bool RFStage::Clipper::_IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, 
     normal = normal.Normalize();
 
     // Dot triangle normal with camera vector
-    float dot = toCamera.Dot(normal);
+    float dot = normal.Dot(toCamera);
 
     // If the angle is equal to or larger than 90 degrees 
-    if(dot > 0.0f)
+    if(dot < 0.0f)
     {
         return false;
     }

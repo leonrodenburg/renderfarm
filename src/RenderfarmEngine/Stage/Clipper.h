@@ -14,7 +14,7 @@ namespace RFStage
     class DLL_API Clipper
     {
     public:
-        Clipper();
+        Clipper(float zNear, float zFar);
         virtual ~Clipper();
 
         void BindBuffer(std::vector<RFGeometry::Vertex*>* pBuffer);
@@ -24,9 +24,13 @@ namespace RFStage
         bool _IsFrontFacing(RFMath::Vector3* p1, RFMath::Vector3* p2, RFMath::Vector3* p3);
 
         std::vector<RFGeometry::Vertex*>* _pBuffer;
+        std::vector<RFGeometry::Vertex*>* _pTemp;
         std::vector<RFGeometry::Vertex*>* _pOutput;
 
         RFMath::Vector3 _planeNormals[6];
+
+        float _zNear;
+        float _zFar;
     };
 }
 
