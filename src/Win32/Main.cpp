@@ -5,7 +5,7 @@
 #include <vector>
 
 #ifdef DEBUG
-    //#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+    #include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
 #endif
 
 #include "Core/Logger.h"
@@ -13,6 +13,7 @@
 #include "Math/Vector3.h"
 #include "Geometry/World.h"
 #include "Geometry/Cube.h"
+#include "Geometry/Pyramid.h"
 #include "Math/Utility.h"
 
 // Forward declarations
@@ -51,11 +52,11 @@ std::vector<RFGeometry::Geometry*>* kpGeometry;
 void Initialize()
 {
     // Initialize geometry and models
-    RFGeometry::Cube* pCube = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.7f, 1.0f, 6.0f));
+    RFGeometry::Cube* pCube = new RFGeometry::Cube(1.0f, RFMath::Vector3(0.9f, 1.0f, 3.0f));
     kpGeometry->push_back(pCube);
 
-    RFGeometry::Cube* pCube5 = new RFGeometry::Cube(1.0f, RFMath::Vector3(-1.0f, -1.0f, 10.0f));
-    kpGeometry->push_back(pCube5);
+    RFGeometry::Pyramid* pPyramid = new RFGeometry::Pyramid(1.0f, 1.0f, RFMath::Vector3(-1.5f, 0.0f, 7.0f));
+    kpGeometry->push_back(pPyramid);
 
     RFGeometry::Cube* pCube2 = new RFGeometry::Cube(1.0f, RFMath::Vector3(-3.0f, -2.0f, 10.0f));
     kpGeometry->push_back(pCube2);
@@ -63,7 +64,7 @@ void Initialize()
     RFGeometry::Cube* pCube3 = new RFGeometry::Cube(1.0f, RFMath::Vector3(2.0f, -2.5f, 10.0f));
     kpGeometry->push_back(pCube3);
 
-    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.0f, 1.0f, 15.0f));
+    RFGeometry::Cube* pCube4 = new RFGeometry::Cube(1.0f, RFMath::Vector3(1.7f, 1.7f, 15.0f));
     kpGeometry->push_back(pCube4);   
 }
 
@@ -72,13 +73,16 @@ void Initialize()
  */
 void Update()
 {
+    // Enable to see rotation
+    /*
     RFMath::Matrix rotation;
     rotation.RotateY(0.1f);
 
     for(unsigned int i = 0; i < kpGeometry->size(); ++i)
     {
-        //kpGeometry->at(i)->Transform(rotation, true);
+        kpGeometry->at(i)->Transform(rotation, true);
     }
+    */
 }
 
 /**

@@ -15,7 +15,7 @@ RFCore::Kernel::Kernel(RFGeometry::World* pWorld, float nearView, float farView,
 {
     this->_pWorld = pWorld;
     this->_pProjector = new RFStage::Projector(nearView, farView, fieldOfView, windowWidth, windowHeight);
-    this->_pClipper = new RFStage::Clipper();
+    this->_pClipper = new RFStage::Clipper(nearView, farView);
     this->_pRasterizer = new RFStage::Rasterizer(windowWidth, windowHeight);
 
 #ifdef DEBUG
@@ -83,8 +83,8 @@ unsigned int* RFCore::Kernel::Run()
     pBuffer = this->_pProjector->Project();
 
     // Bind the buffer to the clipper and clip
-    //this->_pClipper->BindBuffer(pBuffer);
-    //pBuffer = this->_pClipper->Clip();
+    this->_pClipper->BindBuffer(pBuffer);
+    pBuffer = this->_pClipper->Clip();
 
     // Map the vertices to screen coordinates
     this->_pProjector->BindBuffer(pBuffer);
