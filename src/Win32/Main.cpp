@@ -5,7 +5,7 @@
 #include <vector>
 
 #ifdef DEBUG
-    #include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
+    //#include <vld.h> // Visual Leak Detector (http://vld.codeplex.com/)
 #endif
 
 #include "Core/Logger.h"

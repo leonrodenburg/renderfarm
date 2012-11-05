@@ -42,6 +42,8 @@ add_library (${LIBRARY_NAME} SHARED
 			Core/Logger.cpp
 			Geometry/Cube.h
 			Geometry/Cube.cpp
+			Geometry/Pyramid.h
+			Geometry/Pyramid.cpp
 			Geometry/Geometry.h
 			Geometry/Geometry.cpp
             Geometry/Vertex.h
